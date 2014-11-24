@@ -38,6 +38,9 @@ public class JinternalFrameMain extends javax.swing.JInternalFrame {
         setResizable(true);
         setTitle("Ecrâ principal");
 
+        jTabbedPane.setAutoscrolls(true);
+        jTabbedPane.setOpaque(true);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -70,21 +73,33 @@ public class JinternalFrameMain extends javax.swing.JInternalFrame {
 
         jtabelaCandidaturas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {"1","Manuel Fernades","456231876","Pendente"},
+                {"1","Manuel Fernandes","456231876","Pendente"},
                 {"2","Joaquim Manuel","254631879","Concluida"},
                 {"3","Maria Joaquina","528461379","Aprovada"},
                 {"4","Antonio Manuel","225897172","Em execução"}
             },
             new String [] {
                 "Id", "Nome", "Nif", "Estado"
+            }) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
-        ));
+        });
+                
+
         
         if (jtabelaCandidaturas.getColumnModel().getColumnCount() > 0) {
             jtabelaCandidaturas.getColumnModel().getColumn(0).setMinWidth(40);
             jtabelaCandidaturas.getColumnModel().getColumn(0).setPreferredWidth(40);
             jtabelaCandidaturas.getColumnModel().getColumn(0).setMaxWidth(100);
         }
+        jtabelaCandidaturas.setColumnSelectionAllowed(false);
+
         jScrollPane1Cand.setViewportView(jtabelaCandidaturas);
 
         jTabbedPane.addTab("Candidaturas", jScrollPane1Cand);

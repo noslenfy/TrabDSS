@@ -41,9 +41,13 @@ public class JmdiMain extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jSeparator3 = new javax.swing.JToolBar.Separator();
         jbtProcurar = new javax.swing.JButton();
+        jSeparator4 = new javax.swing.JToolBar.Separator();
+        jbtProcurar1 = new javax.swing.JButton();
         jDesktopPaneMain = new javax.swing.JDesktopPane();
         jStatusBar = new javax.swing.JPanel();
         jLeftPanel = new javax.swing.JPanel();
+        jLeftPanelLogo = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
         jBarraMenus = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
@@ -83,6 +87,20 @@ public class JmdiMain extends javax.swing.JFrame {
         });
         jMainToolBar.add(jbtProcurar);
 
+        jSeparator4.setSeparatorSize(new java.awt.Dimension(20, 10));
+        jMainToolBar.add(jSeparator4);
+
+        jbtProcurar1.setText("Users");
+        jbtProcurar1.setFocusable(false);
+        jbtProcurar1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jbtProcurar1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jbtProcurar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtProcurar1ActionPerformed(evt);
+            }
+        });
+        jMainToolBar.add(jbtProcurar1);
+
         jStatusBar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
         javax.swing.GroupLayout jStatusBarLayout = new javax.swing.GroupLayout(jStatusBar);
@@ -106,7 +124,30 @@ public class JmdiMain extends javax.swing.JFrame {
         );
         jLeftPanelLayout.setVerticalGroup(
             jLeftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 476, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/UIGeshabitat/pictures/logotipo_habitat_trans.png"))); // NOI18N
+
+        javax.swing.GroupLayout jLeftPanelLogoLayout = new javax.swing.GroupLayout(jLeftPanelLogo);
+        jLeftPanelLogo.setLayout(jLeftPanelLogoLayout);
+        jLeftPanelLogoLayout.setHorizontalGroup(
+            jLeftPanelLogoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(jLeftPanelLogoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jLeftPanelLogoLayout.createSequentialGroup()
+                    .addGap(0, 5, Short.MAX_VALUE)
+                    .addComponent(jLabel1)
+                    .addGap(0, 6, Short.MAX_VALUE)))
+        );
+        jLeftPanelLogoLayout.setVerticalGroup(
+            jLeftPanelLogoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 95, Short.MAX_VALUE)
+            .addGroup(jLeftPanelLogoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jLeftPanelLogoLayout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jLabel1)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
 
         jMenu1.setText("File");
@@ -124,11 +165,13 @@ public class JmdiMain extends javax.swing.JFrame {
             .addComponent(jStatusBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLeftPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLeftPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLeftPanelLogo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jDesktopPaneMain, javax.swing.GroupLayout.DEFAULT_SIZE, 851, Short.MAX_VALUE)
+                .addComponent(jDesktopPaneMain)
                 .addContainerGap())
-            .addComponent(jMainToolBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jMainToolBar, javax.swing.GroupLayout.DEFAULT_SIZE, 1158, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -136,8 +179,11 @@ public class JmdiMain extends javax.swing.JFrame {
                 .addComponent(jMainToolBar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jDesktopPaneMain)
-                    .addComponent(jLeftPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jDesktopPaneMain, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLeftPanelLogo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLeftPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jStatusBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -171,6 +217,25 @@ public class JmdiMain extends javax.swing.JFrame {
         jfrmMain.setVisible(true);
         
     }//GEN-LAST:event_jbtProcurarActionPerformed
+
+    private void jbtProcurar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtProcurar1ActionPerformed
+        JintFrmUserManagment jfrmUsers = new JintFrmUserManagment();
+        
+        Dimension desktopSize = jDesktopPaneMain.getSize();
+        Dimension frmLoginSize = jfrmUsers.getSize();
+        
+
+        jDesktopPaneMain.add(jfrmUsers);
+        
+        try {
+            //        jfrmUsers.setLocation((desktopSize.width - frmLoginSize.width)/2,
+//                              (desktopSize.height - frmLoginSize.height)/2);
+            jfrmUsers.setMaximum(true);
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(JmdiMain.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        jfrmUsers.setVisible(true);
+    }//GEN-LAST:event_jbtProcurar1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -215,14 +280,18 @@ public class JmdiMain extends javax.swing.JFrame {
     private javax.swing.JMenuBar jBarraMenus;
     private javax.swing.JButton jButton2;
     private javax.swing.JDesktopPane jDesktopPaneMain;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jLeftPanel;
+    private javax.swing.JPanel jLeftPanelLogo;
     private javax.swing.JToolBar jMainToolBar;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JToolBar.Separator jSeparator3;
+    private javax.swing.JToolBar.Separator jSeparator4;
     private javax.swing.JPanel jStatusBar;
     private javax.swing.JButton jbtProcurar;
+    private javax.swing.JButton jbtProcurar1;
     // End of variables declaration//GEN-END:variables
 }
