@@ -227,13 +227,10 @@ public class JmdiMain extends javax.swing.JFrame {
 
         jDesktopPaneMain.add(jfrmUsers);
         
-        try {
-            //        jfrmUsers.setLocation((desktopSize.width - frmLoginSize.width)/2,
-//                              (desktopSize.height - frmLoginSize.height)/2);
-            jfrmUsers.setMaximum(true);
-        } catch (PropertyVetoException ex) {
-            Logger.getLogger(JmdiMain.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
+        jfrmUsers.setLocation((desktopSize.width - frmLoginSize.width)/2,
+                             (desktopSize.height - frmLoginSize.height)/2);
+  
         jfrmUsers.setVisible(true);
     }//GEN-LAST:event_jbtProcurar1ActionPerformed
 

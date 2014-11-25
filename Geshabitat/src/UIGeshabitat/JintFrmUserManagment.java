@@ -65,7 +65,6 @@ public class JintFrmUserManagment extends javax.swing.JInternalFrame {
 
         setClosable(true);
         setIconifiable(true);
-        setMaximizable(true);
         setTitle("Gestão de Utilizadores");
 
         jPanelNewUser.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true), "Adicionar novo utilizador"));
