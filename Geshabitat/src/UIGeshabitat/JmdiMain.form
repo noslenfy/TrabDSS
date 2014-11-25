@@ -113,7 +113,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="jbtProcurar">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Procurar"/>
+            <Property name="text" type="java.lang.String" value="Procurar3"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>

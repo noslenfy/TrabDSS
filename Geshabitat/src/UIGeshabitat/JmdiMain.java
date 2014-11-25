@@ -76,7 +76,7 @@ public class JmdiMain extends javax.swing.JFrame {
         jSeparator3.setSeparatorSize(new java.awt.Dimension(20, 10));
         jMainToolBar.add(jSeparator3);
 
-        jbtProcurar.setText("Procurar");
+        jbtProcurar.setText("Procurar3");
         jbtProcurar.setFocusable(false);
         jbtProcurar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jbtProcurar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
