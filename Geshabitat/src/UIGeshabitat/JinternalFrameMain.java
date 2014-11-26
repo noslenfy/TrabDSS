@@ -82,7 +82,7 @@ public class JinternalFrameMain extends javax.swing.JInternalFrame {
                 "Id", "Nome", "Nif", "Estado"
             }) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, true, false, false
             };
 
             @Override
@@ -96,7 +96,7 @@ public class JinternalFrameMain extends javax.swing.JInternalFrame {
         if (jtabelaCandidaturas.getColumnModel().getColumnCount() > 0) {
             jtabelaCandidaturas.getColumnModel().getColumn(0).setMinWidth(40);
             jtabelaCandidaturas.getColumnModel().getColumn(0).setPreferredWidth(40);
-            jtabelaCandidaturas.getColumnModel().getColumn(0).setMaxWidth(100);
+            jtabelaCandidaturas.getColumnModel().getColumn(0).setMaxWidth(40);
         }
         jtabelaCandidaturas.setColumnSelectionAllowed(false);
 

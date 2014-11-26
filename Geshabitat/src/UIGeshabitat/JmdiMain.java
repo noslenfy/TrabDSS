@@ -124,7 +124,7 @@ public class JmdiMain extends javax.swing.JFrame {
         );
         jLeftPanelLayout.setVerticalGroup(
             jLeftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 369, Short.MAX_VALUE)
         );
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/UIGeshabitat/pictures/logotipo_habitat_trans.png"))); // NOI18N
