@@ -6,15 +6,23 @@
     </Component>
     <Menu class="javax.swing.JMenuBar" name="jBarraMenus">
       <SubComponents>
-        <Menu class="javax.swing.JMenu" name="jMenu1">
+        <Menu class="javax.swing.JMenu" name="jMenuFile">
           <Properties>
             <Property name="text" type="java.lang.String" value="File"/>
           </Properties>
         </Menu>
-        <Menu class="javax.swing.JMenu" name="jMenu2">
+        <Menu class="javax.swing.JMenu" name="jMenuEdit">
           <Properties>
             <Property name="text" type="java.lang.String" value="Edit"/>
           </Properties>
+        </Menu>
+        <Menu class="javax.swing.JMenu" name="jMenuWindow">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Window"/>
+          </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new WindowMenu((MDIDesktopPane)jDesktopPaneMain)"/>
+          </AuxValues>
         </Menu>
       </SubComponents>
     </Menu>
@@ -51,7 +59,7 @@
                   <Component id="jLeftPanelLogo" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jDesktopPaneMain" max="32767" attributes="0"/>
+              <Component id="jScrollDesktopMain" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
           <Component id="jMainToolBar" alignment="0" pref="1158" max="32767" attributes="0"/>
@@ -63,12 +71,12 @@
               <Component id="jMainToolBar" min="-2" pref="38" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jDesktopPaneMain" pref="480" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
                       <Component id="jLeftPanelLogo" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="jLeftPanel" max="32767" attributes="0"/>
                   </Group>
+                  <Component id="jScrollDesktopMain" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jStatusBar" min="-2" max="-2" attributes="0"/>
@@ -113,7 +121,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="jbtProcurar">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Procurar3"/>
+            <Property name="text" type="java.lang.String" value="Procurar"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
@@ -129,7 +137,7 @@
             </Property>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="jbtProcurar1">
+        <Component class="javax.swing.JButton" name="jBtUserMan">
           <Properties>
             <Property name="text" type="java.lang.String" value="Users"/>
             <Property name="focusable" type="boolean" value="false"/>
@@ -137,16 +145,28 @@
             <Property name="verticalTextPosition" type="int" value="3"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbtProcurar1ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jBtUserManActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JToolBar$Separator" name="jSeparator5">
+          <Properties>
+            <Property name="separatorSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[20, 10]"/>
+            </Property>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="jBtNewCand">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Nova Cand"/>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="horizontalTextPosition" type="int" value="0"/>
+            <Property name="verticalTextPosition" type="int" value="3"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jBtNewCandActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>
-    </Container>
-    <Container class="javax.swing.JDesktopPane" name="jDesktopPaneMain">
-
-      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout">
-        <Property name="useNullLayout" type="boolean" value="true"/>
-      </Layout>
     </Container>
     <Container class="javax.swing.JPanel" name="jStatusBar">
       <Properties>
@@ -228,6 +248,22 @@
             </Property>
           </Properties>
         </Component>
+      </SubComponents>
+    </Container>
+    <Container class="javax.swing.JScrollPane" name="jScrollDesktopMain">
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+      <SubComponents>
+        <Container class="javax.swing.JDesktopPane" name="jDesktopPaneMain">
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new MDIDesktopPane()"/>
+            <AuxValue name="JavaCodeGenerator_SerializeTo" type="java.lang.String" value="JmdiMain_jDesktopPaneMain"/>
+          </AuxValues>
+
+          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout">
+            <Property name="useNullLayout" type="boolean" value="true"/>
+          </Layout>
+        </Container>
       </SubComponents>
     </Container>
   </SubComponents>

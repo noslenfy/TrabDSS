@@ -430,31 +430,49 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Pode Consultar"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jChkCFRActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JCheckBox" name="jChkCFW">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Pode Alterar"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jChkCFWActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JCheckBox" name="jChkCCW">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Pode Alterar"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jChkCCWActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JCheckBox" name="jChkCCR">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Pode Consultar"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jChkCCRActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JCheckBox" name="jChkAFW">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Pode Alterar"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jChkAFWActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JCheckBox" name="jChkAFR">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Pode Consultar"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jChkAFRActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JCheckBox" name="jCheckBox7">
               <Properties>

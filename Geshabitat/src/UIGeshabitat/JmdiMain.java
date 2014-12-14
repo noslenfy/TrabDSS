@@ -5,11 +5,26 @@
  */
 package UIGeshabitat;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.Insets;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.beans.PropertyVetoException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.DefaultDesktopManager;
+import javax.swing.DesktopManager;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JComponent;
+import javax.swing.JDesktopPane;
+import javax.swing.JInternalFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JScrollPane;
+import javax.swing.JViewport;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 
 /**
  *
@@ -42,15 +57,19 @@ public class JmdiMain extends javax.swing.JFrame {
         jSeparator3 = new javax.swing.JToolBar.Separator();
         jbtProcurar = new javax.swing.JButton();
         jSeparator4 = new javax.swing.JToolBar.Separator();
-        jbtProcurar1 = new javax.swing.JButton();
-        jDesktopPaneMain = new javax.swing.JDesktopPane();
+        jBtUserMan = new javax.swing.JButton();
+        jSeparator5 = new javax.swing.JToolBar.Separator();
+        jBtNewCand = new javax.swing.JButton();
         jStatusBar = new javax.swing.JPanel();
         jLeftPanel = new javax.swing.JPanel();
         jLeftPanelLogo = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jScrollDesktopMain = new javax.swing.JScrollPane();
+        jDesktopPaneMain = new MDIDesktopPane();
         jBarraMenus = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
+        jMenuFile = new javax.swing.JMenu();
+        jMenuEdit = new javax.swing.JMenu();
+        jMenuWindow = new WindowMenu((MDIDesktopPane)jDesktopPaneMain);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Geshabitat");
@@ -76,7 +95,7 @@ public class JmdiMain extends javax.swing.JFrame {
         jSeparator3.setSeparatorSize(new java.awt.Dimension(20, 10));
         jMainToolBar.add(jSeparator3);
 
-        jbtProcurar.setText("Procurar3");
+        jbtProcurar.setText("Procurar");
         jbtProcurar.setFocusable(false);
         jbtProcurar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jbtProcurar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -90,16 +109,30 @@ public class JmdiMain extends javax.swing.JFrame {
         jSeparator4.setSeparatorSize(new java.awt.Dimension(20, 10));
         jMainToolBar.add(jSeparator4);
 
-        jbtProcurar1.setText("Users");
-        jbtProcurar1.setFocusable(false);
-        jbtProcurar1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jbtProcurar1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jbtProcurar1.addActionListener(new java.awt.event.ActionListener() {
+        jBtUserMan.setText("Users");
+        jBtUserMan.setFocusable(false);
+        jBtUserMan.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jBtUserMan.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jBtUserMan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtProcurar1ActionPerformed(evt);
+                jBtUserManActionPerformed(evt);
             }
         });
-        jMainToolBar.add(jbtProcurar1);
+        jMainToolBar.add(jBtUserMan);
+
+        jSeparator5.setSeparatorSize(new java.awt.Dimension(20, 10));
+        jMainToolBar.add(jSeparator5);
+
+        jBtNewCand.setText("Nova Cand");
+        jBtNewCand.setFocusable(false);
+        jBtNewCand.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jBtNewCand.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jBtNewCand.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtNewCandActionPerformed(evt);
+            }
+        });
+        jMainToolBar.add(jBtNewCand);
 
         jStatusBar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
@@ -150,11 +183,16 @@ public class JmdiMain extends javax.swing.JFrame {
                     .addGap(0, 0, Short.MAX_VALUE)))
         );
 
-        jMenu1.setText("File");
-        jBarraMenus.add(jMenu1);
+        jScrollDesktopMain.setViewportView(jDesktopPaneMain);
 
-        jMenu2.setText("Edit");
-        jBarraMenus.add(jMenu2);
+        jMenuFile.setText("File");
+        jBarraMenus.add(jMenuFile);
+
+        jMenuEdit.setText("Edit");
+        jBarraMenus.add(jMenuEdit);
+
+        jMenuWindow.setText("Window");
+        jBarraMenus.add(jMenuWindow);
 
         setJMenuBar(jBarraMenus);
 
@@ -169,7 +207,7 @@ public class JmdiMain extends javax.swing.JFrame {
                     .addComponent(jLeftPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLeftPanelLogo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jDesktopPaneMain)
+                .addComponent(jScrollDesktopMain)
                 .addContainerGap())
             .addComponent(jMainToolBar, javax.swing.GroupLayout.DEFAULT_SIZE, 1158, Short.MAX_VALUE)
         );
@@ -179,11 +217,11 @@ public class JmdiMain extends javax.swing.JFrame {
                 .addComponent(jMainToolBar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jDesktopPaneMain, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLeftPanelLogo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLeftPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(jLeftPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jScrollDesktopMain))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jStatusBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -218,21 +256,34 @@ public class JmdiMain extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jbtProcurarActionPerformed
 
-    private void jbtProcurar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtProcurar1ActionPerformed
+    private void jBtUserManActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtUserManActionPerformed
         JintFrmUserManagment jfrmUsers = new JintFrmUserManagment();
         
+        //position on center
         Dimension desktopSize = jDesktopPaneMain.getSize();
         Dimension frmLoginSize = jfrmUsers.getSize();
-        
-
         jDesktopPaneMain.add(jfrmUsers);
         
-
         jfrmUsers.setLocation((desktopSize.width - frmLoginSize.width)/2,
                              (desktopSize.height - frmLoginSize.height)/2);
   
         jfrmUsers.setVisible(true);
-    }//GEN-LAST:event_jbtProcurar1ActionPerformed
+    }//GEN-LAST:event_jBtUserManActionPerformed
+
+    private void jBtNewCandActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtNewCandActionPerformed
+        JintFrmNewCand jfrmNewCand = new JintFrmNewCand();
+        
+        
+        jDesktopPaneMain.add(jfrmNewCand);
+        
+//        try {
+//            jfrmNewCand.setMaximum(true);
+//        } catch (PropertyVetoException ex) {
+//        }
+        jfrmNewCand.setVisible(true);
+        
+        
+    }//GEN-LAST:event_jBtNewCandActionPerformed
 
     /**
      * @param args the command line arguments
@@ -275,20 +326,340 @@ public class JmdiMain extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar jBarraMenus;
+    private javax.swing.JButton jBtNewCand;
+    private javax.swing.JButton jBtUserMan;
     private javax.swing.JButton jButton2;
     private javax.swing.JDesktopPane jDesktopPaneMain;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jLeftPanel;
     private javax.swing.JPanel jLeftPanelLogo;
     private javax.swing.JToolBar jMainToolBar;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenuEdit;
+    private javax.swing.JMenu jMenuFile;
+    private javax.swing.JMenu jMenuWindow;
+    private javax.swing.JScrollPane jScrollDesktopMain;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JToolBar.Separator jSeparator3;
     private javax.swing.JToolBar.Separator jSeparator4;
+    private javax.swing.JToolBar.Separator jSeparator5;
     private javax.swing.JPanel jStatusBar;
     private javax.swing.JButton jbtProcurar;
-    private javax.swing.JButton jbtProcurar1;
     // End of variables declaration//GEN-END:variables
+}
+
+
+
+/**
+ * An extension of WDesktopPane that supports often used MDI functionality. This
+ * class also handles setting scroll bars for when windows move too far to the
+ * left or bottom, providing the MDIDesktopPane is in a ScrollPane.
+ */
+class MDIDesktopPane extends JDesktopPane {
+  private static final int FRAME_OFFSET = 20;
+
+  private final MDIDesktopManager manager;
+
+  public MDIDesktopPane() {
+    manager = new MDIDesktopManager(this);
+    setDesktopManager((DesktopManager) manager);
+    setDragMode(JDesktopPane.OUTLINE_DRAG_MODE);
+  }
+
+  @Override
+  public void setBounds(int x, int y, int w, int h) {
+    super.setBounds(x, y, w, h);
+    checkDesktopSize();
+  }
+
+  public Component add(JInternalFrame frame) {
+    JInternalFrame[] array = getAllFrames();
+    Point p;
+    int w;
+    int h;
+
+    Component retval = super.add(frame);
+    checkDesktopSize();
+    if (array.length > 0) {
+      p = array[0].getLocation();
+      p.x = p.x + FRAME_OFFSET;
+      p.y = p.y + FRAME_OFFSET;
+    } else {
+      p = new Point(0, 0);
+    }
+    frame.setLocation(p.x, p.y);
+    if (frame.isResizable()) {
+      w = getWidth() - (getWidth() / 3);
+      h = getHeight() - (getHeight() / 3);
+      if (w < frame.getMinimumSize().getWidth())
+        w = (int) frame.getMinimumSize().getWidth();
+      if (h < frame.getMinimumSize().getHeight())
+        h = (int) frame.getMinimumSize().getHeight();
+      frame.setSize(w, h);
+    }
+    moveToFront(frame);
+    frame.setVisible(true);
+    try {
+      frame.setSelected(true);
+    } catch (PropertyVetoException e) {
+      frame.toBack();
+    }
+    return retval;
+  }
+
+  @Override
+  public void remove(Component c) {
+    super.remove(c);
+    checkDesktopSize();
+  }
+
+  /**
+   * Cascade all internal frames
+   */
+  public void cascadeFrames() {
+    int x = 0;
+    int y = 0;
+    JInternalFrame allFrames[] = getAllFrames();
+
+    manager.setNormalSize();
+    int frameHeight = (getBounds().height - 5) - allFrames.length * FRAME_OFFSET;
+    int frameWidth = (getBounds().width - 5) - allFrames.length * FRAME_OFFSET;
+    for (int i = allFrames.length - 1; i >= 0; i--) {
+     // allFrames[i].setSize(frameWidth, frameHeight);
+      allFrames[i].setLocation(x, y);
+      x = x + FRAME_OFFSET;
+      y = y + FRAME_OFFSET;
+    }
+    this.checkDesktopSize();
+    
+  }
+
+  /**
+   * Tile all internal frames
+   */
+  public void tileFrames() {
+    java.awt.Component allFrames[] = getAllFrames();
+    manager.setNormalSize();
+    int frameHeight = getBounds().height / allFrames.length;
+    int y = 0;
+      for (Component allFrame : allFrames) {
+        //  allFrame.setSize(getBounds().width, frameHeight);
+          allFrame.setLocation(0, y);
+          y = y + frameHeight;
+      }
+    this.checkDesktopSize();
+  }
+
+  /**
+   * Sets all component size properties ( maximum, minimum, preferred) to the
+   * given dimension.
+   */
+  public void setAllSize(Dimension d) {
+    setMinimumSize(d);
+    setMaximumSize(d);
+    setPreferredSize(d);
+  }
+
+  /**
+   * Sets all component size properties ( maximum, minimum, preferred) to the
+   * given width and height.
+   */
+  public void setAllSize(int width, int height) {
+    setAllSize(new Dimension(width, height));
+  }
+
+  private void checkDesktopSize() {
+    if (getParent() != null && isVisible())
+      manager.resizeDesktop();
+  }
+}
+
+
+
+/**
+ * Private class used to replace the standard DesktopManager for JDesktopPane.
+ * Used to provide scrollbar functionality.
+ */
+class MDIDesktopManager extends DefaultDesktopManager {
+  private final MDIDesktopPane desktop;
+
+  public MDIDesktopManager(MDIDesktopPane desktop) {
+    this.desktop = desktop;
+  }
+
+  @Override
+  public void endResizingFrame(JComponent f) {
+    super.endResizingFrame(f);
+    resizeDesktop();
+  }
+
+  @Override
+  public void endDraggingFrame(JComponent f) {
+    super.endDraggingFrame(f);
+    resizeDesktop();
+  }
+
+  public void setNormalSize() {
+    JScrollPane scrollPane = getScrollPane();
+    int x = 0;
+    int y = 0;
+    Insets scrollInsets = getScrollPaneInsets();
+
+    if (scrollPane != null) {
+      Dimension d = scrollPane.getVisibleRect().getSize();
+      if (scrollPane.getBorder() != null) {
+        d.setSize(d.getWidth() - scrollInsets.left - scrollInsets.right, d.getHeight()
+            - scrollInsets.top - scrollInsets.bottom);
+      }
+
+      d.setSize(d.getWidth() - 20, d.getHeight() - 20);
+      desktop.setAllSize(x, y);
+      scrollPane.invalidate();
+      scrollPane.validate();
+    }
+  }
+
+  private Insets getScrollPaneInsets() {
+    JScrollPane scrollPane = getScrollPane();
+    if (scrollPane == null)
+      return new Insets(0, 0, 0, 0);
+    else
+      return getScrollPane().getBorder().getBorderInsets(scrollPane);
+  }
+
+  private JScrollPane getScrollPane() {
+    if (desktop.getParent() instanceof JViewport) {
+      JViewport viewPort = (JViewport) desktop.getParent();
+      if (viewPort.getParent() instanceof JScrollPane)
+        return (JScrollPane) viewPort.getParent();
+    }
+    return null;
+  }
+
+  protected void resizeDesktop() {
+    int x = 0;
+    int y = 0;
+    JScrollPane scrollPane = getScrollPane();
+    Insets scrollInsets = getScrollPaneInsets();
+
+    if (scrollPane != null) {
+      JInternalFrame allFrames[] = desktop.getAllFrames();
+      for (int i = 0; i < allFrames.length; i++) {
+        if (allFrames[i].getX() + allFrames[i].getWidth() > x) {
+          x = allFrames[i].getX() + allFrames[i].getWidth();
+        }
+        if (allFrames[i].getY() + allFrames[i].getHeight() > y) {
+          y = allFrames[i].getY() + allFrames[i].getHeight();
+        }
+      }
+      Dimension d = scrollPane.getVisibleRect().getSize();
+      if (scrollPane.getBorder() != null) {
+        d.setSize(d.getWidth() - scrollInsets.left - scrollInsets.right, d.getHeight()
+            - scrollInsets.top - scrollInsets.bottom);
+      }
+
+      if (x <= d.getWidth())
+        x = ((int) d.getWidth()) - 20;
+      if (y <= d.getHeight())
+        y = ((int) d.getHeight()) - 20;
+      desktop.setAllSize(x, y);
+      scrollPane.invalidate();
+      scrollPane.validate();
+    }
+  }
+}
+
+/**
+ * Menu component that handles the functionality expected of a standard
+ * "Windows" menu for MDI applications.
+ */
+class WindowMenu extends JMenu {
+  private MDIDesktopPane desktop;
+
+  private final JMenuItem cascade = new JMenuItem("Cascade");
+  private final JMenuItem tile = new JMenuItem("Tile");
+
+  public WindowMenu(MDIDesktopPane desktop) {
+    this.desktop = desktop;
+    setText("Window");
+    
+    cascade.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent ae) {
+        WindowMenu.this.desktop.cascadeFrames();
+      }
+    });
+    
+    tile.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent ae) {
+        WindowMenu.this.desktop.tileFrames();
+      }
+    });
+    
+    addMenuListener(new MenuListener() {
+      @Override
+      public void menuCanceled(MenuEvent e) {
+      }
+
+      @Override
+      public void menuDeselected(MenuEvent e) {
+        removeAll();
+      }
+
+      @Override
+      public void menuSelected(MenuEvent e) {
+        buildChildMenus();
+      }
+    });
+  }
+
+  /* Sets up the children menus depending on the current desktop state */
+  private void buildChildMenus() {
+    int i;
+    ChildMenuItem menu;
+    JInternalFrame[] array = desktop.getAllFrames();
+
+    add(cascade);
+    add(tile);
+    if (array.length > 0)
+      addSeparator();
+    cascade.setEnabled(array.length > 0);
+    tile.setEnabled(array.length > 0);
+
+    for (i = 0; i < array.length; i++) {
+      menu = new ChildMenuItem(array[i]);
+      menu.setState(i == 0);
+      menu.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+          JInternalFrame frame = ((ChildMenuItem) ae.getSource()).getFrame();
+          frame.moveToFront();
+          try {
+            frame.setSelected(true);
+          } catch (PropertyVetoException e) {
+          }
+        }
+      });
+      menu.setIcon(array[i].getFrameIcon());
+      add(menu);
+    }
+  }
+
+  /*
+   * This JCheckBoxMenuItem descendant is used to track the child frame that
+   * corresponds to a give menu.
+   */
+  class ChildMenuItem extends JCheckBoxMenuItem {
+    private final JInternalFrame frame;
+
+    public ChildMenuItem(JInternalFrame frame) {
+      super(frame.getTitle());
+      this.frame = frame;
+    }
+
+    public JInternalFrame getFrame() {
+      return frame;
+    }
+  }
 }

@@ -169,16 +169,46 @@ public class JintFrmUserManagment extends javax.swing.JInternalFrame {
         jLabel9.setText("Comiss. Ang. de Fundos");
 
         jChkCFR.setText("Pode Consultar");
+        jChkCFR.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jChkCFRActionPerformed(evt);
+            }
+        });
 
         jChkCFW.setText("Pode Alterar");
+        jChkCFW.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jChkCFWActionPerformed(evt);
+            }
+        });
 
         jChkCCW.setText("Pode Alterar");
+        jChkCCW.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jChkCCWActionPerformed(evt);
+            }
+        });
 
         jChkCCR.setText("Pode Consultar");
+        jChkCCR.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jChkCCRActionPerformed(evt);
+            }
+        });
 
         jChkAFW.setText("Pode Alterar");
+        jChkAFW.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jChkAFWActionPerformed(evt);
+            }
+        });
 
         jChkAFR.setText("Pode Consultar");
+        jChkAFR.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jChkAFRActionPerformed(evt);
+            }
+        });
 
         jCheckBox7.setText("Administrador");
 
@@ -348,6 +378,31 @@ public class JintFrmUserManagment extends javax.swing.JInternalFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jChkCFWActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jChkCFWActionPerformed
+        if(jChkCFW.isSelected() ) jChkCFR.setSelected(true);
+        
+    }//GEN-LAST:event_jChkCFWActionPerformed
+
+    private void jChkCFRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jChkCFRActionPerformed
+        if(!jChkCFR.isSelected()) jChkCFW.setSelected(false);
+    }//GEN-LAST:event_jChkCFRActionPerformed
+
+    private void jChkCCWActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jChkCCWActionPerformed
+        if(jChkCCW.isSelected() ) jChkCCR.setSelected(true);
+    }//GEN-LAST:event_jChkCCWActionPerformed
+
+    private void jChkCCRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jChkCCRActionPerformed
+        if(!jChkCCR.isSelected()) jChkCCW.setSelected(false);
+    }//GEN-LAST:event_jChkCCRActionPerformed
+
+    private void jChkAFWActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jChkAFWActionPerformed
+        if(jChkAFW.isSelected() ) jChkAFR.setSelected(true);
+    }//GEN-LAST:event_jChkAFWActionPerformed
+
+    private void jChkAFRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jChkAFRActionPerformed
+        if(!jChkAFR.isSelected()) jChkAFW.setSelected(false);
+    }//GEN-LAST:event_jChkAFRActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
