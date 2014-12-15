@@ -39,6 +39,7 @@ public class JmdiMain extends javax.swing.JFrame {
         initComponents();
 
         this.setExtendedState(Frame.MAXIMIZED_BOTH);
+        
     }
 
     /**
@@ -60,6 +61,14 @@ public class JmdiMain extends javax.swing.JFrame {
         jBtUserMan = new javax.swing.JButton();
         jSeparator5 = new javax.swing.JToolBar.Separator();
         jBtNewCand = new javax.swing.JButton();
+        jSeparator6 = new javax.swing.JToolBar.Separator();
+        jButton1 = new javax.swing.JButton();
+        jSeparator7 = new javax.swing.JToolBar.Separator();
+        jButton3 = new javax.swing.JButton();
+        jSeparator8 = new javax.swing.JToolBar.Separator();
+        jButton4 = new javax.swing.JButton();
+        jSeparator9 = new javax.swing.JToolBar.Separator();
+        jButton5 = new javax.swing.JButton();
         jStatusBar = new javax.swing.JPanel();
         jLeftPanel = new javax.swing.JPanel();
         jLeftPanelLogo = new javax.swing.JPanel();
@@ -133,6 +142,62 @@ public class JmdiMain extends javax.swing.JFrame {
             }
         });
         jMainToolBar.add(jBtNewCand);
+
+        jSeparator6.setSeparatorSize(new java.awt.Dimension(20, 10));
+        jMainToolBar.add(jSeparator6);
+
+        jButton1.setText("Novo Funcionario");
+        jButton1.setFocusable(false);
+        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jMainToolBar.add(jButton1);
+
+        jSeparator7.setSeparatorSize(new java.awt.Dimension(20, 10));
+        jMainToolBar.add(jSeparator7);
+
+        jButton3.setText("Novo Voluntário");
+        jButton3.setFocusable(false);
+        jButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+        jMainToolBar.add(jButton3);
+
+        jSeparator8.setSeparatorSize(new java.awt.Dimension(20, 10));
+        jMainToolBar.add(jSeparator8);
+
+        jButton4.setText("Novo Doador");
+        jButton4.setFocusable(false);
+        jButton4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton4.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+        jMainToolBar.add(jButton4);
+
+        jSeparator9.setSeparatorSize(new java.awt.Dimension(20, 10));
+        jMainToolBar.add(jSeparator9);
+
+        jButton5.setText("Novo Doação");
+        jButton5.setFocusable(false);
+        jButton5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton5.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+        jMainToolBar.add(jButton5);
 
         jStatusBar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
@@ -285,6 +350,30 @@ public class JmdiMain extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jBtNewCandActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        JintFrmNewElement jfrmNewFuncionario = new JintFrmNewElement("Funcionário");
+        jDesktopPaneMain.add(jfrmNewFuncionario);
+        jfrmNewFuncionario.setVisible(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        JintFrmNewElement jfrmNewVoluntario = new JintFrmNewElement("Voluntário");
+        jDesktopPaneMain.add(jfrmNewVoluntario);
+        jfrmNewVoluntario.setVisible(true);
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        JintFrmNewElement jfrmNewDoador = new JintFrmNewElement("Doador");
+        jDesktopPaneMain.add(jfrmNewDoador);
+        jfrmNewDoador.setVisible(true);
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        JintFrmNewDonation jfrmNewDoacao = new JintFrmNewDonation();
+        jDesktopPaneMain.add(jfrmNewDoacao);
+        jfrmNewDoacao.setVisible(true);
+    }//GEN-LAST:event_jButton5ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -328,7 +417,11 @@ public class JmdiMain extends javax.swing.JFrame {
     private javax.swing.JMenuBar jBarraMenus;
     private javax.swing.JButton jBtNewCand;
     private javax.swing.JButton jBtUserMan;
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JDesktopPane jDesktopPaneMain;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jLeftPanel;
@@ -343,6 +436,10 @@ public class JmdiMain extends javax.swing.JFrame {
     private javax.swing.JToolBar.Separator jSeparator3;
     private javax.swing.JToolBar.Separator jSeparator4;
     private javax.swing.JToolBar.Separator jSeparator5;
+    private javax.swing.JToolBar.Separator jSeparator6;
+    private javax.swing.JToolBar.Separator jSeparator7;
+    private javax.swing.JToolBar.Separator jSeparator8;
+    private javax.swing.JToolBar.Separator jSeparator9;
     private javax.swing.JPanel jStatusBar;
     private javax.swing.JButton jbtProcurar;
     // End of variables declaration//GEN-END:variables
@@ -468,7 +565,7 @@ class MDIDesktopPane extends JDesktopPane {
     setAllSize(new Dimension(width, height));
   }
 
-  private void checkDesktopSize() {
+  public void checkDesktopSize() {
     if (getParent() != null && isVisible())
       manager.resizeDesktop();
   }
@@ -628,7 +725,7 @@ class WindowMenu extends JMenu {
     tile.setEnabled(array.length > 0);
 
     for (i = 0; i < array.length; i++) {
-      menu = new ChildMenuItem(array[i]);
+      menu = new ChildMenuItem(array[i],i+1);
       menu.setState(i == 0);
       menu.addActionListener(new ActionListener() {
         @Override
@@ -652,9 +749,9 @@ class WindowMenu extends JMenu {
    */
   class ChildMenuItem extends JCheckBoxMenuItem {
     private final JInternalFrame frame;
-
-    public ChildMenuItem(JInternalFrame frame) {
-      super(frame.getTitle());
+    
+    public ChildMenuItem(JInternalFrame frame, int pos) {
+      super(String.valueOf(pos) +" - "+frame.getTitle());
       this.frame = frame;
     }
 
