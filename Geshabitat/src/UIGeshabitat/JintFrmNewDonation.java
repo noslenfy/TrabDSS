@@ -6,7 +6,6 @@
 package UIGeshabitat;
 
 import java.awt.Dimension;
-import javax.swing.ButtonGroup;
 import javax.swing.JRadioButton;
 
 /**
@@ -38,7 +37,7 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame {
         jOptMoney = new javax.swing.JRadioButton();
         jOptMaterial = new javax.swing.JRadioButton();
         jPanel2 = new javax.swing.JPanel();
-        jCheckBox1 = new javax.swing.JCheckBox();
+        jChkRecibo = new javax.swing.JCheckBox();
         jLabel3 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox();
         jTextField3 = new javax.swing.JTextField();
@@ -62,11 +61,12 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame {
         jLabel11 = new javax.swing.JLabel();
         jTextField7 = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
-        jTextField6 = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        jComboBox3 = new javax.swing.JComboBox();
+        jBtSelectArtigos = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
@@ -130,7 +130,7 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true), "Info adicional"));
 
-        jCheckBox1.setText("Recibo Emitido?");
+        jChkRecibo.setText("Recibo Emitido?");
 
         jLabel3.setText("Data:");
 
@@ -166,7 +166,7 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame {
                         .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -181,7 +181,7 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jCheckBox1)
+                        .addComponent(jChkRecibo)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -203,7 +203,7 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame {
                     .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton6))
                 .addGap(18, 18, 18)
-                .addComponent(jCheckBox1)
+                .addComponent(jChkRecibo)
                 .addContainerGap(11, Short.MAX_VALUE))
         );
 
@@ -278,7 +278,7 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame {
 
         jLabel11.setText("Quantidade:");
 
-        jLabel10.setText("Descrição:");
+        jLabel10.setText("Artigo");
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -295,6 +295,15 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame {
         jButton3.setText("Remover");
         jButton3.setEnabled(false);
 
+        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Saco de cimento" }));
+
+        jBtSelectArtigos.setText("...");
+        jBtSelectArtigos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtSelectArtigosActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanelMaterialLayout = new javax.swing.GroupLayout(jPanelMaterial);
         jPanelMaterial.setLayout(jPanelMaterialLayout);
         jPanelMaterialLayout.setHorizontalGroup(
@@ -302,7 +311,7 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame {
             .addGroup(jPanelMaterialLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanelMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 622, Short.MAX_VALUE)
                     .addGroup(jPanelMaterialLayout.createSequentialGroup()
                         .addComponent(jButton2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -311,8 +320,10 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame {
                     .addGroup(jPanelMaterialLayout.createSequentialGroup()
                         .addComponent(jLabel10)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jComboBox3, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jBtSelectArtigos, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(42, 42, 42)
                         .addComponent(jLabel11)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -324,9 +335,10 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(jPanelMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
-                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel11)
-                    .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jBtSelectArtigos))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanelMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
@@ -414,6 +426,8 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame {
             d.setSize(d.width, d.height+160);
             this.setSize(d);
             hide_others(jOptMaterial);
+            jChkRecibo.setVisible(false);
+            
         }
     }//GEN-LAST:event_jOptMaterialActionPerformed
 
@@ -422,7 +436,7 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame {
         {
             this.setSize(this.getSize().width,359);
             jPanelServices.setVisible(true);
-            
+             jChkRecibo.setVisible(true);
             hide_others(jOptServices);
         }
     }//GEN-LAST:event_jOptServicesActionPerformed
@@ -432,6 +446,7 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame {
         {
             this.setSize(this.getSize().width,359);
             jPanelMoney.setVisible(true);
+            jChkRecibo.setVisible(true);
             hide_others(jOptMoney);
         }
     }//GEN-LAST:event_jOptMoneyActionPerformed
@@ -439,6 +454,12 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jBtSelectArtigosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtSelectArtigosActionPerformed
+        JintFrmSelectArtigo frmArtigos = new JintFrmSelectArtigo(0);
+        this.getDesktopPane().add(frmArtigos);
+        frmArtigos.setVisible(true);
+    }//GEN-LAST:event_jBtSelectArtigosActionPerformed
 
     private void hide_others(JRadioButton opt) {
         if(!(opt.equals(jOptMaterial))) { jPanelMaterial.setVisible(false); }
@@ -448,15 +469,17 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup btGrpTipo;
+    private javax.swing.JButton jBtSelectArtigos;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
-    private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JCheckBox jChkRecibo;
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JComboBox jComboBox2;
+    private javax.swing.JComboBox jComboBox3;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -484,7 +507,6 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame {
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
     private javax.swing.JTextField jTextField7;
     // End of variables declaration//GEN-END:variables
 }

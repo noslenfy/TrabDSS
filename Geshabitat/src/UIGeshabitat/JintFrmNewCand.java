@@ -6,12 +6,14 @@
 package UIGeshabitat;
 
 import javax.swing.JOptionPane;
+import javax.swing.event.InternalFrameEvent;
+import javax.swing.event.InternalFrameListener;
 
 /**
  *
  * @author nelson
  */
-public class JintFrmNewCand extends javax.swing.JInternalFrame {
+public class JintFrmNewCand extends javax.swing.JInternalFrame  {
 
     /**
      * Creates new form JintFrmNewCand
@@ -63,6 +65,8 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame {
         jLabel16 = new javax.swing.JLabel();
         jTxtPm = new javax.swing.JTextField();
         jLabel17 = new javax.swing.JLabel();
+        jLabel26 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox();
         jButton4 = new javax.swing.JButton();
         jBtAddCand = new javax.swing.JButton();
         jPanelAnexos = new javax.swing.JPanel();
@@ -95,6 +99,11 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame {
         setClosable(true);
         setIconifiable(true);
         setTitle("Nova Candidatura");
+        addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                formFocusGained(evt);
+            }
+        });
 
         jPanelInfoCand.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true), "Informacao Candidato"));
 
@@ -138,6 +147,10 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame {
 
         jLabel17.setText("€");
 
+        jLabel26.setText("Rsponsavel:");
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "nunescf2" }));
+
         javax.swing.GroupLayout jPanelInfoCandLayout = new javax.swing.GroupLayout(jPanelInfoCand);
         jPanelInfoCand.setLayout(jPanelInfoCandLayout);
         jPanelInfoCandLayout.setHorizontalGroup(
@@ -145,18 +158,6 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame {
             .addGroup(jPanelInfoCandLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanelInfoCandLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanelInfoCandLayout.createSequentialGroup()
-                        .addComponent(jLabel11)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTxtLocalidade, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel12)
-                        .addGap(20, 20, 20)
-                        .addComponent(jTxtNacionalidade, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel13)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTxtEmail))
                     .addGroup(jPanelInfoCandLayout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -212,12 +213,34 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame {
                                 .addComponent(jLabel5)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jCmbDt, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanelInfoCandLayout.createSequentialGroup()
+                        .addGroup(jPanelInfoCandLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanelInfoCandLayout.createSequentialGroup()
+                                .addComponent(jLabel11)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jTxtLocalidade, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel12)
+                                .addGap(20, 20, 20)
+                                .addComponent(jTxtNacionalidade, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel13))
+                            .addGroup(jPanelInfoCandLayout.createSequentialGroup()
+                                .addComponent(jLabel26)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(6, 6, 6)
+                        .addComponent(jTxtEmail))))
         );
         jPanelInfoCandLayout.setVerticalGroup(
             jPanelInfoCandLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelInfoCandLayout.createSequentialGroup()
-                .addGap(21, 21, 21)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelInfoCandLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanelInfoCandLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel26)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                 .addGroup(jPanelInfoCandLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jTxtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -261,7 +284,7 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame {
                     .addComponent(jLabel16)
                     .addComponent(jTxtPm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel17))
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         jButton4.setText("Sair");
@@ -273,6 +296,11 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame {
         jLabel25.setText("Descrição anexo:");
 
         jBtProcurarAnexo.setText("Procurar");
+        jBtProcurarAnexo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtProcurarAnexoActionPerformed(evt);
+            }
+        });
 
         jTblAnexos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -308,14 +336,14 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame {
                     .addComponent(jScrollPane2)
                     .addGroup(jPanelAnexosLayout.createSequentialGroup()
                         .addGroup(jPanelAnexosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jBtRemoverAnexo)
                             .addGroup(jPanelAnexosLayout.createSequentialGroup()
                                 .addComponent(jLabel25)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTxtAnexo, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jBtProcurarAnexo))
-                            .addComponent(jBtRemoverAnexo))
-                        .addGap(0, 434, Short.MAX_VALUE)))
+                                .addComponent(jTxtAnexo, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jBtProcurarAnexo)))
+                        .addGap(0, 384, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanelAnexosLayout.setVerticalGroup(
@@ -356,6 +384,11 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame {
         jCmbParentesco.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Filho", "Pai", "Tio", "Sobrinho" }));
 
         jBtAddAgregado.setText("Adicionar");
+        jBtAddAgregado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtAddAgregadoActionPerformed(evt);
+            }
+        });
 
         jBtRemoveAgregado.setText("Remover");
         jBtRemoveAgregado.setEnabled(false);
@@ -406,33 +439,32 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame {
                                 .addComponent(jLabel24)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jTxtNifAgr, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanelInfoAgregadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(jPanelInfoAgregadoLayout.createSequentialGroup()
-                                    .addComponent(jLabel19)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jCmbEscolaridadeAgr, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(jLabel20)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jCmbEstadoAgr, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(28, 28, 28)
-                                    .addComponent(jLabel21)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jCmbDtAgr, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(jPanelInfoAgregadoLayout.createSequentialGroup()
-                                    .addComponent(jLabel22)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jTxtOcupacaoAgr, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jLabel23)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jCmbParentesco, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(jPanelInfoAgregadoLayout.createSequentialGroup()
+                                .addComponent(jLabel19)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jCmbEscolaridadeAgr, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel20)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jCmbEstadoAgr, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(28, 28, 28)
+                                .addComponent(jLabel21)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jCmbDtAgr, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanelInfoAgregadoLayout.createSequentialGroup()
+                                .addComponent(jLabel22)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTxtOcupacaoAgr, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel23)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jCmbParentesco, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addContainerGap())))
         );
         jPanelInfoAgregadoLayout.setVerticalGroup(
             jPanelInfoAgregadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelInfoAgregadoLayout.createSequentialGroup()
-                .addGap(25, 25, 25)
+                .addGap(31, 31, 31)
                 .addGroup(jPanelInfoAgregadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanelInfoAgregadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel24)
@@ -459,8 +491,8 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame {
                     .addComponent(jBtRemoveAgregado)
                     .addComponent(jBtAddAgregado, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPaneAgregado, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jScrollPaneAgregado, javax.swing.GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout jPanelMainLayout = new javax.swing.GroupLayout(jPanelMain);
@@ -517,6 +549,21 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jBtAddAgregadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtAddAgregadoActionPerformed
+        ((JmdiMain)this.getTopLevelAncestor()).jPanelProject.setVisible(false);
+        ((JmdiMain)this.getTopLevelAncestor()).jPanelSearch.setVisible(true);
+    }//GEN-LAST:event_jBtAddAgregadoActionPerformed
+
+    private void jBtProcurarAnexoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtProcurarAnexoActionPerformed
+        ((JmdiMain)this.getTopLevelAncestor()).jPanelProject.setVisible(true);
+        ((JmdiMain)this.getTopLevelAncestor()).jPanelSearch.setVisible(false);
+    }//GEN-LAST:event_jBtProcurarAnexoActionPerformed
+
+    private void formFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_formFocusGained
+        ((JmdiMain)this.getTopLevelAncestor()).jPanelProject.setVisible(false);
+        ((JmdiMain)this.getTopLevelAncestor()).jPanelSearch.setVisible(true);
+    }//GEN-LAST:event_formFocusGained
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBtAddAgregado;
@@ -532,6 +579,7 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame {
     private javax.swing.JComboBox jCmbEstado;
     private javax.swing.JComboBox jCmbEstadoAgr;
     private javax.swing.JComboBox jCmbParentesco;
+    private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -550,6 +598,7 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -582,4 +631,5 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame {
     private javax.swing.JTextField jTxtTelemovel;
     private javax.swing.JTextField jTxtTlf;
     // End of variables declaration//GEN-END:variables
+
 }

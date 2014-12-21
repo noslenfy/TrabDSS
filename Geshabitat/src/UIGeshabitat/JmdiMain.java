@@ -13,16 +13,22 @@ import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyVetoException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultDesktopManager;
 import javax.swing.DesktopManager;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JDesktopPane;
+import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
+import javax.swing.event.InternalFrameEvent;
+import javax.swing.event.InternalFrameListener;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
@@ -30,16 +36,19 @@ import javax.swing.event.MenuListener;
  *
  * @author nelson
  */
-public class JmdiMain extends javax.swing.JFrame {
+public class JmdiMain extends javax.swing.JFrame implements InternalFrameListener{
 
     /**
      * Creates new form jMdiMain
      */
     public JmdiMain() {
         initComponents();
-
+       // this.setContentPane(jDesktopPaneMain);
         this.setExtendedState(Frame.MAXIMIZED_BOTH);
-        
+        jScrollDesktopMain.getVerticalScrollBar().setUnitIncrement(16);
+        jPanelProject.setVisible(false);
+        jPanelSearch.setVisible(false);
+        jPanelDoacoes.setVisible(false);
     }
 
     /**
@@ -55,26 +64,36 @@ public class JmdiMain extends javax.swing.JFrame {
         jMainToolBar = new javax.swing.JToolBar();
         jSeparator1 = new javax.swing.JToolBar.Separator();
         jButton2 = new javax.swing.JButton();
-        jSeparator3 = new javax.swing.JToolBar.Separator();
         jbtProcurar = new javax.swing.JButton();
-        jSeparator4 = new javax.swing.JToolBar.Separator();
         jBtUserMan = new javax.swing.JButton();
-        jSeparator5 = new javax.swing.JToolBar.Separator();
         jBtNewCand = new javax.swing.JButton();
-        jSeparator6 = new javax.swing.JToolBar.Separator();
         jButton1 = new javax.swing.JButton();
-        jSeparator7 = new javax.swing.JToolBar.Separator();
         jButton3 = new javax.swing.JButton();
-        jSeparator8 = new javax.swing.JToolBar.Separator();
         jButton4 = new javax.swing.JButton();
-        jSeparator9 = new javax.swing.JToolBar.Separator();
         jButton5 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
+        jButton10 = new javax.swing.JButton();
         jStatusBar = new javax.swing.JPanel();
-        jLeftPanel = new javax.swing.JPanel();
         jLeftPanelLogo = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollDesktopMain = new javax.swing.JScrollPane();
         jDesktopPaneMain = new MDIDesktopPane();
+        jLayeredPaneLeft = new javax.swing.JLayeredPane();
+        jPanelProject = new SidePanel();
+        jPanel2 = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
+        jBtConcluirTarefa = new javax.swing.JButton();
+        jBtInitTarefa = new javax.swing.JButton();
+        jPanel4 = new javax.swing.JPanel();
+        jBtPlaneamento = new javax.swing.JButton();
+        jPanel5 = new javax.swing.JPanel();
+        jBtRegistoMaterial = new javax.swing.JButton();
+        jPanel6 = new javax.swing.JPanel();
+        jComboBox1 = new javax.swing.JComboBox();
+        jPanelSearch = new javax.swing.JPanel();
+        jButton11 = new javax.swing.JButton();
+        jPanelDoacoes = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
         jBarraMenus = new javax.swing.JMenuBar();
         jMenuFile = new javax.swing.JMenu();
         jMenuEdit = new javax.swing.JMenu();
@@ -101,9 +120,6 @@ public class JmdiMain extends javax.swing.JFrame {
         });
         jMainToolBar.add(jButton2);
 
-        jSeparator3.setSeparatorSize(new java.awt.Dimension(20, 10));
-        jMainToolBar.add(jSeparator3);
-
         jbtProcurar.setText("Procurar");
         jbtProcurar.setFocusable(false);
         jbtProcurar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -114,9 +130,6 @@ public class JmdiMain extends javax.swing.JFrame {
             }
         });
         jMainToolBar.add(jbtProcurar);
-
-        jSeparator4.setSeparatorSize(new java.awt.Dimension(20, 10));
-        jMainToolBar.add(jSeparator4);
 
         jBtUserMan.setText("Users");
         jBtUserMan.setFocusable(false);
@@ -129,9 +142,6 @@ public class JmdiMain extends javax.swing.JFrame {
         });
         jMainToolBar.add(jBtUserMan);
 
-        jSeparator5.setSeparatorSize(new java.awt.Dimension(20, 10));
-        jMainToolBar.add(jSeparator5);
-
         jBtNewCand.setText("Nova Cand");
         jBtNewCand.setFocusable(false);
         jBtNewCand.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -143,10 +153,7 @@ public class JmdiMain extends javax.swing.JFrame {
         });
         jMainToolBar.add(jBtNewCand);
 
-        jSeparator6.setSeparatorSize(new java.awt.Dimension(20, 10));
-        jMainToolBar.add(jSeparator6);
-
-        jButton1.setText("Novo Funcionario");
+        jButton1.setText("Funcionario");
         jButton1.setFocusable(false);
         jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -157,10 +164,7 @@ public class JmdiMain extends javax.swing.JFrame {
         });
         jMainToolBar.add(jButton1);
 
-        jSeparator7.setSeparatorSize(new java.awt.Dimension(20, 10));
-        jMainToolBar.add(jSeparator7);
-
-        jButton3.setText("Novo Voluntário");
+        jButton3.setText("Voluntário");
         jButton3.setFocusable(false);
         jButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -170,9 +174,6 @@ public class JmdiMain extends javax.swing.JFrame {
             }
         });
         jMainToolBar.add(jButton3);
-
-        jSeparator8.setSeparatorSize(new java.awt.Dimension(20, 10));
-        jMainToolBar.add(jSeparator8);
 
         jButton4.setText("Novo Doador");
         jButton4.setFocusable(false);
@@ -185,10 +186,7 @@ public class JmdiMain extends javax.swing.JFrame {
         });
         jMainToolBar.add(jButton4);
 
-        jSeparator9.setSeparatorSize(new java.awt.Dimension(20, 10));
-        jMainToolBar.add(jSeparator9);
-
-        jButton5.setText("Novo Doação");
+        jButton5.setText("Nova Doação");
         jButton5.setFocusable(false);
         jButton5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton5.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -198,6 +196,28 @@ public class JmdiMain extends javax.swing.JFrame {
             }
         });
         jMainToolBar.add(jButton5);
+
+        jButton6.setText("Projecto");
+        jButton6.setFocusable(false);
+        jButton6.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton6.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+        jMainToolBar.add(jButton6);
+
+        jButton10.setText("Donativos");
+        jButton10.setFocusable(false);
+        jButton10.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton10.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton10ActionPerformed(evt);
+            }
+        });
+        jMainToolBar.add(jButton10);
 
         jStatusBar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
@@ -212,19 +232,6 @@ public class JmdiMain extends javax.swing.JFrame {
             .addGap(0, 32, Short.MAX_VALUE)
         );
 
-        jLeftPanel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-
-        javax.swing.GroupLayout jLeftPanelLayout = new javax.swing.GroupLayout(jLeftPanel);
-        jLeftPanel.setLayout(jLeftPanelLayout);
-        jLeftPanelLayout.setHorizontalGroup(
-            jLeftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 229, Short.MAX_VALUE)
-        );
-        jLeftPanelLayout.setVerticalGroup(
-            jLeftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 369, Short.MAX_VALUE)
-        );
-
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/UIGeshabitat/pictures/logotipo_habitat_trans.png"))); // NOI18N
 
         javax.swing.GroupLayout jLeftPanelLogoLayout = new javax.swing.GroupLayout(jLeftPanelLogo);
@@ -233,22 +240,241 @@ public class JmdiMain extends javax.swing.JFrame {
             jLeftPanelLogoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
             .addGroup(jLeftPanelLogoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jLeftPanelLogoLayout.createSequentialGroup()
-                    .addGap(0, 5, Short.MAX_VALUE)
-                    .addComponent(jLabel1)
-                    .addGap(0, 6, Short.MAX_VALUE)))
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jLeftPanelLogoLayout.createSequentialGroup()
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         jLeftPanelLogoLayout.setVerticalGroup(
             jLeftPanelLogoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 95, Short.MAX_VALUE)
+            .addGap(0, 119, Short.MAX_VALUE)
             .addGroup(jLeftPanelLogoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jLeftPanelLogoLayout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jLeftPanelLogoLayout.createSequentialGroup()
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel1)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
         jScrollDesktopMain.setViewportView(jDesktopPaneMain);
+
+        jLayeredPaneLeft.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jLayeredPaneLeft.setLayout(new javax.swing.OverlayLayout(jLayeredPaneLeft));
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 102, 102), 1, true), "Projecto", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP));
+
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true), "Tarefas", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+
+        jBtConcluirTarefa.setText("Concluir Tarefa");
+        jBtConcluirTarefa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtConcluirTarefaActionPerformed(evt);
+            }
+        });
+
+        jBtInitTarefa.setText("Iniciar Tarefa");
+        jBtInitTarefa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtInitTarefaActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jBtInitTarefa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jBtConcluirTarefa, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jBtInitTarefa)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jBtConcluirTarefa)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true), "Gerir Fases/Tarefas"));
+
+        jBtPlaneamento.setText("Definir Planeamento");
+        jBtPlaneamento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtPlaneamentoActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jBtPlaneamento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jBtPlaneamento)
+                .addContainerGap())
+        );
+
+        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true), "Registo Material Usado"));
+
+        jBtRegistoMaterial.setText("Registo Material");
+        jBtRegistoMaterial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtRegistoMaterialActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jBtRegistoMaterial, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jBtRegistoMaterial)
+                .addContainerGap())
+        );
+
+        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true), "Estado Projecto"));
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Em execução" }));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout jPanelProjectLayout = new javax.swing.GroupLayout(jPanelProject);
+        jPanelProject.setLayout(jPanelProjectLayout);
+        jPanelProjectLayout.setHorizontalGroup(
+            jPanelProjectLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelProjectLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanelProjectLayout.setVerticalGroup(
+            jPanelProjectLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelProjectLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jLayeredPaneLeft.add(jPanelProject);
+
+        jButton11.setText("jButton11");
+
+        javax.swing.GroupLayout jPanelSearchLayout = new javax.swing.GroupLayout(jPanelSearch);
+        jPanelSearch.setLayout(jPanelSearchLayout);
+        jPanelSearchLayout.setHorizontalGroup(
+            jPanelSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelSearchLayout.createSequentialGroup()
+                .addGap(50, 50, 50)
+                .addComponent(jButton11)
+                .addContainerGap(119, Short.MAX_VALUE))
+        );
+        jPanelSearchLayout.setVerticalGroup(
+            jPanelSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelSearchLayout.createSequentialGroup()
+                .addGap(68, 68, 68)
+                .addComponent(jButton11)
+                .addContainerGap(338, Short.MAX_VALUE))
+        );
+
+        jLayeredPaneLeft.add(jPanelSearch);
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true), "Doações", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP));
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 237, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 385, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout jPanelDoacoesLayout = new javax.swing.GroupLayout(jPanelDoacoes);
+        jPanelDoacoes.setLayout(jPanelDoacoesLayout);
+        jPanelDoacoesLayout.setHorizontalGroup(
+            jPanelDoacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelDoacoesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanelDoacoesLayout.setVerticalGroup(
+            jPanelDoacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelDoacoesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jLayeredPaneLeft.add(jPanelDoacoes);
 
         jMenuFile.setText("File");
         jBarraMenus.add(jMenuFile);
@@ -269,8 +495,8 @@ public class JmdiMain extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLeftPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLeftPanelLogo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLeftPanelLogo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLayeredPaneLeft))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollDesktopMain)
                 .addContainerGap())
@@ -284,8 +510,8 @@ public class JmdiMain extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLeftPanelLogo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLeftPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLayeredPaneLeft, javax.swing.GroupLayout.PREFERRED_SIZE, 435, Short.MAX_VALUE))
                     .addComponent(jScrollDesktopMain))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jStatusBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -308,19 +534,6 @@ public class JmdiMain extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void jbtProcurarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtProcurarActionPerformed
-        JinternalFrameMain jfrmMain = new JinternalFrameMain();
-
-        jDesktopPaneMain.add(jfrmMain);
-        
-        try {
-            jfrmMain.setMaximum(true);
-        } catch (PropertyVetoException ex) {
-        }
-        jfrmMain.setVisible(true);
-        
-    }//GEN-LAST:event_jbtProcurarActionPerformed
-
     private void jBtUserManActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtUserManActionPerformed
         JintFrmUserManagment jfrmUsers = new JintFrmUserManagment();
         
@@ -331,20 +544,21 @@ public class JmdiMain extends javax.swing.JFrame {
         
         jfrmUsers.setLocation((desktopSize.width - frmLoginSize.width)/2,
                              (desktopSize.height - frmLoginSize.height)/2);
-  
+        ((MDIDesktopPane)jDesktopPaneMain).checkDesktopSize();
         jfrmUsers.setVisible(true);
     }//GEN-LAST:event_jBtUserManActionPerformed
 
     private void jBtNewCandActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtNewCandActionPerformed
         JintFrmNewCand jfrmNewCand = new JintFrmNewCand();
-        
-        
+        jfrmNewCand.addInternalFrameListener(this);
         jDesktopPaneMain.add(jfrmNewCand);
         
 //        try {
 //            jfrmNewCand.setMaximum(true);
 //        } catch (PropertyVetoException ex) {
 //        }
+
+        ((MDIDesktopPane)jDesktopPaneMain).checkDesktopSize();
         jfrmNewCand.setVisible(true);
         
         
@@ -353,26 +567,110 @@ public class JmdiMain extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         JintFrmNewElement jfrmNewFuncionario = new JintFrmNewElement("Funcionário");
         jDesktopPaneMain.add(jfrmNewFuncionario);
+        
+        ((MDIDesktopPane)jDesktopPaneMain).checkDesktopSize();
         jfrmNewFuncionario.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         JintFrmNewElement jfrmNewVoluntario = new JintFrmNewElement("Voluntário");
         jDesktopPaneMain.add(jfrmNewVoluntario);
+        ((MDIDesktopPane)jDesktopPaneMain).checkDesktopSize();
         jfrmNewVoluntario.setVisible(true);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         JintFrmNewElement jfrmNewDoador = new JintFrmNewElement("Doador");
         jDesktopPaneMain.add(jfrmNewDoador);
+        ((MDIDesktopPane)jDesktopPaneMain).checkDesktopSize();
         jfrmNewDoador.setVisible(true);
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         JintFrmNewDonation jfrmNewDoacao = new JintFrmNewDonation();
         jDesktopPaneMain.add(jfrmNewDoacao);
+        ((MDIDesktopPane)jDesktopPaneMain).checkDesktopSize();
         jfrmNewDoacao.setVisible(true);
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        boolean existing = false;
+        for( JInternalFrame i : jDesktopPaneMain.getAllFrames() )
+        {
+            if(i instanceof JintFrmNewProject) { 
+                try {
+                    i.setSelected(true);
+                } catch (PropertyVetoException ex) {  }
+                existing=true;
+            }
+        }
+        if(!existing){
+            JintFrmNewProject jfrmNewProject = new JintFrmNewProject();
+            jfrmNewProject.addInternalFrameListener(this);
+
+            jDesktopPaneMain.add(jfrmNewProject);
+             
+            ((MDIDesktopPane)jDesktopPaneMain).checkDesktopSize();
+            jfrmNewProject.setVisible(true);
+        }
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jbtProcurarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtProcurarActionPerformed
+        JinternalFrameMain jfrmMain = new JinternalFrameMain();
+
+        jDesktopPaneMain.add(jfrmMain);
+
+        try {
+            jfrmMain.setMaximum(true);
+        } catch (PropertyVetoException ex) {
+        }
+        jfrmMain.setVisible(true);
+
+    }//GEN-LAST:event_jbtProcurarActionPerformed
+
+    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+        JintFrmGestaoDonacoes jfrmDoacoes = new JintFrmGestaoDonacoes(jPanelDoacoes);
+
+        jDesktopPaneMain.add(jfrmDoacoes);
+        
+        jfrmDoacoes.addInternalFrameListener(this);
+        
+        ((MDIDesktopPane)jDesktopPaneMain).checkDesktopSize();
+        jfrmDoacoes.setVisible(true);
+        
+    }//GEN-LAST:event_jButton10ActionPerformed
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox1ActionPerformed
+
+    private void jBtPlaneamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtPlaneamentoActionPerformed
+        JintFrmFases frmFases = new JintFrmFases();
+        frmFases.addInternalFrameListener(this);
+        this.jDesktopPaneMain.add(frmFases);
+        frmFases.setVisible(true);
+    }//GEN-LAST:event_jBtPlaneamentoActionPerformed
+
+    private void jBtRegistoMaterialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtRegistoMaterialActionPerformed
+        JintFrmAlocarMaterial frmMaterial = new JintFrmAlocarMaterial();
+        frmMaterial.addInternalFrameListener(this);
+        this.jDesktopPaneMain.add(frmMaterial);
+        frmMaterial.setVisible(true);
+    }//GEN-LAST:event_jBtRegistoMaterialActionPerformed
+
+    private void jBtInitTarefaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtInitTarefaActionPerformed
+        JintFrmTarefas frmTarefas = new JintFrmTarefas(true);
+        frmTarefas.addInternalFrameListener(this);
+        this.jDesktopPaneMain.add(frmTarefas);
+        frmTarefas.setVisible(true);   
+    }//GEN-LAST:event_jBtInitTarefaActionPerformed
+
+    private void jBtConcluirTarefaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtConcluirTarefaActionPerformed
+        JintFrmTarefas frmTarefas = new JintFrmTarefas(false);
+        frmTarefas.addInternalFrameListener(this);
+        this.jDesktopPaneMain.add(frmTarefas);
+        frmTarefas.setVisible(true);  
+    }//GEN-LAST:event_jBtConcluirTarefaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -406,6 +704,7 @@ public class JmdiMain extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 new JmdiMain().setVisible(true);
                
@@ -415,34 +714,98 @@ public class JmdiMain extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar jBarraMenus;
+    private javax.swing.JButton jBtConcluirTarefa;
+    private javax.swing.JButton jBtInitTarefa;
     private javax.swing.JButton jBtNewCand;
+    private javax.swing.JButton jBtPlaneamento;
+    private javax.swing.JButton jBtRegistoMaterial;
     private javax.swing.JButton jBtUserMan;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton10;
+    private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
-    private javax.swing.JDesktopPane jDesktopPaneMain;
+    private javax.swing.JButton jButton6;
+    private javax.swing.JComboBox jComboBox1;
+    public javax.swing.JDesktopPane jDesktopPaneMain;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jLeftPanel;
+    private javax.swing.JLayeredPane jLayeredPaneLeft;
     private javax.swing.JPanel jLeftPanelLogo;
     private javax.swing.JToolBar jMainToolBar;
     private javax.swing.JMenu jMenuEdit;
     private javax.swing.JMenu jMenuFile;
     private javax.swing.JMenu jMenuWindow;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanelDoacoes;
+    public javax.swing.JPanel jPanelProject;
+    public javax.swing.JPanel jPanelSearch;
     private javax.swing.JScrollPane jScrollDesktopMain;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JToolBar.Separator jSeparator3;
-    private javax.swing.JToolBar.Separator jSeparator4;
-    private javax.swing.JToolBar.Separator jSeparator5;
-    private javax.swing.JToolBar.Separator jSeparator6;
-    private javax.swing.JToolBar.Separator jSeparator7;
-    private javax.swing.JToolBar.Separator jSeparator8;
-    private javax.swing.JToolBar.Separator jSeparator9;
     private javax.swing.JPanel jStatusBar;
     private javax.swing.JButton jbtProcurar;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void internalFrameOpened(InternalFrameEvent e) {
+      //  throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void internalFrameClosing(InternalFrameEvent e) {
+      //  throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void internalFrameClosed(InternalFrameEvent e) {
+      //  throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void internalFrameIconified(InternalFrameEvent e) {
+      //  throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void internalFrameDeiconified(InternalFrameEvent e) {
+       // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void internalFrameActivated(InternalFrameEvent e) {
+         if(e.getInternalFrame() instanceof JintFrmNewProject) {
+            ((SidePanel)jPanelProject).setInternalFrame(e.getInternalFrame());
+            jPanelProject.setVisible(true);
+            jPanelDoacoes.setVisible(false);
+            jPanelSearch.setVisible(false);
+        } else if (e.getInternalFrame() instanceof JintFrmNewCand){
+            jPanelProject.setVisible(false);
+            jPanelDoacoes.setVisible(false);
+            jPanelSearch.setVisible(true);
+        } else if (e.getInternalFrame() instanceof JintFrmGestaoDonacoes){
+            jPanelProject.setVisible(false);
+            jPanelSearch.setVisible(false);
+            jPanelDoacoes.setVisible(true);
+        }
+
+    }
+
+    @Override
+    public void internalFrameDeactivated(InternalFrameEvent e) {
+//        if(e.getInternalFrame() instanceof JintFrmNewProject)
+//            ((JintFrmNewProject)e.getSource()).setLayer(8);
+        
+        if(e.getInternalFrame() instanceof ModalJinternalFrame)
+            ((ModalJinternalFrame)e.getSource()).setLayer(8);
+
+    }
 }
 
 
