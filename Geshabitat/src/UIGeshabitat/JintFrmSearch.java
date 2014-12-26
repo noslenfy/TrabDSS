@@ -11,12 +11,12 @@ import javax.swing.JTable;
  *
  * @author nelson
  */
-public class JinternalFrameMain extends javax.swing.JInternalFrame {
+public class JintFrmSearch extends javax.swing.JInternalFrame {
 
     /**
      * Creates new form JinternalFrameMain
      */
-    public JinternalFrameMain() {
+    public JintFrmSearch() {
         initComponents();
         createSeparators();
     }

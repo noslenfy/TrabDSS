@@ -11,12 +11,12 @@ import java.awt.Cursor;
  *
  * @author nelson
  */
-public class JinternalFrameLogin extends javax.swing.JInternalFrame {
+public class JintFrmLogin extends javax.swing.JInternalFrame {
 
     /**
      * Creates new form jInteralFrameLogin
      */
-    public JinternalFrameLogin() {
+    public JintFrmLogin() {
         initComponents();
     }
 

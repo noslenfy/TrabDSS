@@ -13,18 +13,14 @@ import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyVetoException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultDesktopManager;
 import javax.swing.DesktopManager;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JDesktopPane;
-import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 import javax.swing.event.InternalFrameEvent;
@@ -521,7 +517,7 @@ public class JmdiMain extends javax.swing.JFrame implements InternalFrameListene
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        JinternalFrameLogin jfrmLogin = new JinternalFrameLogin();
+        JintFrmLogin jfrmLogin = new JintFrmLogin();
         Dimension desktopSize = jDesktopPaneMain.getSize();
         Dimension frmLoginSize = jfrmLogin.getSize();
         
@@ -565,7 +561,7 @@ public class JmdiMain extends javax.swing.JFrame implements InternalFrameListene
     }//GEN-LAST:event_jBtNewCandActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        JintFrmNewElement jfrmNewFuncionario = new JintFrmNewElement("Funcionário");
+        JintFrmNewFuncionario jfrmNewFuncionario = new JintFrmNewFuncionario();
         jDesktopPaneMain.add(jfrmNewFuncionario);
         
         ((MDIDesktopPane)jDesktopPaneMain).checkDesktopSize();
@@ -573,14 +569,14 @@ public class JmdiMain extends javax.swing.JFrame implements InternalFrameListene
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        JintFrmNewElement jfrmNewVoluntario = new JintFrmNewElement("Voluntário");
+        JintFrmNewVoluntario jfrmNewVoluntario = new JintFrmNewVoluntario();
         jDesktopPaneMain.add(jfrmNewVoluntario);
         ((MDIDesktopPane)jDesktopPaneMain).checkDesktopSize();
         jfrmNewVoluntario.setVisible(true);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        JintFrmNewElement jfrmNewDoador = new JintFrmNewElement("Doador");
+        JintFrmNewDoador jfrmNewDoador = new JintFrmNewDoador("Doador");
         jDesktopPaneMain.add(jfrmNewDoador);
         ((MDIDesktopPane)jDesktopPaneMain).checkDesktopSize();
         jfrmNewDoador.setVisible(true);
@@ -616,7 +612,7 @@ public class JmdiMain extends javax.swing.JFrame implements InternalFrameListene
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jbtProcurarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtProcurarActionPerformed
-        JinternalFrameMain jfrmMain = new JinternalFrameMain();
+        JintFrmSearch jfrmMain = new JintFrmSearch();
 
         jDesktopPaneMain.add(jfrmMain);
 
@@ -645,7 +641,7 @@ public class JmdiMain extends javax.swing.JFrame implements InternalFrameListene
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void jBtPlaneamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtPlaneamentoActionPerformed
-        JintFrmFases frmFases = new JintFrmFases();
+        JintFrmGerirFases frmFases = new JintFrmGerirFases();
         frmFases.addInternalFrameListener(this);
         this.jDesktopPaneMain.add(frmFases);
         frmFases.setVisible(true);
@@ -653,21 +649,21 @@ public class JmdiMain extends javax.swing.JFrame implements InternalFrameListene
 
     private void jBtRegistoMaterialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtRegistoMaterialActionPerformed
         JintFrmAlocarMaterial frmMaterial = new JintFrmAlocarMaterial();
-        frmMaterial.addInternalFrameListener(this);
+        //frmMaterial.addInternalFrameListener(this);
         this.jDesktopPaneMain.add(frmMaterial);
         frmMaterial.setVisible(true);
     }//GEN-LAST:event_jBtRegistoMaterialActionPerformed
 
     private void jBtInitTarefaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtInitTarefaActionPerformed
         JintFrmTarefas frmTarefas = new JintFrmTarefas(true);
-        frmTarefas.addInternalFrameListener(this);
+        //frmTarefas.addInternalFrameListener(this);
         this.jDesktopPaneMain.add(frmTarefas);
         frmTarefas.setVisible(true);   
     }//GEN-LAST:event_jBtInitTarefaActionPerformed
 
     private void jBtConcluirTarefaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtConcluirTarefaActionPerformed
         JintFrmTarefas frmTarefas = new JintFrmTarefas(false);
-        frmTarefas.addInternalFrameListener(this);
+        //frmTarefas.addInternalFrameListener(this);
         this.jDesktopPaneMain.add(frmTarefas);
         frmTarefas.setVisible(true);  
     }//GEN-LAST:event_jBtConcluirTarefaActionPerformed

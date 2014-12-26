@@ -19,6 +19,7 @@ public class JintFrmTarefas extends ModalJinternalFrame {
      * @param tipo
      */
     public JintFrmTarefas(boolean tipo) {
+
         this.tipo = tipo;
         initComponents();
         if(tipo) {

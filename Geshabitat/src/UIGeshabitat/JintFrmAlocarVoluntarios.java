@@ -38,7 +38,7 @@ public class JintFrmAlocarVoluntarios extends javax.swing.JInternalFrame{
         jCmbEscolha = new javax.swing.JComboBox();
         jLabel2 = new javax.swing.JLabel();
         jBtAlocar = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
+        jLblTipo = new javax.swing.JLabel();
         jSplitPane1 = new javax.swing.JSplitPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         jListProjects = new javax.swing.JList();
@@ -65,9 +65,19 @@ public class JintFrmAlocarVoluntarios extends javax.swing.JInternalFrame{
         buttonGroupTipo.add(jOptVoluntario);
         jOptVoluntario.setSelected(true);
         jOptVoluntario.setText("Voluntário");
+        jOptVoluntario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jOptVoluntarioActionPerformed(evt);
+            }
+        });
 
         buttonGroupTipo.add(jOptEquipa);
         jOptEquipa.setText("Equipa");
+        jOptEquipa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jOptEquipaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -96,7 +106,7 @@ public class JintFrmAlocarVoluntarios extends javax.swing.JInternalFrame{
 
         jBtAlocar.setText("Alocar");
 
-        jLabel1.setText("Voluntario:");
+        jLblTipo.setText("Voluntario:");
 
         jSplitPane1.setDividerLocation(250);
 
@@ -137,7 +147,7 @@ public class JintFrmAlocarVoluntarios extends javax.swing.JInternalFrame{
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel1)
+                                .addComponent(jLblTipo)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jCmbEscolha, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -163,7 +173,7 @@ public class JintFrmAlocarVoluntarios extends javax.swing.JInternalFrame{
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jCmbEscolha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1)
+                    .addComponent(jLblTipo)
                     .addComponent(jBtList))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -203,6 +213,16 @@ public class JintFrmAlocarVoluntarios extends javax.swing.JInternalFrame{
         // TODO add your handling code here:
     }//GEN-LAST:event_jBtListActionPerformed
 
+    private void jOptEquipaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jOptEquipaActionPerformed
+        if(jOptEquipa.isSelected()) jLblTipo.setText("Equipa:");
+        else jLblTipo.setText("Voluntario:");
+    }//GEN-LAST:event_jOptEquipaActionPerformed
+
+    private void jOptVoluntarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jOptVoluntarioActionPerformed
+        if(jOptVoluntario.isSelected()) jLblTipo.setText("Voluntario:");
+        else jLblTipo.setText("Equipa:");
+    }//GEN-LAST:event_jOptVoluntarioActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroupTipo;
@@ -210,9 +230,9 @@ public class JintFrmAlocarVoluntarios extends javax.swing.JInternalFrame{
     private javax.swing.JButton jBtCancelar;
     private javax.swing.JButton jBtList;
     private javax.swing.JComboBox jCmbEscolha;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLblTipo;
     private javax.swing.JList jListProjects;
     private javax.swing.JList jListTarefas;
     private javax.swing.JRadioButton jOptEquipa;
