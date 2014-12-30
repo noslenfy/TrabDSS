@@ -23,13 +23,14 @@ public class VoluntarioDAO extends EntityDAO{
     @Override
     public PreparedStatement getInsertSqlStatement(String table) throws PersistableException
     {
+        int autoGenerateKeys = PreparedStatement.RETURN_GENERATED_KEYS;
         Voluntario voluntario = (Voluntario)super.objectToPersist;   
         PreparedStatement statement=null;
         String sql = "INSERT INTO " + table + " (Rua,Nif,Telefone,Email,DtNascimento,Localidade,Nome,Cp,Nacionalidade,Profissao) "
                 + "VALUES (?,?,?,?,?,?,?,?,?,?)";
        
         try {
-            statement = conn.prepareStatement(sql);
+            statement = conn.prepareStatement(sql,autoGenerateKeys);
             
             statement.setString(1, voluntario.getRua());
             statement.setInt(2, voluntario.getNif());  
@@ -55,11 +56,11 @@ public class VoluntarioDAO extends EntityDAO{
             Voluntario ret;
         try {
             ret = new Voluntario(rst.getInt("Nif"),
-                                  rst.getString("Telefone"),
-                                  rst.getString("Rua"),
-                                  rst.getString("Email"),
-                                  rst.getString("Localidade"),
                                   rst.getString("Nome"),
+                                  rst.getString("Telefone"),
+                                  rst.getString("Email"),
+                                  rst.getString("Rua"),
+                                  rst.getString("Localidade"),
                                   rst.getString("Cp"),
                                   rst.getDate("DtNascimento"),
                                   rst.getString("Nacionalidade"),
@@ -70,8 +71,7 @@ public class VoluntarioDAO extends EntityDAO{
         }
         return ret;
     }
- 
-    
+
     
 
         

@@ -5,7 +5,7 @@
  */
 package BLGeshabitat;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -22,6 +22,11 @@ public class Familiar {
     private String Ocupacao;    
     private String grau;
 
+    public Familiar() {
+    }
+
+    
+    
     public Familiar(int Id, String Nome, String EstadoCivil, Date DtNascimento, String Escolaridade, String Ocupacao, String grau) {
         this.Id = Id;
         this.Nome = Nome;
@@ -86,7 +91,7 @@ public class Familiar {
      * @return
      */
     public Object[] getRowData() {
-        Object[] ret = {Id,Nome,EstadoCivil,DtNascimento,Escolaridade,Ocupacao,grau};
+        Object[] ret = {Id,Nome,grau,EstadoCivil,Escolaridade,DtNascimento,Ocupacao};
         return ret;
     }
 

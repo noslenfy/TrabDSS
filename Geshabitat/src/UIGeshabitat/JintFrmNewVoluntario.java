@@ -273,24 +273,20 @@ public class JintFrmNewVoluntario extends javax.swing.JInternalFrame {
         String Profissao = jTxtProfissao.getText();
 
 
-        FacadeDAO facade = new FacadeDAO();
-        
-        
-        // Criar facade da BL
-        
+      
         
         Voluntario voluntario = new Voluntario(Nif, Nome,Telefone,Email,Rua,Localidade,Cp,DtNascimento,Nacionalidade, Profissao);
  
         try {
-            facade.put(new VoluntarioDAO(), voluntario);
+            JmdiMain.facadeBL.put(voluntario);
             
         } catch (PersistableException ex) {
-            JOptionPane.showMessageDialog(this,"Ocorreu um erro a criação do registo","Erro", JOptionPane.ERROR_MESSAGE);            
+            JOptionPane.showMessageDialog(this,"Ocorreu um erro a criação do registo","Erro", JOptionPane.ERROR_MESSAGE);  
+            return;
         }
         JOptionPane.showMessageDialog(this,"Registo adicionado com sucesso!","Sucesso", JOptionPane.INFORMATION_MESSAGE);
-        facade.closeConnection();
-        this.dispose();
 
+        this.dispose();
         
     }//GEN-LAST:event_jBtAddActionPerformed
 

@@ -17,7 +17,7 @@ public class Geshabitat {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        FacadeDAO d = new FacadeDAO();
+        //FacadeDAO d = new FacadeDAO();
     }
     
 }

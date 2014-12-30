@@ -22,13 +22,15 @@ public class DoadorDAO extends EntityDAO{
 
     @Override
     public PreparedStatement getInsertSqlStatement(String table) throws PersistableException {
+       
+        int autoGenerateKeys = PreparedStatement.RETURN_GENERATED_KEYS;
         Doador doador = (Doador)super.objectToPersist;
         PreparedStatement statement=null;
         String sql = "INSERT INTO " + table + " (Rua,Nif,Telefone,Email,DtNascimento,Localidade,Nome,Cp,EstadoCivil,Profissao,Actividade,Tipo,Parceria) "
                 + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
        
         try {
-            statement = conn.prepareStatement(sql);
+            statement = conn.prepareStatement(sql,autoGenerateKeys);
             
             statement.setString(1, doador.getRua());
             statement.setInt(2, doador.getNif());  
@@ -56,11 +58,11 @@ public class DoadorDAO extends EntityDAO{
             Doador ret;
         try {
             ret = new Doador(rst.getInt("Nif"),
-                                  rst.getString("Telefone"),
-                                  rst.getString("Rua"),
-                                  rst.getString("Email"),
-                                  rst.getString("Localidade"),
                                   rst.getString("Nome"),
+                                  rst.getString("Telefone"),
+                                  rst.getString("Email"),
+                                  rst.getString("Rua"),
+                                  rst.getString("Localidade"),
                                   rst.getString("Cp"),
                                   rst.getDate("DtNascimento"),
                                   rst.getString("EstadoCivil"),
@@ -74,11 +76,46 @@ public class DoadorDAO extends EntityDAO{
         }
         return ret;
     }
- 
-    
-    
 
+        public float getTotalDoacoes(int Doador_Id) throws PersistableException {
         
+        String sql = "SELECT SUM(valor) AS total FROM Doador AS D inner join Doacao AS DC WHERE D.Id = DC.Doador_Id and D.Id=?";
+        
+        
+        
+        float ret=-1;
+        PreparedStatement statement = null;
+        ResultSet rst = null;
+        
+        try {
+            statement = conn.prepareStatement(sql);     
+            
+            statement.setInt(1,Doador_Id);
+            rst = statement.executeQuery();
+            
+            if(rst.next())
+            {              
+                ret=rst.getFloat("total");
+            } else {
+                throw new PersistableException("Ocorreu um erro na obtenção do registo");           
+            }
+            statement.close();
+            rst.close();
+            
+        } catch (SQLException ex) { 
+            throw new PersistableException("Ocorreu um erro na obtenção do registo" + ex.getMessage());
+        } finally {
+            try {
+                if (statement != null)  statement.close();
+                if (rst != null) rst.close();
+                
+            } catch (SQLException ex) {
+                throw new PersistableException("Ocorreu um erro ao fechar conexões!\n" + ex.getMessage());
+            }  
+            
+        }
+        return ret;
+    }    
 
     
 }

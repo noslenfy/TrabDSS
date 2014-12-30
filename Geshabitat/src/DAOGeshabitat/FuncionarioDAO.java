@@ -6,9 +6,11 @@
 package DAOGeshabitat;
 
 import BLGeshabitat.Funcionario;
+import static DAOGeshabitat.EntityDAO.conn;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  *
@@ -66,11 +68,7 @@ public class FuncionarioDAO extends EntityDAO{
         }
         return ret;
     }
- 
-    
-    
-
-        
-
-    
 }
+    
+
+

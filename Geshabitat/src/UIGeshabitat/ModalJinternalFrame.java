@@ -5,15 +5,12 @@
  */
 package UIGeshabitat;
 
-import javax.swing.JFrame;
-import javax.swing.event.InternalFrameListener;
-
 
 /**
  *
  * @author nelson
  */
-public class ModalJinternalFrame extends javax.swing.JInternalFrame  {
+public abstract class ModalJinternalFrame extends javax.swing.JInternalFrame  {
 
 
 

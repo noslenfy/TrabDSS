@@ -174,6 +174,9 @@ public class Funcionario {
     }
 
 
-
+    public Object[] getRowData() {
+        Object[] ret = {Id,Nome,Localidade,Telefone,Email};
+        return ret;
+    }
 
 }

@@ -30,8 +30,11 @@ public class Doador {
 
     public Doador() {
     }
-    public Doador(int Nif, String Nome, String Telefone, String Email, String Rua, String Localidade, String Cp, Date DtNascimento, String EstadoCivil, String Profissao, String Actividade, String Tipo, boolean Parceria) {
-        this.Id = Id;
+    
+    
+    public Doador(int Nif, String Nome, String Telefone, String Email, String Rua, String Localidade, String Cp, Date DtNascimento, String EstadoCivil, String Profissao,
+                    String Actividade, String Tipo, boolean Parceria) {
+        this.Id = -1;
         this.Nif = Nif;
         this.Nome = Nome;
         this.Telefone = Telefone;
@@ -135,7 +138,7 @@ public class Doador {
 
     @Override
     public String toString() {
-        return "Doador{" + "Id=" + Id + ", Nif=" + Nif + ", Nome=" + Nome + ", Telefone=" + Telefone + ", Email=" + Email + ", Rua=" + Rua + ", Localidade=" + Localidade + ", Cp=" + Cp + ", DtNascimento=" + DtNascimento + ", EstadoCivil=" + EstadoCivil + ", Profissao=" + Profissao + ", Actividade=" + Actividade + ", Tipo=" + Tipo + ", Parceria=" + Parceria + '}';
+        return Nome;
     }
 
     @Override
@@ -218,7 +221,10 @@ public class Doador {
         return new Doador(this.Nif,this.Nome,this.Telefone,this.Email,this.Rua,this.Localidade,this.Cp,this.DtNascimento,this.EstadoCivil,this.Profissao, this.Actividade, this.Tipo, this.Parceria);
     }
 
-
+    public Object[] getRowData() {
+        Object[] ret = {Id,Nome,Localidade,Tipo,new String(""),new String(""),Parceria};
+        return ret;
+    }
 
 
 }

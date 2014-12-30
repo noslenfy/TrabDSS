@@ -5,18 +5,19 @@
  */
 package UIGeshabitat;
 
-import javax.swing.event.InternalFrameListener;
-
 /**
  *
  * @author nelson
  */
 public class JintFrmGerirFases extends ModalJinternalFrame  {
 
+
     /**
      * Creates new form JintFrmFases
+     * @param Project_Id
      */
     public JintFrmGerirFases() {
+
         initComponents();
     }
 

@@ -5,25 +5,52 @@
  */
 package UIGeshabitat;
 
+import BLGeshabitat.Material;
+import DAOGeshabitat.PersistableException;
+import java.util.List;
+
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author nelson
  */
-public class JintFrmSelectArtigo extends javax.swing.JInternalFrame {
+public class JintFrmSelectArtigo extends javax.swing.JInternalFrame{
     
     private final int modo; //  0 -> Doação | 1 -> Outro
+    
     /**
      * Creates new form JintFrmNewArtigo
      * @param modo -- Tipo de modo, 0=doação, 1=outro, permite activar modo de edição de novos artigos
      */
     public JintFrmSelectArtigo(int modo) {
+
         this.modo = modo;
         initComponents();
-        if(modo!=0) jBtNew.setVisible(false);
+        
+        this.populateList();
+        if(modo!=0) {
+            jBtNew.setVisible(false);
+            jBtRemover.setVisible(false);
+        }
     }
+    
+    private void populateList() {
+        try {
+            List<Object> artigos = JmdiMain.facadeBL.getAll(new Material());
+            DefaultTableModel tableModel = (DefaultTableModel)jTblArtigos.getModel();
+            for(Object obj : artigos) {
+                Material m = (Material) obj;
+                tableModel.addRow(m.getRowData());
+            }
+        } catch (PersistableException ex) {
+            JOptionPane.showMessageDialog(this,"Ocorre um erro na obtencao da lista de Artigos!","Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -39,7 +66,8 @@ public class JintFrmSelectArtigo extends javax.swing.JInternalFrame {
         jBtSelect = new javax.swing.JButton();
         jBtCancel = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTblArtigos = new javax.swing.JTable();
+        jBtRemover = new javax.swing.JButton();
 
         setClosable(true);
         setTitle("Artigos");
@@ -54,19 +82,34 @@ public class JintFrmSelectArtigo extends javax.swing.JInternalFrame {
         jBtSelect.setText("Selecionar");
 
         jBtCancel.setText("Cancelar");
+        jBtCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtCancelActionPerformed(evt);
+            }
+        });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTblArtigos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+
             },
             new String [] {
                 "Id", "Descrição", "Stock"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jTblArtigos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTblArtigosMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jTblArtigos);
+
+        jBtRemover.setText("Remover");
+        jBtRemover.setEnabled(false);
+        jBtRemover.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtRemoverActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanelMainLayout = new javax.swing.GroupLayout(jPanelMain);
         jPanelMain.setLayout(jPanelMainLayout);
@@ -77,6 +120,8 @@ public class JintFrmSelectArtigo extends javax.swing.JInternalFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelMainLayout.createSequentialGroup()
                         .addGap(23, 23, 23)
                         .addComponent(jBtNew)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jBtRemover)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jBtSelect)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -96,7 +141,8 @@ public class JintFrmSelectArtigo extends javax.swing.JInternalFrame {
                 .addGroup(jPanelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jBtSelect)
                     .addComponent(jBtCancel)
-                    .addComponent(jBtNew))
+                    .addComponent(jBtNew)
+                    .addComponent(jBtRemover))
                 .addContainerGap())
         );
 
@@ -125,21 +171,59 @@ public class JintFrmSelectArtigo extends javax.swing.JInternalFrame {
        
         String s = (String)JOptionPane.showInputDialog(
         this    ,
-        "Insira descrição do novo artigo",
+        "Insira descrição(unitária) do novo artigo",
         "Novo artigo",
         JOptionPane.PLAIN_MESSAGE,
         icon,
         null,
         "");
+        
+        if(JmdiMain.exists(s,jTblArtigos,"Descrição")) {
+            JOptionPane.showMessageDialog(this,"O artigo que inseriu já existe,\npor favor introduza um nome distinto.","Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+                
+        Material m = new Material(s,0);
+        int Id=-1;
+
+        try {
+            Id=JmdiMain.facadeBL.put(m);
+            m.setId(Id);
+        } catch (PersistableException ex) {
+            JOptionPane.showMessageDialog(this,"Ocorreu um erro na criação do Artigo!","Erro", JOptionPane.ERROR_MESSAGE);
+        }
+        ((DefaultTableModel)this.jTblArtigos.getModel()).addRow(m.getRowData());
     }//GEN-LAST:event_jBtNewActionPerformed
+
+
+    private void jTblArtigosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTblArtigosMouseClicked
+         int row = jTblArtigos.getSelectedRow();
+        if(row!=-1) this.jBtRemover.setEnabled(true);
+        else this.jBtRemover.setEnabled(false);
+    }//GEN-LAST:event_jTblArtigosMouseClicked
+
+    private void jBtRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtRemoverActionPerformed
+        int row = jTblArtigos.getSelectedRow();  
+        ((DefaultTableModel)this.jTblArtigos.getModel()).removeRow(row);
+        //JmdiMain.reorderId(((DefaultTableModel)this.jTblArtigos.getModel()));
+       //JmdiMain.facadeBL.delete(row, row);
+    }//GEN-LAST:event_jBtRemoverActionPerformed
+
+    private void jBtCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtCancelActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_jBtCancelActionPerformed
+
+                                            
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBtCancel;
     private javax.swing.JButton jBtNew;
+    private javax.swing.JButton jBtRemover;
     private javax.swing.JButton jBtSelect;
     private javax.swing.JPanel jPanelMain;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTblArtigos;
     // End of variables declaration//GEN-END:variables
 }

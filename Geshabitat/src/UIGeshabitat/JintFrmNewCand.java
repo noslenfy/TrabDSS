@@ -5,19 +5,19 @@
  */
 package UIGeshabitat;
 
-import BLGeshabitat.FacadeBL;
+import BLGeshabitat.Anexo;
+import BLGeshabitat.Candidatura;
 import BLGeshabitat.Familiar;
 import BLGeshabitat.Funcionario;
 import DAOGeshabitat.PersistableException;
-import java.awt.FileDialog;
-import java.io.IOException;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -25,16 +25,25 @@ import javax.swing.table.DefaultTableModel;
  * @author nelson
  */
 public class JintFrmNewCand extends javax.swing.JInternalFrame  {
-    private FacadeBL facadeBL;
+    
+ 
+    private Candidatura cand;
+
+    public Candidatura getCand() {
+        return cand;
+    }
+    public void setCand(Candidatura cand) {
+        this.cand = cand;
+    }
+    
     
     /**
      * Creates new form JintFrmNewCand
      */
     public JintFrmNewCand() {
-        facadeBL = new FacadeBL();
         initComponents();
         try {
-            List<Object> funcionarios = facadeBL.getFuncionarios();
+            List<Object> funcionarios = JmdiMain.facadeBL.getAll(new Funcionario());
             for(Object obj : funcionarios) {
                 jCmbFuncionario.addItem((Funcionario)obj);
             }
@@ -62,29 +71,27 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame  {
         jLabel3 = new javax.swing.JLabel();
         jCmbEscolaridade = new javax.swing.JComboBox();
         jLabel4 = new javax.swing.JLabel();
-        jCmbEstado = new javax.swing.JComboBox();
+        jCmbEstadoCivil = new javax.swing.JComboBox();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jTxtProfissao = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jTxtTelemovel = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
-        jTxtTlf = new javax.swing.JTextField();
+        jTxtTelefone = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         jTxtRua = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
-        jTxtCP = new javax.swing.JTextField();
+        jTxtCp = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         jTxtLocalidade = new javax.swing.JTextField();
-        jLabel12 = new javax.swing.JLabel();
-        jTxtNacionalidade = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
         jTxtEmail = new javax.swing.JTextField();
         jLabel14 = new javax.swing.JLabel();
-        jTxtRab = new javax.swing.JTextField();
+        jTxtRendimento = new javax.swing.JTextField();
         jLabel15 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
-        jTxtPm = new javax.swing.JTextField();
+        jTxtPrestacao = new javax.swing.JTextField();
         jLabel17 = new javax.swing.JLabel();
         jLabel26 = new javax.swing.JLabel();
         jCmbFuncionario = new javax.swing.JComboBox();
@@ -97,6 +104,7 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame  {
         jScrollPane2 = new javax.swing.JScrollPane();
         jTblAnexos = new javax.swing.JTable();
         jBtRemoverAnexo = new javax.swing.JButton();
+        jTxtDescricao = new javax.swing.JTextField();
         jPanelInfoAgregado = new javax.swing.JPanel();
         jLabel18 = new javax.swing.JLabel();
         jTxtNomeAgr = new javax.swing.JTextField();
@@ -136,7 +144,7 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame  {
 
         jLabel4.setText("Estado Civil:");
 
-        jCmbEstado.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Solteiro", "Casado ", "Viuvo" }));
+        jCmbEstadoCivil.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Solteiro", "Casado ", "Viuvo" }));
 
         jLabel5.setText("Data Nascimento:");
 
@@ -151,8 +159,6 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame  {
         jLabel10.setText("Cod. Postal:");
 
         jLabel11.setText("Localidade:");
-
-        jLabel12.setText("Nacionalidade:");
 
         jLabel13.setText("Email:");
 
@@ -181,11 +187,11 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame  {
                     .addGroup(jPanelInfoCandLayout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTxtNome)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTxtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 472, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(3, 3, 3)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTxtNif, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jTxtNif, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())
                     .addGroup(jPanelInfoCandLayout.createSequentialGroup()
                         .addGroup(jPanelInfoCandLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -196,7 +202,7 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame  {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel4)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jCmbEstado, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jCmbEstadoCivil, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel5)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -206,13 +212,13 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame  {
                                     .addGroup(jPanelInfoCandLayout.createSequentialGroup()
                                         .addComponent(jLabel14)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTxtRab, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jTxtRendimento, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jLabel15)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGap(18, 18, 18)
                                         .addComponent(jLabel16)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTxtPm, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jTxtPrestacao, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jLabel17))
                                     .addGroup(jPanelInfoCandLayout.createSequentialGroup()
@@ -226,7 +232,7 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame  {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jLabel8)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTxtTlf, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(jTxtTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(jPanelInfoCandLayout.createSequentialGroup()
                                         .addComponent(jLabel9)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -234,32 +240,29 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame  {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(jLabel10)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTxtCP, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addComponent(jTxtCp, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(0, 0, Short.MAX_VALUE)))
                         .addContainerGap())
                     .addGroup(jPanelInfoCandLayout.createSequentialGroup()
                         .addGroup(jPanelInfoCandLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanelInfoCandLayout.createSequentialGroup()
-                                .addGap(569, 569, 569)
-                                .addComponent(jTxtEmail))
+                                .addComponent(jLabel26)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jCmbFuncionario, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(jPanelInfoCandLayout.createSequentialGroup()
+                                .addComponent(jLabel11)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jTxtLocalidade, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(jPanelInfoCandLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanelInfoCandLayout.createSequentialGroup()
-                                        .addComponent(jLabel11)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jTxtLocalidade, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jLabel12)
-                                        .addGap(20, 20, 20)
-                                        .addComponent(jTxtNacionalidade, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel13))
+                                        .addGap(48, 48, 48)
+                                        .addComponent(jTxtEmail))
                                     .addGroup(jPanelInfoCandLayout.createSequentialGroup()
-                                        .addComponent(jLabel26)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jCmbFuncionario, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addGap(12, 12, 12))))
+                                        .addComponent(jLabel13)
+                                        .addGap(0, 0, Short.MAX_VALUE)))))
+                        .addGap(280, 280, 280))))
         );
         jPanelInfoCandLayout.setVerticalGroup(
             jPanelInfoCandLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -279,7 +282,7 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame  {
                     .addComponent(jLabel3)
                     .addComponent(jCmbEscolaridade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
-                    .addComponent(jCmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jCmbEstadoCivil, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5)
                     .addComponent(jDpDtNascimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -288,29 +291,27 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame  {
                     .addComponent(jLabel7)
                     .addComponent(jTxtTelemovel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8)
-                    .addComponent(jTxtTlf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTxtTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanelInfoCandLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
                     .addComponent(jTxtRua, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel10)
-                    .addComponent(jTxtCP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTxtCp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanelInfoCandLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel11)
                     .addComponent(jTxtLocalidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel12)
-                    .addComponent(jTxtNacionalidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel13)
                     .addComponent(jTxtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanelInfoCandLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel14)
-                    .addComponent(jTxtRab, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTxtRendimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel15)
                     .addComponent(jLabel16)
-                    .addComponent(jTxtPm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTxtPrestacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel17))
                 .addContainerGap())
         );
@@ -323,10 +324,15 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame  {
         });
 
         jBtAddCand.setText("Adicionar");
+        jBtAddCand.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtAddCandActionPerformed(evt);
+            }
+        });
 
         jPanelAnexos.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true), "Anexos"));
 
-        jLabel25.setText("Anexar Ficheiro:");
+        jLabel25.setText("Descricao:");
 
         jBtProcurarAnexo.setText("Anexar");
         jBtProcurarAnexo.addActionListener(new java.awt.event.ActionListener() {
@@ -340,15 +346,22 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame  {
 
             },
             new String [] {
-                "Id", "Caminho"
+                "Id", "Descricao", "Caminho"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
         jTblAnexos.setColumnSelectionAllowed(true);
@@ -363,6 +376,9 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame  {
             jTblAnexos.getColumnModel().getColumn(0).setMinWidth(70);
             jTblAnexos.getColumnModel().getColumn(0).setPreferredWidth(70);
             jTblAnexos.getColumnModel().getColumn(0).setMaxWidth(100);
+            jTblAnexos.getColumnModel().getColumn(1).setMinWidth(300);
+            jTblAnexos.getColumnModel().getColumn(1).setPreferredWidth(300);
+            jTblAnexos.getColumnModel().getColumn(1).setMaxWidth(400);
         }
 
         jBtRemoverAnexo.setText("Remover");
@@ -387,6 +403,8 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame  {
                             .addGroup(jPanelAnexosLayout.createSequentialGroup()
                                 .addComponent(jLabel25)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTxtDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jBtProcurarAnexo)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
@@ -397,7 +415,8 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame  {
                 .addGap(18, 18, 18)
                 .addGroup(jPanelAnexosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel25)
-                    .addComponent(jBtProcurarAnexo))
+                    .addComponent(jBtProcurarAnexo)
+                    .addComponent(jTxtDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -553,9 +572,11 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame  {
                         .addComponent(jBtAddCand)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jBtSair, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jPanelInfoCand, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanelInfoAgregado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(jPanelMainLayout.createSequentialGroup()
+                        .addGroup(jPanelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jPanelInfoCand, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanelInfoAgregado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanelMainLayout.setVerticalGroup(
@@ -594,9 +615,11 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame  {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+
+    
     private void populateCmbFuncionario() {
         try {
-            List<Object> funcionarios = facadeBL.getFuncionarios();
+            List<Object> funcionarios = JmdiMain.facadeBL.getAll(new Funcionario());
             for(Object obj : funcionarios) {
                 jCmbFuncionario.addItem((Funcionario)obj);
             }
@@ -617,7 +640,7 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame  {
         String Ocupacao = this.jTxtOcupacaoAgr.getText();
         String Parentesco = this.jCmbParentesco.getSelectedItem().toString();
         String Escolaridade = this.jCmbEscolaridadeAgr.getSelectedItem().toString();
-        Familiar familiar = new Familiar(Id,Nome,EstadoCivil,new java.sql.Date(DtNascimento.getTime()),Escolaridade,Ocupacao,Parentesco);
+        Familiar familiar = new Familiar(Id,Nome,EstadoCivil,DtNascimento,Escolaridade,Ocupacao,Parentesco);
         
         ((DefaultTableModel)this.jTblAgregado.getModel()).addRow(familiar.getRowData());
         
@@ -631,7 +654,7 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame  {
     
         if(returnVal == JFileChooser.APPROVE_OPTION) {
             String filename = chooser.getSelectedFile().getAbsoluteFile().getAbsolutePath();
-            ((DefaultTableModel)this.jTblAnexos.getModel()).addRow(new Object[] { this.jTblAnexos.getRowCount()+1,filename });
+            ((DefaultTableModel)this.jTblAnexos.getModel()).addRow(new Object[] { this.jTblAnexos.getRowCount()+1,jTxtDescricao.getText(),filename });
         }
         
                
@@ -650,7 +673,9 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame  {
     private void jBtRemoveAgregadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtRemoveAgregadoActionPerformed
         int row = jTblAgregado.getSelectedRow();  
         ((DefaultTableModel)this.jTblAgregado.getModel()).removeRow(row);
-        this.reorderId(((DefaultTableModel)this.jTblAgregado.getModel()));
+        JmdiMain.reorderId(((DefaultTableModel)this.jTblAgregado.getModel()));
+        this.jBtRemoveAgregado.setEnabled(false);
+        
     }//GEN-LAST:event_jBtRemoveAgregadoActionPerformed
 
     private void jTblAnexosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTblAnexosMouseClicked
@@ -662,18 +687,119 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame  {
     private void jBtRemoverAnexoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtRemoverAnexoActionPerformed
         int row = jTblAnexos.getSelectedRow();  
         ((DefaultTableModel)this.jTblAnexos.getModel()).removeRow(row);
-        this.reorderId(((DefaultTableModel)this.jTblAnexos.getModel()));
+        JmdiMain.reorderId(((DefaultTableModel)this.jTblAnexos.getModel()));
+        this.jBtRemoverAnexo.setEnabled(false);
     }//GEN-LAST:event_jBtRemoverAnexoActionPerformed
 
     private void jBtSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtSairActionPerformed
         this.dispose();
     }//GEN-LAST:event_jBtSairActionPerformed
 
-    private void reorderId(DefaultTableModel tableModel) {
-        for(int i=0; i < tableModel.getRowCount(); i++) {
-            tableModel.setValueAt(i+1, i, 0);
+    private void jBtAddCandActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtAddCandActionPerformed
+        int Id = -1;
+        int Nif;
+        try{
+            Nif = Integer.valueOf(jTxtNif.getText());
+        } catch (NumberFormatException e){
+            JOptionPane.showMessageDialog(this,"O número de contribuinte que inseriu não é válido","Erro", JOptionPane.ERROR_MESSAGE);
+            return;
         }
+        String Nome = jTxtNome.getText();
+        String Telefone = jTxtTelefone.getText();
+        String Email = jTxtEmail.getText();
+        String Rua = jTxtRua.getText();
+        String Localidade = jTxtLocalidade.getText();
+        String Cp = jTxtCp.getText();
+        Date DtNascimento = jDpDtNascimento.getDate();
+        String Profissao = jTxtProfissao.getText();
+        String Estado = "Em Aprovação";
+        String Escolaridade = (String)jCmbEscolaridade.getSelectedItem();
+        String EstadoCivil = (String)jCmbEstadoCivil.getSelectedItem();
+        String Telemovel = jTxtTelemovel.getText();
+        
+        float Rendimento=0;
+        float Prestacao=0;
+        try{
+            if(!"".equals(jTxtRendimento.getText()))
+            Rendimento = Float.valueOf(jTxtRendimento.getText());
+        } catch (NumberFormatException e){
+            JOptionPane.showMessageDialog(this,"O valor referente ao Rendimento que inseriu não é válido","Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        try {
+            if(!"".equals(jTxtPrestacao.getText()))
+            Prestacao = Float.valueOf(jTxtPrestacao.getText());
+        }
+        catch (NumberFormatException e){
+            JOptionPane.showMessageDialog(this,"O valor referente à Prestacao que inseriu não é válido","Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        int Funcionario_Id = -1;
+        if(jCmbFuncionario.getSelectedItem()!=null) {
+            Funcionario func =(Funcionario)jCmbFuncionario.getSelectedItem(); 
+            Funcionario_Id=func.getId();
+        }
+        Candidatura candidatura = new Candidatura(Nif, Nome, Telefone, Email, Rua, Localidade, Cp, new java.sql.Date(DtNascimento.getTime()),  Profissao, Rendimento, 
+                                                  Estado, Escolaridade, Funcionario_Id, Prestacao, EstadoCivil, Telemovel);
+        
+        candidatura.setAgregado(getFamiliares(jTblAgregado));
+        candidatura.setAnexos(getAnexos(jTblAnexos));
+        this.cand=candidatura;
+        
+        try {
+            JmdiMain.facadeBL.put(candidatura);
+        } catch (PersistableException ex) {
+            JOptionPane.showMessageDialog(this,"Não foi possivel guardar a candidatura com sucesso!\n"+ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        JOptionPane.showMessageDialog(this,"Registo adicionado com sucesso!","Sucesso", JOptionPane.INFORMATION_MESSAGE);
+
+      //  this.dispose();
+        
+    }//GEN-LAST:event_jBtAddCandActionPerformed
+
+    
+    private List<Familiar> getFamiliares(JTable table) {
+        int Id;
+        String Nome;
+        String Parentesco;
+        String EstadoCivil;
+        String Escolaridade;
+        Date DtNascimento;
+        String Ocupacao;
+                
+        ArrayList<Familiar> ret = new ArrayList<>();
+        for(int i=0; i<table.getRowCount();i++) {
+                Id=(int)table.getValueAt(i, 0);
+                Nome=(String)table.getValueAt(i, 1).toString();
+                Parentesco=(String)table.getValueAt(i, 2).toString();
+                EstadoCivil=(String)table.getValueAt(i, 3).toString();
+                Escolaridade=(String)table.getValueAt(i, 4).toString();
+                DtNascimento = (Date)table.getValueAt(i, 5);                            
+                Ocupacao=(String)table.getValueAt(i, 6).toString();
+                
+                ret.add(new Familiar(Id,Nome,EstadoCivil,DtNascimento,Escolaridade,Ocupacao,Parentesco));
+        } 
+        return ret;
     }
+    
+    
+    private List<Anexo> getAnexos(JTable table) {
+        int Id;
+        String Descricao;
+        String Caminho;
+                
+        ArrayList<Anexo> ret = new ArrayList<>();
+        for(int i=0; i<table.getRowCount();i++) {
+                Id=(int)table.getValueAt(i, 0);
+                Descricao=(String)table.getValueAt(i, 1);
+                Caminho=(String)table.getValueAt(i, 2);
+
+                ret.add(new Anexo(Id,Descricao,Caminho));
+        } 
+        return ret;
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBtAddCand;
     private javax.swing.JButton jBtAddFamiliar;
@@ -683,8 +809,8 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame  {
     private javax.swing.JButton jBtSair;
     private javax.swing.JComboBox jCmbEscolaridade;
     private javax.swing.JComboBox jCmbEscolaridadeAgr;
-    private javax.swing.JComboBox jCmbEstado;
     private javax.swing.JComboBox jCmbEstadoAgr;
+    private javax.swing.JComboBox jCmbEstadoCivil;
     private javax.swing.JComboBox jCmbFuncionario;
     private javax.swing.JComboBox jCmbParentesco;
     private org.jdesktop.swingx.JXDatePicker jDpDtNascimento;
@@ -692,7 +818,6 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame  {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
@@ -722,20 +847,20 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame  {
     private javax.swing.JScrollPane jScrollPaneAgregado;
     private javax.swing.JTable jTblAgregado;
     private javax.swing.JTable jTblAnexos;
-    private javax.swing.JTextField jTxtCP;
+    private javax.swing.JTextField jTxtCp;
+    private javax.swing.JTextField jTxtDescricao;
     private javax.swing.JTextField jTxtEmail;
     private javax.swing.JTextField jTxtLocalidade;
-    private javax.swing.JTextField jTxtNacionalidade;
     private javax.swing.JTextField jTxtNif;
     private javax.swing.JTextField jTxtNome;
     private javax.swing.JTextField jTxtNomeAgr;
     private javax.swing.JTextField jTxtOcupacaoAgr;
-    private javax.swing.JTextField jTxtPm;
+    private javax.swing.JTextField jTxtPrestacao;
     private javax.swing.JTextField jTxtProfissao;
-    private javax.swing.JTextField jTxtRab;
+    private javax.swing.JTextField jTxtRendimento;
     private javax.swing.JTextField jTxtRua;
+    private javax.swing.JTextField jTxtTelefone;
     private javax.swing.JTextField jTxtTelemovel;
-    private javax.swing.JTextField jTxtTlf;
     // End of variables declaration//GEN-END:variables
 
 }

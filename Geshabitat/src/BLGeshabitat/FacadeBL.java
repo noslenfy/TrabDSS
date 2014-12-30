@@ -6,9 +6,16 @@
 package BLGeshabitat;
 
 import DAOGeshabitat.CandidaturaDAO;
+import DAOGeshabitat.DBConnection;
+import DAOGeshabitat.DoacaoDAO;
+import DAOGeshabitat.DoadorDAO;
+import DAOGeshabitat.EntityDAO;
 import DAOGeshabitat.FacadeDAO;
 import DAOGeshabitat.FuncionarioDAO;
+import DAOGeshabitat.MaterialDAO;
 import DAOGeshabitat.PersistableException;
+import DAOGeshabitat.ProjectoDAO;
+import DAOGeshabitat.VoluntarioDAO;
 import java.util.List;
 
 
@@ -23,30 +30,47 @@ public class FacadeBL {
     public FacadeBL() {
         this.facadeDAO = new FacadeDAO();
     }
+
+    public FacadeBL(DBConnection conn) throws PersistableException {
+        this.facadeDAO = new FacadeDAO(conn);
+    }
+    
+    private EntityDAO getType (Object obj){
+        if(obj instanceof Candidatura) return new CandidaturaDAO();
+        if(obj instanceof Doacao) return new DoacaoDAO();
+        if(obj instanceof Projecto) return new ProjectoDAO();
+        if(obj instanceof Doador) return new DoadorDAO();
+        if(obj instanceof Funcionario) return new FuncionarioDAO();
+        if(obj instanceof Voluntario) return new VoluntarioDAO();
+        if(obj instanceof Material) return new MaterialDAO();
+        if(obj instanceof Projecto) return new ProjectoDAO();
+        return null;
+    }
  
-    public void putCandidatura(Candidatura candidatura) throws PersistableException {
-        this.facadeDAO = new FacadeDAO();
-        
-        facadeDAO.put(new CandidaturaDAO(), candidatura);
-        facadeDAO.closeConnection();
-    }
-    public List<Object> getFuncionarios() throws PersistableException {
-         this.facadeDAO = new FacadeDAO();
-        return facadeDAO.getAll(new FuncionarioDAO());
-    }
-            
     
-    public void putFuncionario(Funcionario funcionario) throws PersistableException {
-        
-        
-    }
-    public void putVoluntario(Voluntario voluntario) throws PersistableException {
-        
-        
-    }
-    public void putDoador(Doador doador) throws PersistableException {
-        
-        
+    public int put(Object obj) throws PersistableException {
+        return facadeDAO.put(this.getType(obj), obj);
     }
     
+    public void delete(Object obj, int Id) throws PersistableException {
+        facadeDAO.delete(this.getType(obj), Id);
+    }
+    public List<Object> getAll(Object obj) throws PersistableException {
+        return facadeDAO.getAll(this.getType(obj));
+    }
+    
+    public void update(Object obj, String column, String value, int Id) throws PersistableException {
+        facadeDAO.update(this.getType(obj),  column, value, Id);
+    }
+
+
+    public boolean existsMaterial(String Column, String Value) throws PersistableException {
+        return facadeDAO.exists(new MaterialDAO(), Column, Value);
+    }
+
+    public float getTotalDoacoes(int Doador_Id) throws PersistableException {
+        return facadeDAO.getTotalDoacoes(Doador_Id);
+    }  
+    
+      
 }

@@ -5,6 +5,11 @@
  */
 package UIGeshabitat;
 
+import BLGeshabitat.Candidatura;
+import BLGeshabitat.FacadeBL;
+import DAOGeshabitat.DBConnection;
+import static DAOGeshabitat.FacadeDAO.conn;
+import DAOGeshabitat.PersistableException;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Frame;
@@ -13,6 +18,9 @@ import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyVetoException;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultDesktopManager;
 import javax.swing.DesktopManager;
 import javax.swing.JCheckBoxMenuItem;
@@ -21,30 +29,71 @@ import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JViewport;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author nelson
  */
 public class JmdiMain extends javax.swing.JFrame implements InternalFrameListener{
+    
+    public static FacadeBL facadeBL;
+    public static String configFile = "./connection.config";
+    
+    public static void reorderId(DefaultTableModel tableModel) {
+        for(int i=0; i < tableModel.getRowCount(); i++) {
+            tableModel.setValueAt(i+1, i, 0);
+        }
+    }
+    
+    public static boolean exists(String nome,JTable table,String coluna) {
+        boolean ret=false;
+        int column = 0;
+        for(int i=0; i< table.getColumnCount(); i++) {
+            if(table.getColumnName(i).equals(coluna)) column=i;
+        }
 
+        for(int i=0;i<table.getRowCount();i++) {
+            if(nome.equals(table.getValueAt(i, column))) return true;
+        }
+        return false;
+    }
+    
     /**
      * Creates new form jMdiMain
      */
     public JmdiMain() {
+        DBConnection connection = null;
+        try {
+             connection = DBConnection.load(configFile);
+        } catch (IOException | ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(this,"Não foi possivel carregar as configurações da Base Dados.\nPor favor efectue novas configuraçoes através da opção Setup Connection accessivel no menu File","Erro", JOptionPane.ERROR_MESSAGE);
+        } 
+        
+        
+        if(connection!=null) try {
+            facadeBL = new FacadeBL(connection);
+        } catch (PersistableException ex) {
+            JOptionPane.showMessageDialog(this,"Não foi possivel estabelecer conexão à Base Dados.\nVerifique as definições e volte a tentar","Erro", JOptionPane.ERROR_MESSAGE);
+        }
+        
+        
         initComponents();
-       // this.setContentPane(jDesktopPaneMain);
+
         this.setExtendedState(Frame.MAXIMIZED_BOTH);
         jScrollDesktopMain.getVerticalScrollBar().setUnitIncrement(16);
         jPanelProject.setVisible(false);
         jPanelSearch.setVisible(false);
         jPanelDoacoes.setVisible(false);
+        jPanelCandidatura.setVisible(false);
     }
 
     /**
@@ -69,12 +118,16 @@ public class JmdiMain extends javax.swing.JFrame implements InternalFrameListene
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         jButton10 = new javax.swing.JButton();
+        jButton7 = new javax.swing.JButton();
         jStatusBar = new javax.swing.JPanel();
         jLeftPanelLogo = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollDesktopMain = new javax.swing.JScrollPane();
         jDesktopPaneMain = new MDIDesktopPane();
         jLayeredPaneLeft = new javax.swing.JLayeredPane();
+        jPanelCandidatura = new SidePanel();
+        jPanel7 = new javax.swing.JPanel();
+        jBtAprovarCand = new javax.swing.JButton();
         jPanelProject = new SidePanel();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
@@ -92,6 +145,7 @@ public class JmdiMain extends javax.swing.JFrame implements InternalFrameListene
         jPanel1 = new javax.swing.JPanel();
         jBarraMenus = new javax.swing.JMenuBar();
         jMenuFile = new javax.swing.JMenu();
+        jMnuConnectionSetup = new javax.swing.JMenuItem();
         jMenuEdit = new javax.swing.JMenu();
         jMenuWindow = new WindowMenu((MDIDesktopPane)jDesktopPaneMain);
 
@@ -215,6 +269,17 @@ public class JmdiMain extends javax.swing.JFrame implements InternalFrameListene
         });
         jMainToolBar.add(jButton10);
 
+        jButton7.setText("NovoProjecto");
+        jButton7.setFocusable(false);
+        jButton7.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton7.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+        jMainToolBar.add(jButton7);
+
         jStatusBar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
         javax.swing.GroupLayout jStatusBarLayout = new javax.swing.GroupLayout(jStatusBar);
@@ -255,6 +320,51 @@ public class JmdiMain extends javax.swing.JFrame implements InternalFrameListene
 
         jLayeredPaneLeft.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jLayeredPaneLeft.setLayout(new javax.swing.OverlayLayout(jLayeredPaneLeft));
+
+        jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 102, 102), 1, true), "Candidatura", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP));
+
+        jBtAprovarCand.setText("Aprovar Candidatura");
+        jBtAprovarCand.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtAprovarCandActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jBtAprovarCand, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addGap(37, 37, 37)
+                .addComponent(jBtAprovarCand)
+                .addContainerGap(323, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout jPanelCandidaturaLayout = new javax.swing.GroupLayout(jPanelCandidatura);
+        jPanelCandidatura.setLayout(jPanelCandidaturaLayout);
+        jPanelCandidaturaLayout.setHorizontalGroup(
+            jPanelCandidaturaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelCandidaturaLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanelCandidaturaLayout.setVerticalGroup(
+            jPanelCandidaturaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelCandidaturaLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jLayeredPaneLeft.add(jPanelCandidatura);
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 102, 102), 1, true), "Projecto", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP));
 
@@ -440,7 +550,7 @@ public class JmdiMain extends javax.swing.JFrame implements InternalFrameListene
 
         jLayeredPaneLeft.add(jPanelSearch);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true), "Doações", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 102, 102), 1, true), "Doações", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -473,6 +583,15 @@ public class JmdiMain extends javax.swing.JFrame implements InternalFrameListene
         jLayeredPaneLeft.add(jPanelDoacoes);
 
         jMenuFile.setText("File");
+
+        jMnuConnectionSetup.setText("Setup Connection");
+        jMnuConnectionSetup.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMnuConnectionSetupActionPerformed(evt);
+            }
+        });
+        jMenuFile.add(jMnuConnectionSetup);
+
         jBarraMenus.add(jMenuFile);
 
         jMenuEdit.setText("Edit");
@@ -593,7 +712,7 @@ public class JmdiMain extends javax.swing.JFrame implements InternalFrameListene
         boolean existing = false;
         for( JInternalFrame i : jDesktopPaneMain.getAllFrames() )
         {
-            if(i instanceof JintFrmNewProject) { 
+            if(i instanceof JintFrmProject) { 
                 try {
                     i.setSelected(true);
                 } catch (PropertyVetoException ex) {  }
@@ -601,7 +720,7 @@ public class JmdiMain extends javax.swing.JFrame implements InternalFrameListene
             }
         }
         if(!existing){
-            JintFrmNewProject jfrmNewProject = new JintFrmNewProject();
+            JintFrmProject jfrmNewProject = new JintFrmProject();
             jfrmNewProject.addInternalFrameListener(this);
 
             jDesktopPaneMain.add(jfrmNewProject);
@@ -668,6 +787,30 @@ public class JmdiMain extends javax.swing.JFrame implements InternalFrameListene
         frmTarefas.setVisible(true);  
     }//GEN-LAST:event_jBtConcluirTarefaActionPerformed
 
+    private void jMnuConnectionSetupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuConnectionSetupActionPerformed
+        JintFrmDBConnection frmDBConnection = new JintFrmDBConnection();
+        //frmTarefas.addInternalFrameListener(this);
+        this.jDesktopPaneMain.add(frmDBConnection);
+        frmDBConnection.setVisible(true);  
+    }//GEN-LAST:event_jMnuConnectionSetupActionPerformed
+
+    private void jBtAprovarCandActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtAprovarCandActionPerformed
+//       // Candidatura c = ((JintFrmNewCand)((SidePanel)jPanelCandidatura).getjIntFrame()).getCand();
+//        
+//        JintFrmNewProject frmNewProject = new JintFrmNewProject(1,1,"Joaquim Luis");
+//        frmNewProject.addInternalFrameListener(this);
+//        this.jDesktopPaneMain.add(frmNewProject);
+//        frmNewProject.setVisible(true);  
+    }//GEN-LAST:event_jBtAprovarCandActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+       
+        JintFrmNewProject frmNewProject = new JintFrmNewProject(1,1,"Joaquim Luis");
+        frmNewProject.addInternalFrameListener(this);
+        this.jDesktopPaneMain.add(frmNewProject);
+        frmNewProject.setVisible(true);  
+    }//GEN-LAST:event_jButton7ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -710,6 +853,7 @@ public class JmdiMain extends javax.swing.JFrame implements InternalFrameListene
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar jBarraMenus;
+    private javax.swing.JButton jBtAprovarCand;
     private javax.swing.JButton jBtConcluirTarefa;
     private javax.swing.JButton jBtInitTarefa;
     private javax.swing.JButton jBtNewCand;
@@ -724,6 +868,7 @@ public class JmdiMain extends javax.swing.JFrame implements InternalFrameListene
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
     private javax.swing.JComboBox jComboBox1;
     public javax.swing.JDesktopPane jDesktopPaneMain;
     private javax.swing.JLabel jLabel1;
@@ -733,12 +878,15 @@ public class JmdiMain extends javax.swing.JFrame implements InternalFrameListene
     private javax.swing.JMenu jMenuEdit;
     private javax.swing.JMenu jMenuFile;
     private javax.swing.JMenu jMenuWindow;
+    private javax.swing.JMenuItem jMnuConnectionSetup;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanelCandidatura;
     private javax.swing.JPanel jPanelDoacoes;
     public javax.swing.JPanel jPanelProject;
     public javax.swing.JPanel jPanelSearch;
@@ -776,27 +924,31 @@ public class JmdiMain extends javax.swing.JFrame implements InternalFrameListene
 
     @Override
     public void internalFrameActivated(InternalFrameEvent e) {
-         if(e.getInternalFrame() instanceof JintFrmNewProject) {
+         if(e.getInternalFrame() instanceof JintFrmProject) {
             ((SidePanel)jPanelProject).setInternalFrame(e.getInternalFrame());
             jPanelProject.setVisible(true);
             jPanelDoacoes.setVisible(false);
             jPanelSearch.setVisible(false);
+            jPanelCandidatura.setVisible(false);
         } else if (e.getInternalFrame() instanceof JintFrmNewCand){
+            ((SidePanel)jPanelCandidatura).setInternalFrame(e.getInternalFrame());
             jPanelProject.setVisible(false);
             jPanelDoacoes.setVisible(false);
-            jPanelSearch.setVisible(true);
+            jPanelSearch.setVisible(false);
+            jPanelCandidatura.setVisible(true);
         } else if (e.getInternalFrame() instanceof JintFrmGestaoDonacoes){
             jPanelProject.setVisible(false);
             jPanelSearch.setVisible(false);
             jPanelDoacoes.setVisible(true);
+            jPanelCandidatura.setVisible(false);
         }
 
     }
 
     @Override
     public void internalFrameDeactivated(InternalFrameEvent e) {
-//        if(e.getInternalFrame() instanceof JintFrmNewProject)
-//            ((JintFrmNewProject)e.getSource()).setLayer(8);
+//        if(e.getInternalFrame() instanceof JintFrmProject)
+//            ((JintFrmProject)e.getSource()).setLayer(8);
         
         if(e.getInternalFrame() instanceof ModalJinternalFrame)
             ((ModalJinternalFrame)e.getSource()).setLayer(8);

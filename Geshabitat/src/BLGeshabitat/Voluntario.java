@@ -185,7 +185,10 @@ public class Voluntario {
         return new Voluntario(this.Nif,this.Nome,this.Telefone,this.Email,this.Rua,this.Localidade,this.Cp,this.DtNascimento,this.Nacionalidade,this.Profissao);
     }
 
-
+    public Object[] getRowData() {
+        Object[] ret = {Id,Nome,Localidade,Profissao,Nacionalidade};
+        return ret;
+    }
 
 
 }

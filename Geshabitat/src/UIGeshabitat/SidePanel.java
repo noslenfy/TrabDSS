@@ -26,5 +26,11 @@ public class SidePanel extends javax.swing.JPanel{
     public void setInternalFrame(JInternalFrame jIntFrame) {
         this.jIntFrame = jIntFrame;
     }
+
+    public JInternalFrame getjIntFrame() {
+        return jIntFrame;
+    }
+    
+
     
 }

@@ -69,26 +69,124 @@ public abstract class EntityDAO implements Persistable{
         }
     }
     
+    /**
+     * Actualiza um registo na base dados de acordo com a coluna e valor fornecidos, usando a chave estrabageira na forma
+     * Tablename.Id para selecionar registo a actualizar
+     * @param table
+     * @param column - Nome do atributo a actualizar
+     * @param newvalue
+     * @param Id - Id da chave estrageira (Nota - apenas com chaves estrangeiras do tipo Nome.Id)
+     * @throws PersistableException
+     */
+    @Override
+    public void update(String table, String column, String newvalue, int Id) throws PersistableException{
+        //update table Set Recibo=1 where Doacao.Id = 1;
+        String tableId = table+".Id";
+        String sql = "UPDATE " + table + " SET " + column + " = ? " + " WHERE " + tableId + " = ?";
+
+        PreparedStatement statement = null;
+               
+        try {
+            statement = conn.prepareStatement(sql);
+            statement.setString(1, newvalue);
+            statement.setInt(2, Id);
+ 
+            statement.executeUpdate(); 
+
+            
+            
+        } catch (SQLException ex) {
+            throw new PersistableException("Ocorreu um erro na actualização do registo!\n" + ex.getMessage());
+        } finally {
+            try {
+                if (statement != null)  statement.close();               
+            } catch (SQLException ex) {
+                throw new PersistableException("Ocorreu um erro ao fechar conexões!\n" + ex.getMessage());
+            }      
+        }
+    }
+
+    
     @Override
     public Object get(int Id) throws PersistableException {
        return this.get("Id", Id);
     }
     
     @Override
-    public Object get(String Column, int Atribute) throws PersistableException {
+    public Iterable getAll(Collection<Integer> ids) throws PersistableException {
+        List<Object> ret = new ArrayList<>();
+        for(Integer id : ids) {
+            ret.add(get(id));
+        }
+        return ret;
+    }
+    
+    
+    @Override
+    public Object get(String Column, int Value) throws PersistableException {
 
         String sql = "SELECT * FROM " + EntityDAO.table + " where " + Column + " =?";
         Object ret=null;
         
         try {
             PreparedStatement statement = conn.prepareStatement(sql);           
-            statement.setInt(1, Atribute);
+            statement.setInt(1, Value);
             ResultSet rst = statement.executeQuery();
             
             while(rst.next())
             {
                 if(ret != null) throw new PersistableException("Existe mais que um registo com esse id");
                 ret=this.convertResultSet(rst);
+            }
+            statement.close();
+            rst.close();
+            
+        } catch (SQLException ex) { 
+            throw new PersistableException("Ocorreu um erro na obtenção do registo" + ex.getMessage());
+        }  
+        return ret;
+    }
+    
+    @Override
+    public Object get(String Column, String Value) throws PersistableException {
+
+        String sql = "SELECT * FROM " + EntityDAO.table + " where " + Column + " =?";
+        Object ret=null;
+        
+        try {
+            PreparedStatement statement = conn.prepareStatement(sql);           
+            statement.setString(1, Value);
+            ResultSet rst = statement.executeQuery();
+            
+            while(rst.next())
+            {
+                if(ret != null) throw new PersistableException("Existe mais que um registo com esse id");
+                ret=this.convertResultSet(rst);
+            }
+            statement.close();
+            rst.close();
+            
+        } catch (SQLException ex) { 
+            throw new PersistableException("Ocorreu um erro na obtenção do registo" + ex.getMessage());
+        }  
+        return ret;
+    }
+    
+    @Override
+    public String get(String fieldToShow, String Column, String Value) throws PersistableException {
+
+        String sql = "SELECT " + fieldToShow + " FROM " + EntityDAO.table + " where " + Column + " =?";
+        String ret=null;
+        
+        try {
+            PreparedStatement statement = conn.prepareStatement(sql);           
+            statement.setString(1, Value);
+            ResultSet rst = statement.executeQuery();
+            
+            while(rst.next())
+            {
+                if(ret != null) throw new PersistableException("Existe mais que um registo com esse id");
+                ret=rst.getString(fieldToShow);
             }
             statement.close();
             rst.close();
@@ -209,22 +307,20 @@ public abstract class EntityDAO implements Persistable{
         return this.get(id) != null;
     }
 
+    @Override
+    public boolean exists(String Column, String Value) throws PersistableException {
+        return this.get(Column,Value) != null;
+    }
     
     
+
+
     
     
     //Falta implementar
     
-    @Override
-    public void update(Object entity) throws PersistableException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
     
-    @Override
-    public Iterable getAll(Collection<Integer> ids) throws PersistableException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
+    
     @Override
     public void deleteAll(Collection entidades) throws PersistableException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

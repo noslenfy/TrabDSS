@@ -23,22 +23,27 @@ public class Candidatura {
     private String Localidade;
     private String Cp;
     private Date DtNascimento;
-    private String Nacionalidade;
     private String Profissao;
     private float Rendimento;
     private String Estado;
     private String Escolaridade;
-    private int Funcionario;
-    private int Projecto;
+    private int Funcionario_Id;
     private float Prestacao;
     private String EstadoCivil;
+    private String Telemovel;
+        
     
-    private List<String> Anexos;
+    private List<Anexo> Anexos;
     private List<Familiar> Agregado;
 
-    public Candidatura(int Nif, String Nome, String Telefone, String Email, String Rua, String Localidade, String Cp, Date DtNascimento, String Nacionalidade,
-                       String Profissao, float Rendimento, String Estado, String Escolaridade, int Funcionario, int Projecto, float Prestacao, String EstadoCivil,
-                       List<String> Anexos, List<Familiar> Agregado) {
+    public Candidatura() {
+    }
+
+    
+    
+    public Candidatura(int Nif, String Nome, String Telefone, String Email, String Rua, String Localidade, String Cp, Date DtNascimento, String Profissao,
+                        float Rendimento, String Estado, String Escolaridade, int Funcionario_Id, float Prestacao, String EstadoCivil, String Telemovel, List<Anexo> Anexos, List<Familiar> Agregado) {
+        this.Id = -1;
         this.Nif = Nif;
         this.Nome = Nome;
         this.Telefone = Telefone;
@@ -47,21 +52,22 @@ public class Candidatura {
         this.Localidade = Localidade;
         this.Cp = Cp;
         this.DtNascimento = DtNascimento;
-        this.Nacionalidade = Nacionalidade;
         this.Profissao = Profissao;
         this.Rendimento = Rendimento;
         this.Estado = Estado;
         this.Escolaridade = Escolaridade;
-        this.Funcionario = Funcionario;
-        this.Projecto = Projecto;
+        this.Funcionario_Id = Funcionario_Id;
         this.Prestacao = Prestacao;
         this.EstadoCivil = EstadoCivil;
+        this.Telemovel = Telemovel;
         this.Anexos = Anexos;
         this.Agregado = Agregado;
     }
-
-    public Candidatura(int Nif, String Nome, String Telefone, String Email, String Rua, String Localidade, String Cp, Date DtNascimento, String Nacionalidade,
-                        String Profissao, float Rendimento, String Estado, String Escolaridade, int Funcionario, int Projecto, float Prestacao, String EstadoCivil) {
+    
+    
+    public Candidatura(int Nif, String Nome, String Telefone, String Email, String Rua, String Localidade, String Cp, Date DtNascimento, String Profissao,
+                        float Rendimento, String Estado, String Escolaridade, int Funcionario_Id, float Prestacao, String EstadoCivil, String Telemovel) {
+        this.Id=-1;
         this.Nif = Nif;
         this.Nome = Nome;
         this.Telefone = Telefone;
@@ -70,24 +76,18 @@ public class Candidatura {
         this.Localidade = Localidade;
         this.Cp = Cp;
         this.DtNascimento = DtNascimento;
-        this.Nacionalidade = Nacionalidade;
         this.Profissao = Profissao;
         this.Rendimento = Rendimento;
         this.Estado = Estado;
         this.Escolaridade = Escolaridade;
-        this.Funcionario = Funcionario;
-        this.Projecto = Projecto;
+        this.Funcionario_Id = Funcionario_Id;
         this.Prestacao = Prestacao;
         this.EstadoCivil = EstadoCivil;
+        this.Telemovel = Telemovel;
     }
 
     
-    public List<String> getAnexos() {
-        return Anexos;
-    }
-    public List<Familiar> getAgregado() {
-        return Agregado;
-    }
+    
     public int getId() {
         return Id;
     }
@@ -115,9 +115,7 @@ public class Candidatura {
     public Date getDtNascimento() {
         return DtNascimento;
     }
-    public String getNacionalidade() {
-        return Nacionalidade;
-    }
+
     public String getProfissao() {
         return Profissao;
     }
@@ -130,17 +128,23 @@ public class Candidatura {
     public String getEscolaridade() {
         return Escolaridade;
     }
-    public int getFuncionario() {
-        return Funcionario;
-    }
-    public int getProjecto() {
-        return Projecto;
+    public int getFuncionario_Id() {
+        return Funcionario_Id;
     }
     public float getPrestacao() {
         return Prestacao;
     }
     public String getEstadoCivil() {
         return EstadoCivil;
+    }
+    public String getTelemovel() {
+        return Telemovel;
+    }
+    public List<Anexo> getAnexos() {
+        return Anexos;
+    }
+    public List<Familiar> getAgregado() {
+        return Agregado;
     }
 
     public void setId(int Id) {
@@ -170,9 +174,7 @@ public class Candidatura {
     public void setDtNascimento(Date DtNascimento) {
         this.DtNascimento = DtNascimento;
     }
-    public void setNacionalidade(String Nacionalidade) {
-        this.Nacionalidade = Nacionalidade;
-    }
+
     public void setProfissao(String Profissao) {
         this.Profissao = Profissao;
     }
@@ -185,11 +187,8 @@ public class Candidatura {
     public void setEscolaridade(String Escolaridade) {
         this.Escolaridade = Escolaridade;
     }
-    public void setFuncionario(int Funcionario) {
-        this.Funcionario = Funcionario;
-    }
-    public void setProjecto(int Projecto) {
-        this.Projecto = Projecto;
+    public void setFuncionario_Id(int Funcionario_Id) {
+        this.Funcionario_Id = Funcionario_Id;
     }
     public void setPrestacao(float Prestacao) {
         this.Prestacao = Prestacao;
@@ -197,7 +196,10 @@ public class Candidatura {
     public void setEstadoCivil(String EstadoCivil) {
         this.EstadoCivil = EstadoCivil;
     }
-    public void setAnexos(List<String> Anexos) {
+    public void setTelemovel(String Telemovel) {
+        this.Telemovel = Telemovel;
+    }
+    public void setAnexos(List<Anexo> Anexos) {
         this.Anexos = Anexos;
     }
     public void setAgregado(List<Familiar> Agregado) {
@@ -205,28 +207,32 @@ public class Candidatura {
     }
 
     @Override
+    public String toString() {
+        return "Candidatura{" + "Id=" + Id + ", Nif=" + Nif + ", Nome=" + Nome + ", Telefone=" + Telefone + ", Email=" + Email + ", Rua=" + Rua + ", Localidade=" + Localidade + ", Cp=" + Cp + ", DtNascimento=" + DtNascimento + ", Profissao=" + Profissao + ", Rendimento=" + Rendimento + ", Estado=" + Estado + ", Escolaridade=" + Escolaridade + ", Funcionario_Id=" + Funcionario_Id +  ", Prestacao=" + Prestacao + ", EstadoCivil=" + EstadoCivil + ", Telemovel=" + Telemovel + ", Anexos=" + Anexos + ", Agregado=" + Agregado + '}';
+    }
+
+    @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 53 * hash + this.Id;
-        hash = 53 * hash + this.Nif;
-        hash = 53 * hash + Objects.hashCode(this.Nome);
-        hash = 53 * hash + Objects.hashCode(this.Telefone);
-        hash = 53 * hash + Objects.hashCode(this.Email);
-        hash = 53 * hash + Objects.hashCode(this.Rua);
-        hash = 53 * hash + Objects.hashCode(this.Localidade);
-        hash = 53 * hash + Objects.hashCode(this.Cp);
-        hash = 53 * hash + Objects.hashCode(this.DtNascimento);
-        hash = 53 * hash + Objects.hashCode(this.Nacionalidade);
-        hash = 53 * hash + Objects.hashCode(this.Profissao);
-        hash = 53 * hash + Float.floatToIntBits(this.Rendimento);
-        hash = 53 * hash + Objects.hashCode(this.Estado);
-        hash = 53 * hash + Objects.hashCode(this.Escolaridade);
-        hash = 53 * hash + this.Funcionario;
-        hash = 53 * hash + this.Projecto;
-        hash = 53 * hash + Float.floatToIntBits(this.Prestacao);
-        hash = 53 * hash + Objects.hashCode(this.EstadoCivil);
-        hash = 53 * hash + Objects.hashCode(this.Anexos);
-        hash = 53 * hash + Objects.hashCode(this.Agregado);
+        int hash = 3;
+        hash = 41 * hash + this.Id;
+        hash = 41 * hash + this.Nif;
+        hash = 41 * hash + Objects.hashCode(this.Nome);
+        hash = 41 * hash + Objects.hashCode(this.Telefone);
+        hash = 41 * hash + Objects.hashCode(this.Email);
+        hash = 41 * hash + Objects.hashCode(this.Rua);
+        hash = 41 * hash + Objects.hashCode(this.Localidade);
+        hash = 41 * hash + Objects.hashCode(this.Cp);
+        hash = 41 * hash + Objects.hashCode(this.DtNascimento);
+        hash = 41 * hash + Objects.hashCode(this.Profissao);
+        hash = 41 * hash + Float.floatToIntBits(this.Rendimento);
+        hash = 41 * hash + Objects.hashCode(this.Estado);
+        hash = 41 * hash + Objects.hashCode(this.Escolaridade);
+        hash = 41 * hash + this.Funcionario_Id;
+        hash = 41 * hash + Float.floatToIntBits(this.Prestacao);
+        hash = 41 * hash + Objects.hashCode(this.EstadoCivil);
+        hash = 41 * hash + Objects.hashCode(this.Telemovel);
+        hash = 41 * hash + Objects.hashCode(this.Anexos);
+        hash = 41 * hash + Objects.hashCode(this.Agregado);
         return hash;
     }
 
@@ -266,9 +272,6 @@ public class Candidatura {
         if (!Objects.equals(this.DtNascimento, other.DtNascimento)) {
             return false;
         }
-        if (!Objects.equals(this.Nacionalidade, other.Nacionalidade)) {
-            return false;
-        }
         if (!Objects.equals(this.Profissao, other.Profissao)) {
             return false;
         }
@@ -281,16 +284,16 @@ public class Candidatura {
         if (!Objects.equals(this.Escolaridade, other.Escolaridade)) {
             return false;
         }
-        if (this.Funcionario != other.Funcionario) {
-            return false;
-        }
-        if (this.Projecto != other.Projecto) {
+        if (this.Funcionario_Id != other.Funcionario_Id) {
             return false;
         }
         if (Float.floatToIntBits(this.Prestacao) != Float.floatToIntBits(other.Prestacao)) {
             return false;
         }
         if (!Objects.equals(this.EstadoCivil, other.EstadoCivil)) {
+            return false;
+        }
+        if (!Objects.equals(this.Telemovel, other.Telemovel)) {
             return false;
         }
         if (!Objects.equals(this.Anexos, other.Anexos)) {
@@ -300,11 +303,11 @@ public class Candidatura {
             return false;
         }
         return true;
+    } 
+    
+    public Object[] getRowData() {
+        Object[] ret = {Id,Nome,Nif,Localidade,Estado};
+        return ret;
     }
-
-   
-    
-    
-    
 }
 

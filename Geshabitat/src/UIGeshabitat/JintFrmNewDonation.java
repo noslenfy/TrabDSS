@@ -5,20 +5,43 @@
  */
 package UIGeshabitat;
 
+import BLGeshabitat.Doacao;
+import BLGeshabitat.Doador;
+import BLGeshabitat.Material;
+import BLGeshabitat.Projecto;
+
+
+import DAOGeshabitat.PersistableException;
 import java.awt.Dimension;
+import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+
+import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author nelson
  */
-public class JintFrmNewDonation extends javax.swing.JInternalFrame {
+public class JintFrmNewDonation extends javax.swing.JInternalFrame{
 
+    private int tipo=0;  // 0->Monetaria 1->Material 2->Serviços
     /**
      * Creates new form JintFrmNewDoation
      */
     public JintFrmNewDonation() {
         initComponents();
+        this.populateComboArtigos();
+        this.populateComdoDoadores();
+        this.populateCmbProjecto();
     }
 
     /**
@@ -39,37 +62,37 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame {
         jPanel2 = new javax.swing.JPanel();
         jChkRecibo = new javax.swing.JCheckBox();
         jLabel3 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox();
-        jTextField3 = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        jTxtEvento = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox();
-        jButton1 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        jCmbDoador = new javax.swing.JComboBox();
+        jBtListaDoadores = new javax.swing.JButton();
+        jDpData = new org.jdesktop.swingx.JXDatePicker();
+        jCmbProjecto = new javax.swing.JComboBox();
         jPanelMoney = new javax.swing.JPanel();
-        jTextField4 = new javax.swing.JTextField();
+        jTxtValor = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
+        jLblTotalDoado = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
         jPanelServices = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
+        jTxtDescricao = new javax.swing.JTextField();
         jPanelMaterial = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
-        jTextField7 = new javax.swing.JTextField();
+        jTxtQuantidade = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jComboBox3 = new javax.swing.JComboBox();
+        jTblArtigos = new javax.swing.JTable();
+        jBtAddMaterial = new javax.swing.JButton();
+        jBtRemover = new javax.swing.JButton();
+        jCmbArtigos = new javax.swing.JComboBox();
         jBtSelectArtigos = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        jBtAdicionar = new javax.swing.JButton();
+        jBtSair = new javax.swing.JButton();
 
         jLabel5.setText("jLabel5");
 
@@ -134,24 +157,31 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame {
 
         jLabel3.setText("Data:");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "12 / Dezembro / 2014" }));
-
         jLabel4.setText("Projecto destino:");
 
         jLabel2.setText("Evento:");
 
         jLabel8.setText("Doador:");
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Construções Machado Lda" }));
-
-        jButton1.setText("...");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jCmbDoador.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jCmbDoadorActionPerformed(evt);
             }
         });
 
-        jButton6.setText("...");
+        jBtListaDoadores.setText("...");
+        jBtListaDoadores.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtListaDoadoresActionPerformed(evt);
+            }
+        });
+
+        DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.LONG, Locale.forLanguageTag("pt"));
+        jDpData.setFormats(dateFormat);
+
+        jDpData.setDate(new Date());
+
+        jCmbProjecto.setEditable(true);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -161,28 +191,28 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel8)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(14, 14, 14)
-                        .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel2)
+                        .addComponent(jCmbProjecto, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jDpData, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jChkRecibo)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTxtEvento, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jChkRecibo))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel8)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jCmbDoador, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jBtListaDoadores, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 207, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -191,20 +221,23 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1)
-                    .addComponent(jLabel3)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jCmbDoador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jBtListaDoadores))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton6))
-                .addGap(18, 18, 18)
-                .addComponent(jChkRecibo)
-                .addContainerGap(11, Short.MAX_VALUE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jDpData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel3))
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel4)
+                        .addComponent(jCmbProjecto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel2)
+                        .addComponent(jTxtEvento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jChkRecibo))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         jPanelMoney.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true), "Monetaria"));
@@ -215,7 +248,9 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame {
 
         jLabel12.setText("Valor Total doado:");
 
-        jLabel13.setText("15520.25 €");
+        jLblTotalDoado.setText("15520.25");
+
+        jLabel1.setText("€");
 
         javax.swing.GroupLayout jPanelMoneyLayout = new javax.swing.GroupLayout(jPanelMoney);
         jPanelMoney.setLayout(jPanelMoneyLayout);
@@ -225,13 +260,15 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTxtValor, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(3, 3, 3)
                 .addComponent(jLabel7)
                 .addGap(64, 64, 64)
                 .addComponent(jLabel12)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel13)
+                .addComponent(jLblTotalDoado)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanelMoneyLayout.setVerticalGroup(
@@ -240,10 +277,11 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(jPanelMoneyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTxtValor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7)
                     .addComponent(jLabel12)
-                    .addComponent(jLabel13))
+                    .addComponent(jLblTotalDoado)
+                    .addComponent(jLabel1))
                 .addContainerGap())
         );
 
@@ -260,7 +298,7 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addComponent(jLabel9)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField5)
+                .addComponent(jTxtDescricao)
                 .addContainerGap())
         );
         jPanelServicesLayout.setVerticalGroup(
@@ -269,7 +307,7 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(jPanelServicesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTxtDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -280,22 +318,35 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame {
 
         jLabel10.setText("Artigo");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTblArtigos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null}
+
             },
             new String [] {
                 "Id", "Descrição", "Quantidade"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jTblArtigos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTblArtigosMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jTblArtigos);
 
-        jButton2.setText("Adicionar");
+        jBtAddMaterial.setText("Adicionar");
+        jBtAddMaterial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtAddMaterialActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("Remover");
-        jButton3.setEnabled(false);
-
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Saco de cimento" }));
+        jBtRemover.setText("Remover");
+        jBtRemover.setEnabled(false);
+        jBtRemover.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtRemoverActionPerformed(evt);
+            }
+        });
 
         jBtSelectArtigos.setText("...");
         jBtSelectArtigos.addActionListener(new java.awt.event.ActionListener() {
@@ -311,22 +362,22 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame {
             .addGroup(jPanelMaterialLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanelMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 622, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1)
                     .addGroup(jPanelMaterialLayout.createSequentialGroup()
-                        .addComponent(jButton2)
+                        .addComponent(jBtAddMaterial)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton3)
+                        .addComponent(jBtRemover)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanelMaterialLayout.createSequentialGroup()
                         .addComponent(jLabel10)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox3, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jCmbArtigos, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jBtSelectArtigos, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(42, 42, 42)
                         .addComponent(jLabel11)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jTxtQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanelMaterialLayout.setVerticalGroup(
@@ -336,21 +387,31 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame {
                 .addGroup(jPanelMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
                     .addComponent(jLabel11)
-                    .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTxtQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jCmbArtigos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jBtSelectArtigos))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanelMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3))
+                    .addComponent(jBtAddMaterial)
+                    .addComponent(jBtRemover))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jButton4.setText("Adicionar");
+        jBtAdicionar.setText("Adicionar");
+        jBtAdicionar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtAdicionarActionPerformed(evt);
+            }
+        });
 
-        jButton5.setText("Sair");
+        jBtSair.setText("Sair");
+        jBtSair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtSairActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -358,9 +419,9 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton4)
+                .addComponent(jBtAdicionar)
                 .addGap(18, 18, 18)
-                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jBtSair, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -368,8 +429,8 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton5)
-                    .addComponent(jButton4))
+                    .addComponent(jBtSair)
+                    .addComponent(jBtAdicionar))
                 .addGap(15, 15, 15))
         );
 
@@ -380,22 +441,18 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanelServices, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanelMoney, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanelMaterial, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addContainerGap())
+                    .addComponent(jPanelServices, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanelMoney, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanelMaterial, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jPanelTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(165, 165, 165))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap())))))
+                        .addGap(0, 417, Short.MAX_VALUE)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanelTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(176, 176, 176))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -418,9 +475,47 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    private void populateComboArtigos() {
+        try {
+            List<Object> artigos = JmdiMain.facadeBL.getAll(new Material());
+            for(Object obj : artigos) {
+                Material m = (Material) obj;
+                this.jCmbArtigos.addItem(m);
+            }
+        } catch (PersistableException ex) {
+            JOptionPane.showMessageDialog(this,"Ocorre um erro na obtencao da lista de Artigos!","Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void populateComdoDoadores() {
+        try {
+            List<Object> artigos = JmdiMain.facadeBL.getAll(new Doador());
+            for(Object obj : artigos) {
+                Doador m = (Doador) obj;
+                this.jCmbDoador.addItem(m);
+            }
+        } catch (PersistableException ex) {
+            JOptionPane.showMessageDialog(this,"Ocorre um erro na obtencao da lista de Doadores!","Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void populateCmbProjecto(){
+        jCmbProjecto.addItem(new String(""));
+        try {
+            List<Object> projectos = JmdiMain.facadeBL.getAll(new Projecto());
+            for(Object obj : projectos) {
+                jCmbProjecto.addItem((Projecto)obj);
+            }
+        } catch (PersistableException ex) {
+            JOptionPane.showMessageDialog(this,ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
     private void jOptMaterialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jOptMaterialActionPerformed
-        if(jOptMaterial.isSelected()) 
+        if(jOptMaterial.isSelected() && jPanelMaterial.isVisible()==false) 
         {
+            this.tipo=1;
             jPanelMaterial.setVisible(true);
             Dimension d = this.getSize();
             d.setSize(d.width, d.height+160);
@@ -434,6 +529,7 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame {
     private void jOptServicesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jOptServicesActionPerformed
         if(jOptServices.isSelected()) 
         {
+            this.tipo=2;
             this.setSize(this.getSize().width,359);
             jPanelServices.setVisible(true);
              jChkRecibo.setVisible(true);
@@ -444,6 +540,7 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame {
     private void jOptMoneyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jOptMoneyActionPerformed
         if(jOptMoney.isSelected()) 
         {
+            this.tipo=0;
             this.setSize(this.getSize().width,359);
             jPanelMoney.setVisible(true);
             jChkRecibo.setVisible(true);
@@ -451,15 +548,189 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_jOptMoneyActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void jBtListaDoadoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtListaDoadoresActionPerformed
 
+    }//GEN-LAST:event_jBtListaDoadoresActionPerformed
+
+
+    
     private void jBtSelectArtigosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtSelectArtigosActionPerformed
         JintFrmSelectArtigo frmArtigos = new JintFrmSelectArtigo(0);
         this.getDesktopPane().add(frmArtigos);
         frmArtigos.setVisible(true);
     }//GEN-LAST:event_jBtSelectArtigosActionPerformed
+
+    private void jBtAddMaterialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtAddMaterialActionPerformed
+        float Quantidade;
+        if(jTxtQuantidade.getText().equals("")) {
+            JOptionPane.showMessageDialog(this,"Tem de preencher os campos obrigatorios!","Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        try {
+            Quantidade = Float.valueOf(jTxtQuantidade.getText());
+            if(Quantidade <0) {
+                JOptionPane.showMessageDialog(this,"Não pode inserir quantidades negativas!","Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this,"Inseriu uma qantidade inválida!","Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        Material material = (Material)this.jCmbArtigos.getSelectedItem();
+        
+        if (material==null) {
+            JOptionPane.showMessageDialog(this,"Escolheu um artigo inválido","Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        int column=-1;
+        float quantidadeNova=0;
+        for(int i=0; i< jTblArtigos.getColumnCount(); i++) {
+            if(jTblArtigos.getColumnName(i).equals("Descrição")) column=i;
+        }
+
+        for(int i=0;i<jTblArtigos.getRowCount();i++) {
+            if(material.getDescricao().equals(jTblArtigos.getValueAt(i, column))) {
+                int colunaQuantidade=-1;
+                for(int j=0; j< jTblArtigos.getColumnCount(); j++) {
+                    if(jTblArtigos.getColumnName(j).equals("Quantidade")) colunaQuantidade=j;
+                }
+                quantidadeNova = (float)jTblArtigos.getValueAt(i, colunaQuantidade)+Quantidade;
+                jTblArtigos.setValueAt(quantidadeNova, i, colunaQuantidade);
+            }
+        }
+                
+        if(quantidadeNova==0) {
+            material.setStock(Quantidade);
+            ((DefaultTableModel)this.jTblArtigos.getModel()).addRow(material.getRowData());
+        }
+        else
+            material.setStock(quantidadeNova);
+        
+
+    }//GEN-LAST:event_jBtAddMaterialActionPerformed
+
+    private void jBtSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtSairActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_jBtSairActionPerformed
+
+    private void jBtAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtAdicionarActionPerformed
+        boolean Recibo = jChkRecibo.isSelected();
+        Date Data = jDpData.getDate();
+        String Descricao = null;
+        if(tipo==2)  {
+            if(jTxtDescricao.getText().equals("")) {
+                JOptionPane.showMessageDialog(this,"Introduza uma descricao do serviço prestado válida!","Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            Descricao = jTxtDescricao.getText();
+        }
+        String Evento = jTxtEvento.getText();
+        float Valor=-1;
+        if(tipo==0) 
+            try{
+                Valor = Float.valueOf(jTxtValor.getText());
+            } catch (NumberFormatException e){
+                JOptionPane.showMessageDialog(this,"O valor que inseriu não é válido","Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        int Doador_Id;
+        if(jCmbDoador.getSelectedItem()==null) {
+            JOptionPane.showMessageDialog(this,"Por favor escolha um doador","Erro", JOptionPane.ERROR_MESSAGE);
+            return;   
+        }
+        Doador_Id= ((Doador)jCmbDoador.getSelectedItem()).getId();
+        List<Material> Materiais = null;
+        if(tipo==1) {
+            Materiais = this.getMateriais(jTblArtigos);
+            if(Materiais==null || Materiais.size()==0) {
+                JOptionPane.showMessageDialog(this,"Por favor adicione materiais, ou mude o tipo de doação","Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+        int Projecto_Id = -1;
+        String Destino=null;
+        
+        if(jCmbProjecto.getSelectedItem()==null) ;
+        else if(jCmbProjecto.getSelectedItem() instanceof Projecto) {
+            Projecto_Id = ((Projecto)jCmbProjecto.getSelectedItem()).getId();
+            Destino = jCmbProjecto.getSelectedItem().toString();
+        }
+        else if (!jCmbProjecto.getSelectedItem().toString().equals("")) {
+            Destino = jCmbProjecto.getSelectedItem().toString();
+        }
+        
+        
+        Doacao doacao=null;
+
+        switch(tipo) {
+            case 0: 
+                 doacao = new Doacao(Recibo,Data,Evento,Valor,Destino,Doador_Id);
+                 break;    
+            case 1:
+                 doacao = new Doacao(Data,Evento,Destino,Doador_Id);
+                 doacao.setMateriais(Materiais);
+                 break;       
+            case 2:
+                 doacao = new Doacao(Recibo,Data,Descricao,Destino,Doador_Id);
+        }
+        if(Projecto_Id != -1) doacao.setProjecto_Id(Projecto_Id);
+
+        try {
+            JmdiMain.facadeBL.put(doacao);
+        } catch (PersistableException ex) {
+            JOptionPane.showMessageDialog(this,"Não foi possivel guardar a candidatura com sucesso!\n"+ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        JOptionPane.showMessageDialog(this,"Registo adicionado com sucesso!","Sucesso", JOptionPane.INFORMATION_MESSAGE);
+
+    }//GEN-LAST:event_jBtAdicionarActionPerformed
+
+    private List<Material> getMateriais(JTable table) {
+        int Id;
+        String Descricao;
+        float Quantidade;
+                
+        ArrayList<Material> ret = new ArrayList<>();
+        Material m=null;
+        for(int i=0; i<table.getRowCount();i++) {
+                Id=(int)table.getValueAt(i, 0);
+                Descricao=(String)table.getValueAt(i, 1);
+                Quantidade=(float)table.getValueAt(i, 2);
+                m = new Material(Descricao,Quantidade);
+                m.setId(Id);
+                ret.add(m);
+        } 
+        return ret;
+
+    }
+    
+    private void jBtRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtRemoverActionPerformed
+        int row = jTblArtigos.getSelectedRow();  
+        ((DefaultTableModel)this.jTblArtigos.getModel()).removeRow(row);
+        JmdiMain.reorderId(((DefaultTableModel)this.jTblArtigos.getModel()));
+        this.jBtRemover.setEnabled(false);
+    }//GEN-LAST:event_jBtRemoverActionPerformed
+
+    private void jTblArtigosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTblArtigosMouseClicked
+                                        
+        int row = jTblArtigos.getSelectedRow();
+        if(row!=-1) this.jBtRemover.setEnabled(true);
+        else this.jBtRemover.setEnabled(false);
+    }//GEN-LAST:event_jTblArtigosMouseClicked
+
+    private void jCmbDoadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCmbDoadorActionPerformed
+        if(jCmbDoador.getSelectedItem()!="") {
+            Doador d = (Doador)jCmbDoador.getSelectedItem();
+            String valor="";
+            try {
+                valor = String.valueOf(JmdiMain.facadeBL.getTotalDoacoes(d.getId()));
+            } catch (PersistableException ex) {
+            }
+            jLblTotalDoado.setText(valor);
+        }
+    }//GEN-LAST:event_jCmbDoadorActionPerformed
 
     private void hide_others(JRadioButton opt) {
         if(!(opt.equals(jOptMaterial))) { jPanelMaterial.setVisible(false); }
@@ -469,21 +740,21 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup btGrpTipo;
+    private javax.swing.JButton jBtAddMaterial;
+    private javax.swing.JButton jBtAdicionar;
+    private javax.swing.JButton jBtListaDoadores;
+    private javax.swing.JButton jBtRemover;
+    private javax.swing.JButton jBtSair;
     private javax.swing.JButton jBtSelectArtigos;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
     private javax.swing.JCheckBox jChkRecibo;
-    private javax.swing.JComboBox jComboBox1;
-    private javax.swing.JComboBox jComboBox2;
-    private javax.swing.JComboBox jComboBox3;
+    private javax.swing.JComboBox jCmbArtigos;
+    private javax.swing.JComboBox jCmbDoador;
+    private javax.swing.JComboBox jCmbProjecto;
+    private org.jdesktop.swingx.JXDatePicker jDpData;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -492,6 +763,7 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLblTotalDoado;
     private javax.swing.JRadioButton jOptMaterial;
     private javax.swing.JRadioButton jOptMoney;
     private javax.swing.JRadioButton jOptServices;
@@ -502,11 +774,12 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanelServices;
     private javax.swing.JPanel jPanelTipo;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField7;
+    private javax.swing.JTable jTblArtigos;
+    private javax.swing.JTextField jTxtDescricao;
+    private javax.swing.JTextField jTxtEvento;
+    private javax.swing.JTextField jTxtQuantidade;
+    private javax.swing.JTextField jTxtValor;
     // End of variables declaration//GEN-END:variables
+
+
 }

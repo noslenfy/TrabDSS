@@ -364,22 +364,20 @@ public class JintFrmNewDoador extends javax.swing.JInternalFrame {
             Profissao = null;
             EstadoCivil = null;
         }
-
-        FacadeDAO facade = new FacadeDAO();
-        
-        
+   
         Doador doador = new Doador(Nif,Nome, Telefone,Email, Rua, Localidade, Cp, DtNascimento, EstadoCivil, Profissao, Actividade, Tipo, Parceria);
-      
-         
+        
+
  
         try {
-            facade.put(new DoadorDAO(), doador);
+            JmdiMain.facadeBL.put(doador);
             
         } catch (PersistableException ex) {
-            JOptionPane.showMessageDialog(this,"Ocorreu um erro a criação do registo","Erro", JOptionPane.ERROR_MESSAGE);            
+            JOptionPane.showMessageDialog(this,"Ocorreu um erro a criação do registo","Erro", JOptionPane.ERROR_MESSAGE);
+            return;
         }
         JOptionPane.showMessageDialog(this,"Registo adicionado com sucesso!","Sucesso", JOptionPane.INFORMATION_MESSAGE);
-        facade.closeConnection();
+
         this.dispose();
     }//GEN-LAST:event_jBtAddActionPerformed
 
