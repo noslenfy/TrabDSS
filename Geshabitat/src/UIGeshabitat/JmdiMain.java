@@ -720,7 +720,7 @@ public class JmdiMain extends javax.swing.JFrame implements InternalFrameListene
             }
         }
         if(!existing){
-            JintFrmProject jfrmNewProject = new JintFrmProject();
+            JintFrmProject jfrmNewProject = new JintFrmProject(1);
             jfrmNewProject.addInternalFrameListener(this);
 
             jDesktopPaneMain.add(jfrmNewProject);
@@ -744,7 +744,7 @@ public class JmdiMain extends javax.swing.JFrame implements InternalFrameListene
     }//GEN-LAST:event_jbtProcurarActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
-        JintFrmGestaoDonacoes jfrmDoacoes = new JintFrmGestaoDonacoes(jPanelDoacoes);
+        JintFrmDonations jfrmDoacoes = new JintFrmDonations(jPanelDoacoes);
 
         jDesktopPaneMain.add(jfrmDoacoes);
         
@@ -760,38 +760,50 @@ public class JmdiMain extends javax.swing.JFrame implements InternalFrameListene
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void jBtPlaneamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtPlaneamentoActionPerformed
-        JintFrmGerirFases frmFases = new JintFrmGerirFases();
+        int Project_Id = ((JintFrmProject)((SidePanel)this.jPanelProject).getjIntFrame()).Project_Id;
+        
+        JintFrmGerirFases frmFases = new JintFrmGerirFases(Project_Id);
         frmFases.addInternalFrameListener(this);
         this.jDesktopPaneMain.add(frmFases);
         frmFases.setVisible(true);
+        frmFases.setLayer(20);
+        
     }//GEN-LAST:event_jBtPlaneamentoActionPerformed
 
     private void jBtRegistoMaterialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtRegistoMaterialActionPerformed
-        JintFrmAlocarMaterial frmMaterial = new JintFrmAlocarMaterial();
-        //frmMaterial.addInternalFrameListener(this);
+        int Project_Id = ((JintFrmProject)((SidePanel)this.jPanelProject).getjIntFrame()).Project_Id;
+        JintFrmAlocarMaterial frmMaterial = new JintFrmAlocarMaterial(Project_Id);
+        frmMaterial.addInternalFrameListener(this);
         this.jDesktopPaneMain.add(frmMaterial);
         frmMaterial.setVisible(true);
+        frmMaterial.setLayer(20);
+        
     }//GEN-LAST:event_jBtRegistoMaterialActionPerformed
 
     private void jBtInitTarefaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtInitTarefaActionPerformed
-        JintFrmTarefas frmTarefas = new JintFrmTarefas(true);
-        //frmTarefas.addInternalFrameListener(this);
+        int Project_Id = ((JintFrmProject)((SidePanel)this.jPanelProject).getjIntFrame()).Project_Id;        
+        JintFrmTarefas frmTarefas = new JintFrmTarefas(true,Project_Id);
+        frmTarefas.addInternalFrameListener(this);
         this.jDesktopPaneMain.add(frmTarefas);
-        frmTarefas.setVisible(true);   
+        frmTarefas.setVisible(true);
+        frmTarefas.setLayer(21);        
     }//GEN-LAST:event_jBtInitTarefaActionPerformed
 
     private void jBtConcluirTarefaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtConcluirTarefaActionPerformed
-        JintFrmTarefas frmTarefas = new JintFrmTarefas(false);
-        //frmTarefas.addInternalFrameListener(this);
+        int Project_Id = ((JintFrmProject)((SidePanel)this.jPanelProject).getjIntFrame()).Project_Id;
+        JintFrmTarefas frmTarefas = new JintFrmTarefas(false,Project_Id);
+        frmTarefas.addInternalFrameListener(this);
         this.jDesktopPaneMain.add(frmTarefas);
         frmTarefas.setVisible(true);  
+        frmTarefas.setLayer(22);
     }//GEN-LAST:event_jBtConcluirTarefaActionPerformed
 
     private void jMnuConnectionSetupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMnuConnectionSetupActionPerformed
         JintFrmDBConnection frmDBConnection = new JintFrmDBConnection();
         //frmTarefas.addInternalFrameListener(this);
         this.jDesktopPaneMain.add(frmDBConnection);
-        frmDBConnection.setVisible(true);  
+        frmDBConnection.setVisible(true); 
+        
     }//GEN-LAST:event_jMnuConnectionSetupActionPerformed
 
     private void jBtAprovarCandActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtAprovarCandActionPerformed
@@ -936,7 +948,7 @@ public class JmdiMain extends javax.swing.JFrame implements InternalFrameListene
             jPanelDoacoes.setVisible(false);
             jPanelSearch.setVisible(false);
             jPanelCandidatura.setVisible(true);
-        } else if (e.getInternalFrame() instanceof JintFrmGestaoDonacoes){
+        } else if (e.getInternalFrame() instanceof JintFrmDonations){
             jPanelProject.setVisible(false);
             jPanelSearch.setVisible(false);
             jPanelDoacoes.setVisible(true);

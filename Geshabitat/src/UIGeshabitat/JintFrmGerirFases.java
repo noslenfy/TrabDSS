@@ -5,22 +5,51 @@
  */
 package UIGeshabitat;
 
+import BLGeshabitat.Fase;
+import BLGeshabitat.Tarefa;
+import DAOGeshabitat.PersistableException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.AbstractListModel;
+import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.ListModel;
+
 /**
  *
  * @author nelson
  */
 public class JintFrmGerirFases extends ModalJinternalFrame  {
-
+    private int Project_Id;
 
     /**
      * Creates new form JintFrmFases
      * @param Project_Id
      */
-    public JintFrmGerirFases() {
-
+    public JintFrmGerirFases(int Project_Id) {
+        this.Project_Id = Project_Id;
         initComponents();
+        this.LoadFases();
     }
 
+    
+    public void LoadFases() {
+        try {
+            List<Object> fases = JmdiMain.facadeBL.getAll(new Fase(),"Projecto_Id",String.valueOf(this.Project_Id));
+            DefaultListModel listmodel = (DefaultListModel) jLstFases.getModel();
+            listmodel.clear();
+            for(Object obj : fases) {
+                Fase f = (Fase)obj;
+                listmodel. addElement(f);
+            }
+        } catch (PersistableException ex) {
+            JOptionPane.showMessageDialog(this,"Ocorreu um erro ao carregar as fases do projecto","Erro", JOptionPane.ERROR_MESSAGE);
+        }
+        
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -34,17 +63,17 @@ public class JintFrmGerirFases extends ModalJinternalFrame  {
         jPanel2 = new javax.swing.JPanel();
         jSplitPane1 = new javax.swing.JSplitPane();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
+        jLstFases = new javax.swing.JList(new DefaultListModel());
         jScrollPane3 = new javax.swing.JScrollPane();
-        jList2 = new javax.swing.JList();
+        jLstTarefas = new javax.swing.JList(new DefaultListModel());
         jLabel17 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
+        jTxtDescricao = new javax.swing.JTextField();
+        jBtAdicionarFase = new javax.swing.JButton();
+        jBtRemoverFase = new javax.swing.JButton();
+        jBtAddTarefa = new javax.swing.JButton();
+        jBtRemoveTarefa = new javax.swing.JButton();
         jBtCancelar = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        jBtGuardar = new javax.swing.JButton();
 
         setClosable(true);
         setTitle("Gestão de tarefas");
@@ -53,38 +82,42 @@ public class JintFrmGerirFases extends ModalJinternalFrame  {
 
         jSplitPane1.setDividerLocation(300);
 
-        jList1.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Fase 1 - Demolições", "Fase 2 - Construção do Grosso", "Fase 3 - Coberturas", "Fase 4 - Interiores" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
+        jLstFases.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jLstFases.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                jLstFasesValueChanged(evt);
+            }
         });
-        jList1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jList1.setSelectedIndex(2);
-        jScrollPane2.setViewportView(jList1);
+        jScrollPane2.setViewportView(jLstFases);
 
         jSplitPane1.setLeftComponent(jScrollPane2);
 
-        jList2.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Tarefa 1 - Reboco paredes interiores", "Tarefa 2 - Pintura de Paredes", "Tarefa 3 - Colocação de rodapés" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane3.setViewportView(jList2);
+        jScrollPane3.setViewportView(jLstTarefas);
 
         jSplitPane1.setRightComponent(jScrollPane3);
 
         jLabel17.setText("Descrição fase:");
 
-        jButton4.setText("Adicionar");
+        jBtAdicionarFase.setText("Adicionar");
+        jBtAdicionarFase.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtAdicionarFaseActionPerformed(evt);
+            }
+        });
 
-        jButton5.setText("Remover");
-        jButton5.setEnabled(false);
+        jBtRemoverFase.setText("Remover");
+        jBtRemoverFase.setEnabled(false);
 
-        jButton6.setText("Adicionar tarefa");
-        jButton6.setEnabled(false);
+        jBtAddTarefa.setText("Adicionar tarefa");
+        jBtAddTarefa.setEnabled(false);
+        jBtAddTarefa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtAddTarefaActionPerformed(evt);
+            }
+        });
 
-        jButton7.setText("Remover tarefa");
-        jButton7.setEnabled(false);
+        jBtRemoveTarefa.setText("Remover tarefa");
+        jBtRemoveTarefa.setEnabled(false);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -96,17 +129,17 @@ public class JintFrmGerirFases extends ModalJinternalFrame  {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel17)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jTxtDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jSplitPane1)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(jButton4)
+                        .addComponent(jBtAdicionarFase)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton5)
+                        .addComponent(jBtRemoverFase)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 238, Short.MAX_VALUE)
-                        .addComponent(jButton6)
+                        .addComponent(jBtAddTarefa)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton7)))
+                        .addComponent(jBtRemoveTarefa)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -114,14 +147,14 @@ public class JintFrmGerirFases extends ModalJinternalFrame  {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTxtDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel17))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton4)
-                    .addComponent(jButton5)
-                    .addComponent(jButton6)
-                    .addComponent(jButton7))
+                    .addComponent(jBtAdicionarFase)
+                    .addComponent(jBtRemoverFase)
+                    .addComponent(jBtAddTarefa)
+                    .addComponent(jBtRemoveTarefa))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSplitPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -134,7 +167,7 @@ public class JintFrmGerirFases extends ModalJinternalFrame  {
             }
         });
 
-        jButton2.setText("Guardar");
+        jBtGuardar.setText("Guardar");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -146,7 +179,7 @@ public class JintFrmGerirFases extends ModalJinternalFrame  {
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton2)
+                        .addComponent(jBtGuardar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jBtCancelar)))
                 .addContainerGap())
@@ -159,7 +192,7 @@ public class JintFrmGerirFases extends ModalJinternalFrame  {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jBtCancelar)
-                    .addComponent(jButton2))
+                    .addComponent(jBtGuardar))
                 .addContainerGap())
         );
 
@@ -187,22 +220,92 @@ public class JintFrmGerirFases extends ModalJinternalFrame  {
         this.dispose();
     }//GEN-LAST:event_jBtCancelarActionPerformed
 
+    private void jBtAdicionarFaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtAdicionarFaseActionPerformed
+        if(!"".equals(jTxtDescricao.getText())){
+            Fase f = new Fase(jTxtDescricao.getText(),this.Project_Id);
+            try {
+//                if(JmdiMain.facadeBL.exists(f,"Descricao", f.getDescricao())) {
+//                    JOptionPane.showMessageDialog(this,"Já existe uma fase com essa Descricao","Erro", JOptionPane.ERROR_MESSAGE);
+//                    return;
+//                }
+                DefaultListModel listmodel = (DefaultListModel) jLstFases.getModel();
+                listmodel. addElement(f);
 
+                f.setId(JmdiMain.facadeBL.put(f));
+
+            } catch (PersistableException ex) {
+                Logger.getLogger(JintFrmGerirFases.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        
+    }//GEN-LAST:event_jBtAdicionarFaseActionPerformed
+
+    private void jLstFasesValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jLstFasesValueChanged
+        Fase f = (Fase)jLstFases.getSelectedValue();
+        if(f!=null)  {
+            this.jBtRemoverFase.setEnabled(true);
+            this.jBtAddTarefa.setEnabled(true);
+        }
+        
+        else this.jBtRemoverFase.setEnabled(false);
+        this.LoadTarefas(f.getId());
+        
+        
+    }//GEN-LAST:event_jLstFasesValueChanged
+
+    private void jBtAddTarefaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtAddTarefaActionPerformed
+        ImageIcon icon = new ImageIcon("");
+       
+        String s = (String)JOptionPane.showInputDialog(
+        this    ,
+        "Adicionar Tarefa",
+        "Insira descrição da Tarefa:",
+        JOptionPane.PLAIN_MESSAGE,
+        icon,
+        null,
+        "");
+        if(s!=null) {
+            Fase faseSelecionada=(Fase)jLstFases.getSelectedValue();
+            Tarefa tarefa = new Tarefa(s,faseSelecionada.getId(), null, null);
+
+            try {
+                JmdiMain.facadeBL.put(tarefa);
+            } catch (PersistableException ex) {
+                JOptionPane.showMessageDialog(this,"Ocorreu um erro ao gravar a Tarefa","Erro", JOptionPane.ERROR_MESSAGE);
+            }
+            this.LoadTarefas(faseSelecionada.getId());
+        }
+    }//GEN-LAST:event_jBtAddTarefaActionPerformed
+
+    private void LoadTarefas(int Fase_Id) {
+        try {
+            List<Object> tarefas = JmdiMain.facadeBL.getAll(new Tarefa(), "Fase_Id", String.valueOf(Fase_Id));
+            DefaultListModel listmodel = (DefaultListModel) jLstTarefas.getModel();
+            listmodel.clear();
+            for(Object obj : tarefas) {
+                Tarefa t = (Tarefa)obj;
+                listmodel. addElement(t);
+            }
+        } catch (PersistableException ex) {
+            JOptionPane.showMessageDialog(this,"Ocorreu um erro ao carregar as Tarefas","Erro", JOptionPane.ERROR_MESSAGE);
+        }       
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jBtAddTarefa;
+    private javax.swing.JButton jBtAdicionarFase;
     private javax.swing.JButton jBtCancelar;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
+    private javax.swing.JButton jBtGuardar;
+    private javax.swing.JButton jBtRemoveTarefa;
+    private javax.swing.JButton jBtRemoverFase;
     private javax.swing.JLabel jLabel17;
-    private javax.swing.JList jList1;
-    private javax.swing.JList jList2;
+    private javax.swing.JList jLstFases;
+    private javax.swing.JList jLstTarefas;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSplitPane jSplitPane1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTxtDescricao;
     // End of variables declaration//GEN-END:variables
 }

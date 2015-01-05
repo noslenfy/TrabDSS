@@ -98,24 +98,7 @@ public class DoacaoDAO extends EntityDAO{
         return statement;
     } 
     
-     private PreparedStatement getUpdateSqlStatementStockMaterial(String table, Material material) throws PersistableException {
-        String tableId = table+".Id";
-        String sql = "UPDATE " + table + " SET Stock = ? " + " WHERE " + tableId + " = ?";
-        
-        PreparedStatement statement=null;
-
-        try {
-            statement = conn.prepareStatement(sql);
-            
-            statement.setFloat(1, material.getStock());
-            statement.setInt(2, material.getId());
-            
-        } catch (SQLException ex) { 
-            throw new PersistableException("Erro ao criar o PreparedStatement!");
-        }
-
-        return statement;
-    }     
+     
         
     @Override
     public int put(Object obj) throws PersistableException {
@@ -173,7 +156,7 @@ public class DoacaoDAO extends EntityDAO{
                 for(int i=0; i< materiais.size(); i++) {
                     Material m = materiais.get(i);
                     m.setStock(m.getStock()+existencias.get(i));
-                    statement=this.getUpdateSqlStatementStockMaterial(FacadeDAO.MATERIALTABLE, m);
+                    statement=new MaterialDAO().getUpdateSqlStatementStockMaterial(FacadeDAO.MATERIALTABLE, m);
                     statement.executeUpdate(); 
                 }
 
@@ -202,7 +185,35 @@ public class DoacaoDAO extends EntityDAO{
         return  GeneratedKey; 
     }
 
+    public float getTotalDoado() throws PersistableException {
+        float ret =0;
+        
+        String sql = "select sum(valor) as Total from " + FacadeDAO.DOACAOTABLE;
+        PreparedStatement statement = null;
+        ResultSet rst = null;
+        try {
+            statement = conn.prepareStatement(sql);           
+            rst = statement.executeQuery();
+            
+            if(rst.next())
+            {
+                ret=rst.getFloat("Total");
+            }
+            
+        } catch (SQLException ex) { 
+            throw new PersistableException("Ocorreu um erro na obtenção do registo" + ex.getMessage());
+        } finally {
+            try {
+                if (statement != null)  statement.close();    
+                if( rst != null ) rst.close();
+            } catch (SQLException ex) {
+                throw new PersistableException("Ocorreu um erro ao fechar conexões!\n" + ex.getMessage());
+            }             
+            
+        }
+        return ret;
 
+    }
     
     
 }

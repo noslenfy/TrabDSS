@@ -5,25 +5,38 @@
  */
 package UIGeshabitat;
 
+import DAOGeshabitat.PersistableException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JPanel;
 
 /**
  *
  * @author nelson
  */
-public class JintFrmGestaoDonacoes extends javax.swing.JInternalFrame {
+public class JintFrmDonations extends javax.swing.JInternalFrame {
 
     private final JPanel panel;
     /**
      * Creates new form JintFrmGestaoDonacoes
      * @param panel panel que vai adicionar funcionalidades
      */
-    public JintFrmGestaoDonacoes(JPanel panel) {
+    public JintFrmDonations(JPanel panel) {
         this.panel = panel;
         panel.setVisible(true);
         initComponents();
+        this.getInfo();
     }
     
+    private void getInfo() {
+        try {
+            float totalDoado = JmdiMain.facadeBL.getTotalDoado();
+            jLblTotalDoado.setText(String.valueOf(totalDoado));
+        } catch (PersistableException ex) {
+            Logger.getLogger(JintFrmDonations.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
    
     /**
      * This method is called from within the constructor to initialize the form.
@@ -44,7 +57,7 @@ public class JintFrmGestaoDonacoes extends javax.swing.JInternalFrame {
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        jLblTotalDoado = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
@@ -75,7 +88,7 @@ public class JintFrmGestaoDonacoes extends javax.swing.JInternalFrame {
 
         jLabel10.setText("Casa Manuel Gomes - Fafe");
 
-        jLabel5.setText("35428.00");
+        jLblTotalDoado.setText("35428.00");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -103,7 +116,7 @@ public class JintFrmGestaoDonacoes extends javax.swing.JInternalFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel5)
+                                .addComponent(jLblTotalDoado)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel6)))
                         .addGap(0, 0, Short.MAX_VALUE)))
@@ -115,7 +128,7 @@ public class JintFrmGestaoDonacoes extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jLabel5)
+                    .addComponent(jLblTotalDoado)
                     .addComponent(jLabel6))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -202,16 +215,14 @@ public class JintFrmGestaoDonacoes extends javax.swing.JInternalFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))))
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
@@ -237,11 +248,11 @@ public class JintFrmGestaoDonacoes extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLblTotalDoado;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

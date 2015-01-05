@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 
@@ -72,6 +73,8 @@ public abstract class EntityDAO implements Persistable{
     /**
      * Actualiza um registo na base dados de acordo com a coluna e valor fornecidos, usando a chave estrabageira na forma
      * Tablename.Id para selecionar registo a actualizar
+     * 
+     * Update table Set Column = newValue where 'tableId' = Id
      * @param table
      * @param column - Nome do atributo a actualizar
      * @param newvalue
@@ -79,7 +82,7 @@ public abstract class EntityDAO implements Persistable{
      * @throws PersistableException
      */
     @Override
-    public void update(String table, String column, String newvalue, int Id) throws PersistableException{
+    public void update(String table, String column, Object newvalue, int Id) throws PersistableException{
         //update table Set Recibo=1 where Doacao.Id = 1;
         String tableId = table+".Id";
         String sql = "UPDATE " + table + " SET " + column + " = ? " + " WHERE " + tableId + " = ?";
@@ -88,7 +91,9 @@ public abstract class EntityDAO implements Persistable{
                
         try {
             statement = conn.prepareStatement(sql);
-            statement.setString(1, newvalue);
+            if(newvalue instanceof String)  statement.setString(1, (String)newvalue);
+            if(newvalue instanceof Date)  statement.setDate(1, new java.sql.Date(((Date)newvalue).getTime()));
+            
             statement.setInt(2, Id);
  
             statement.executeUpdate(); 
@@ -222,9 +227,16 @@ public abstract class EntityDAO implements Persistable{
         return ret;
     }
 
+    /**
+     * Retorna todos os elementos de uma tabela que cumpram um requisito
+     * @param Atribute
+     * @param Value
+     * @return
+     * @throws PersistableException
+     */
     @Override
-    public Iterable getAll(String Column) throws PersistableException {
-        String sql = "SELECT * FROM " + EntityDAO.table + " where " + Column + " = ?";
+    public Iterable getAll(String Atribute, String Value) throws PersistableException {
+        String sql = "SELECT * FROM " + EntityDAO.table + " where " + Atribute + " = ?";
         
         List<Object> ret = new ArrayList<>();
         
@@ -232,7 +244,8 @@ public abstract class EntityDAO implements Persistable{
         ResultSet rst;
         
         try {
-            statement = conn.prepareStatement(sql);           
+            statement = conn.prepareStatement(sql);
+            statement.setString(1, Value);
             rst = statement.executeQuery();
 
             while(rst.next())
@@ -307,6 +320,14 @@ public abstract class EntityDAO implements Persistable{
         return this.get(id) != null;
     }
 
+    /**
+     *Testa se existem elementos com os criterios indicados.
+     * SELECT * FROM EntityDAO.table where Column=Value
+     * @param Column
+     * @param Value
+     * @return
+     * @throws PersistableException
+     */
     @Override
     public boolean exists(String Column, String Value) throws PersistableException {
         return this.get(Column,Value) != null;

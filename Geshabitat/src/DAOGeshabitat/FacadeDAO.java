@@ -5,12 +5,18 @@
  */
 package DAOGeshabitat;
 
+import BLGeshabitat.Fase;
 import BLGeshabitat.Funcionario;
+import BLGeshabitat.Material;
+import BLGeshabitat.RegistoMaterial;
+import BLGeshabitat.Tarefa;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -40,6 +46,9 @@ public final class FacadeDAO {
     public static final String DOACAOTABLE = "Doacao";
     public static final String DOACAOMATERIALTABLE = "DoacaoMaterial";
     public static final String PROJECTOTABLE = "Projecto";
+    public static final String FASETABLE = "Fase";    
+    public static final String TAREFATABLE = "Tarefa";     
+    public static final String MATERIALFASE = "MaterialFase";  
     
     public FacadeDAO() {     
 
@@ -84,14 +93,19 @@ public final class FacadeDAO {
         if(entity instanceof MaterialDAO) return MATERIALTABLE;
         if(entity instanceof DoacaoDAO) return DOACAOTABLE;
         if(entity instanceof ProjectoDAO) return PROJECTOTABLE;
+        if(entity instanceof FaseDAO) return FASETABLE;
+        if(entity instanceof TarefaDAO) return TAREFATABLE; 
+        
         return null;
     }
     
+
+            
     public int put(EntityDAO entityTypeDAO, Object obj) throws PersistableException {
        EntityDAO.setConnection(conn, getTable(entityTypeDAO));  
        return entityTypeDAO.put(obj);
     }
-    public void update(EntityDAO entityTypeDAO, String column, String value, int Id) throws PersistableException {
+    public void update(EntityDAO entityTypeDAO, String column, Object value, int Id) throws PersistableException {
        EntityDAO.setConnection(conn, getTable(entityTypeDAO));  
        entityTypeDAO.update(getTable(entityTypeDAO),column, value, Id);
     }   
@@ -101,17 +115,22 @@ public final class FacadeDAO {
     } 
     public Object get(EntityDAO entityTypeDAO, String Column, int Id) throws PersistableException {
         EntityDAO.setConnection(conn, getTable(entityTypeDAO)); 
-        return entityTypeDAO.get(Column, Id);
+        return entityTypeDAO.get(Column, String.valueOf(Id));
     } 
+    public String get(EntityDAO entityTypeDAO, String fieldToShow, String Column, String Value) throws PersistableException {
+        EntityDAO.setConnection(conn, getTable(entityTypeDAO));
+        return entityTypeDAO.get(fieldToShow, Column, Value);
+        
+    }
     public List<Object> getAll(EntityDAO entityTypeDAO) throws PersistableException {
         EntityDAO.setConnection(conn, getTable(entityTypeDAO));
         ArrayList<Object> array = (ArrayList<Object>) entityTypeDAO.getAll();
         
         return array;
     }
-    public List<Object> getAll(EntityDAO entityTypeDAO, String Column) throws PersistableException {
+    public List<Object> getAll(EntityDAO entityTypeDAO, String Atribute, String Value) throws PersistableException {
         EntityDAO.setConnection(conn, getTable(entityTypeDAO));
-        ArrayList<Object> array = (ArrayList<Object>) entityTypeDAO.getAll(Column);
+        ArrayList<Object> array = (ArrayList<Object>) entityTypeDAO.getAll(Atribute, Value);
         
         return array;
     }
@@ -136,10 +155,38 @@ public final class FacadeDAO {
         return entityTypeDAO.exists(Column, Value);
     }
     
+    public List<Tarefa> getTarefasNRealizadas (int Projecto_Id) throws PersistableException {
+     return new TarefaDAO().getTarefasNRealizadas(Projecto_Id);
+    }
+
+    public List<Tarefa> getTarefasNIniciadas (int Projecto_Id) throws PersistableException {
+     return new TarefaDAO().getTarefasNIniciadas(Projecto_Id);
+    }
+    
+    public List<Tarefa> getTarefasIniciadas (int Projecto_Id) throws PersistableException {
+     return new TarefaDAO().getTarefasIniciadas(Projecto_Id);
+    }
+    
+    public Map<Tarefa,Integer>  getTarefasConcluidas (int Projecto_Id) throws PersistableException {
+     return new TarefaDAO().getTarefasConcluidas(Projecto_Id);
+    }
     
     public float getTotalDoacoes(int Doador_Id) throws PersistableException {
-        return new DoadorDAO().getTotalDoacoes(Doador_Id);
+     return new DoadorDAO().getTotalDoacoes(Doador_Id);
     }  
+
+    public void alocaMateriais(List<Date> datas, List<Material> materiais, List<Float> quantidades, List<Fase> fases) throws PersistableException {
+        new MaterialDAO().alocaMateriais(datas,materiais,quantidades,fases);
+    }
+    
+    public List<RegistoMaterial> getMateriaisUtilizados(int Project_Id) throws PersistableException {
+        return new MaterialDAO().getMateriaisUtilizados(Project_Id);
+    }
+    
+    public float getTotalDoado() throws PersistableException {
+        EntityDAO.setConnection(conn, getTable(new DoacaoDAO()));
+        return new DoacaoDAO().getTotalDoado();
+    }
     
 }
     

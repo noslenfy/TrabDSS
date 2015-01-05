@@ -66,7 +66,7 @@ public class ProjectoDAO extends EntityDAO{
                                 rst.getInt("Candidatura_Id"));
             ret.setId(rst.getInt("Id"));
         } catch (SQLException ex) {
-            throw new PersistableException("Ocorreu um erro na crição da entidade (convertToResulSet())");
+            throw new PersistableException("Ocorreu um erro na crição da entidade (convertToResulSet())\n"+ex.getMessage());
         }
         return ret;
     }

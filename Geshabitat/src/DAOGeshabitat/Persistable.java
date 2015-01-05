@@ -26,7 +26,7 @@ public interface Persistable {
     public String get(String fieldToShow, String Column, String Value) throws PersistableException;
     
     public Iterable getAll() throws PersistableException;
-    public Iterable getAll(String Column) throws PersistableException;
+    public Iterable getAll(String Atribute, String Value) throws PersistableException;
     
     public Iterable getAll(Collection<Integer> ids) throws PersistableException;
     
@@ -35,7 +35,7 @@ public interface Persistable {
     public void deleteAll(Collection entidades) throws PersistableException;
    
     //NOTA-GENERALIZAR
-    public void update(String table, String column, String newvalue, int Id) throws PersistableException;
+    public void update(String table, String column, Object newvalue, int Id) throws PersistableException;
     
     public long count() throws PersistableException;
     

@@ -12,10 +12,15 @@ import BLGeshabitat.Material;
 import BLGeshabitat.Projecto;
 import BLGeshabitat.Voluntario;
 import DAOGeshabitat.PersistableException;
+import java.beans.PropertyVetoException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JDesktopPane;
+import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
+import javax.swing.event.InternalFrameListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -112,7 +117,14 @@ public class JintFrmSearch extends javax.swing.JInternalFrame {
                 "Id", "Descrição", "Localidade", "Data Inicio", "Candidatura"
             }
         ));
+        jTblProjectos.setColumnSelectionAllowed(true);
+        jTblProjectos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTblProjectosMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(jTblProjectos);
+        jTblProjectos.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
         javax.swing.GroupLayout jPnlProjectosLayout = new javax.swing.GroupLayout(jPnlProjectos);
         jPnlProjectos.setLayout(jPnlProjectosLayout);
@@ -283,6 +295,34 @@ public class JintFrmSearch extends javax.swing.JInternalFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jTblProjectosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTblProjectosMouseClicked
+        boolean existing = false;
+        JDesktopPane jDesktopPaneMain = this.getDesktopPane();
+        
+        for( JInternalFrame i : jDesktopPaneMain.getAllFrames() )
+        {
+            if(i instanceof JintFrmProject) { 
+                /*
+                try {
+                    i.setSelected(true);
+                } catch (PropertyVetoException ex) {  }
+                existing=true;
+                        */
+                i.dispose(); // fecha a janela anterior caso esteja activa
+            }
+        }
+        if(!existing){
+            int id = (int)jTblProjectos.getValueAt(jTblProjectos.getSelectedRow(),0);
+            JintFrmProject jfrmNewProject = new JintFrmProject(id);
+            jfrmNewProject.addInternalFrameListener((InternalFrameListener)((JFrame)this.getTopLevelAncestor()));
+
+            jDesktopPaneMain.add(jfrmNewProject);
+             
+            ((MDIDesktopPane)jDesktopPaneMain).checkDesktopSize();
+            jfrmNewProject.setVisible(true);
+        }        
+    }//GEN-LAST:event_jTblProjectosMouseClicked
 
     
     private void fillTableDoadores() {

@@ -5,17 +5,39 @@
  */
 package UIGeshabitat;
 
+import BLGeshabitat.Fase;
+import BLGeshabitat.Material;
+import DAOGeshabitat.PersistableException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author nelson
  */
 public class JintFrmAlocarMaterial extends ModalJinternalFrame {
-
+    private int Project_Id;
+    DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.LONG, Locale.forLanguageTag("pt"));
     /**
      * Creates new form JintFrmAlocarMaterial
      */
-    public JintFrmAlocarMaterial() {
+    public JintFrmAlocarMaterial(int Project_Id) {
+        this.Project_Id=Project_Id;
         initComponents();
+        try {
+            this.getFases();
+            this.getArtigos();
+        } catch (PersistableException ex) {
+            JOptionPane.showMessageDialog(this,"Ocorreu um erro ao obter os artigos/fases","Erro", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -30,46 +52,62 @@ public class JintFrmAlocarMaterial extends ModalJinternalFrame {
         jPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jComboBox4 = new javax.swing.JComboBox();
+        jTblMaterialAlocado = new javax.swing.JTable();
         jLabel22 = new javax.swing.JLabel();
         jLabel23 = new javax.swing.JLabel();
-        jComboBox5 = new javax.swing.JComboBox();
+        jCmbArtigos = new javax.swing.JComboBox();
         jBtSelectArtigo = new javax.swing.JButton();
         jLabel24 = new javax.swing.JLabel();
-        jSpinner1 = new javax.swing.JSpinner();
-        jButton10 = new javax.swing.JButton();
-        jButton11 = new javax.swing.JButton();
-        jComboBox6 = new javax.swing.JComboBox();
+        jBtAdicionar = new javax.swing.JButton();
+        jBtRemover = new javax.swing.JButton();
+        jCmbFases = new javax.swing.JComboBox();
         jLabel25 = new javax.swing.JLabel();
+        jLblStock = new javax.swing.JLabel();
+        jDpData = new org.jdesktop.swingx.JXDatePicker();
+        jTxtQuantidade = new javax.swing.JTextField();
         jBtCancelar = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        jBtGuardar = new javax.swing.JButton();
 
         setClosable(true);
         setTitle("Registo de Material");
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true), "Alocar Material"));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTblMaterialAlocado.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+
             },
             new String [] {
-                "Data", "Descrição", "Quantidade", "Fase", "Doador"
+                "Data", "Descrição", "Quantidade", "Fase"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
 
-        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "12 / Janeiro / 2012", " " }));
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTblMaterialAlocado.setColumnSelectionAllowed(true);
+        jTblMaterialAlocado.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTblMaterialAlocadoMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jTblMaterialAlocado);
+        jTblMaterialAlocado.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
         jLabel22.setText("Data:");
 
         jLabel23.setText("Descrição:");
 
-        jComboBox5.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Saco cimento" }));
+        jCmbArtigos.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Saco cimento" }));
+        jCmbArtigos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCmbArtigosActionPerformed(evt);
+            }
+        });
 
         jBtSelectArtigo.setText("...");
         jBtSelectArtigo.addActionListener(new java.awt.event.ActionListener() {
@@ -80,16 +118,32 @@ public class JintFrmAlocarMaterial extends ModalJinternalFrame {
 
         jLabel24.setText("Quantidade:");
 
-        jSpinner1.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(1.0f), null, Float.valueOf(10.0f), Float.valueOf(0.5f)));
+        jBtAdicionar.setText("Adicionar");
+        jBtAdicionar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtAdicionarActionPerformed(evt);
+            }
+        });
 
-        jButton10.setText("Adicionar");
+        jBtRemover.setText("Remover");
+        jBtRemover.setEnabled(false);
+        jBtRemover.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtRemoverActionPerformed(evt);
+            }
+        });
 
-        jButton11.setText("Remover");
-        jButton11.setEnabled(false);
-
-        jComboBox6.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Fase 1 - Demolições" }));
+        jCmbFases.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Fase 1 - Demolições" }));
 
         jLabel25.setText("Fase:");
+
+        jLblStock.setText("Stock");
+
+        jDpData.setFormats(dateFormat);
+
+        jDpData.setDate(new Date());
+
+        jTxtQuantidade.setText("1.0");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -100,30 +154,32 @@ public class JintFrmAlocarMaterial extends ModalJinternalFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jButton10)
+                                .addComponent(jBtAdicionar)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton11))
+                                .addComponent(jBtRemover))
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(jLabel23)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jCmbArtigos, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jBtSelectArtigo, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(26, 26, 26)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel24)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jTxtQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(4, 4, 4)
+                                .addComponent(jLblStock))
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(jLabel22)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(6, 6, 6)
+                                .addComponent(jDpData, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jLabel25)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jComboBox6, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addGap(0, 377, Short.MAX_VALUE)))
+                                .addComponent(jCmbFases, javax.swing.GroupLayout.PREFERRED_SIZE, 379, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 185, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -131,21 +187,22 @@ public class JintFrmAlocarMaterial extends ModalJinternalFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel22)
-                    .addComponent(jComboBox6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel25))
+                    .addComponent(jCmbFases, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel25)
+                    .addComponent(jDpData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jCmbArtigos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel23)
                     .addComponent(jBtSelectArtigo)
                     .addComponent(jLabel24)
-                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLblStock)
+                    .addComponent(jTxtQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton10)
-                    .addComponent(jButton11))
+                    .addComponent(jBtAdicionar)
+                    .addComponent(jBtRemover))
                 .addGap(11, 11, 11)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE)
                 .addContainerGap())
@@ -158,7 +215,12 @@ public class JintFrmAlocarMaterial extends ModalJinternalFrame {
             }
         });
 
-        jButton2.setText("Guardar");
+        jBtGuardar.setText("Guardar");
+        jBtGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtGuardarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -170,7 +232,7 @@ public class JintFrmAlocarMaterial extends ModalJinternalFrame {
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton2)
+                        .addComponent(jBtGuardar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jBtCancelar)))
                 .addContainerGap())
@@ -183,7 +245,7 @@ public class JintFrmAlocarMaterial extends ModalJinternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jBtCancelar)
-                    .addComponent(jButton2))
+                    .addComponent(jBtGuardar))
                 .addContainerGap())
         );
 
@@ -217,24 +279,124 @@ public class JintFrmAlocarMaterial extends ModalJinternalFrame {
         this.dispose();
     }//GEN-LAST:event_jBtCancelarActionPerformed
 
+    private void jCmbArtigosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCmbArtigosActionPerformed
+        if(jCmbArtigos.getSelectedItem()!=null) {
+            int Material_Id = ((Material)jCmbArtigos.getSelectedItem()).getId();
+            String Stock = "";
+            try {
+                Stock = JmdiMain.facadeBL.getField(new Material(), "Stock" , "Id", Material_Id);
+                this.jLblStock.setText("(Stock="+Stock+")");
+            } catch (PersistableException ex) {
+                JOptionPane.showMessageDialog(this,"Ocorreu um erro ao obter o stock","Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        
+        
+    }//GEN-LAST:event_jCmbArtigosActionPerformed
+
+    private void jBtAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtAdicionarActionPerformed
+        Material m = (Material)this.jCmbArtigos.getSelectedItem();
+        Fase f = (Fase)this.jCmbFases.getSelectedItem();
+        float Quantidade=0;
+        String Stock="";
+        try {
+            Quantidade = Float.valueOf(jTxtQuantidade.getText());
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this,"A quantidade que inseriu não é valida","Erro", JOptionPane.ERROR_MESSAGE);  
+            return;
+        }
+        
+        try {
+            Stock = JmdiMain.facadeBL.getField(new Material(), "Stock" , "Id", m.getId());
+        } catch (PersistableException ex) {
+            JOptionPane.showMessageDialog(this,"Ocorreu um erro ao obter o stock","Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        if(Quantidade > Float.valueOf(Stock) || Quantidade <= 0 ) {
+            JOptionPane.showMessageDialog(this,"A quantidade que inseriu não é valida","Erro", JOptionPane.ERROR_MESSAGE); 
+            return;
+        }
+        
+        DefaultTableModel tablemodel = (DefaultTableModel)this.jTblMaterialAlocado.getModel();
+        Object[] registo = {this.jDpData.getDate(), m, Quantidade, f};
+        tablemodel.addRow(registo);
+        
+    }//GEN-LAST:event_jBtAdicionarActionPerformed
+
+    private void jTblMaterialAlocadoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTblMaterialAlocadoMouseClicked
+        int row = jTblMaterialAlocado.getSelectedRow();
+        if(row!=-1) this.jBtRemover.setEnabled(true);
+        else this.jBtRemover.setEnabled(false);
+    }//GEN-LAST:event_jTblMaterialAlocadoMouseClicked
+
+    private void jBtRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtRemoverActionPerformed
+        int row = jTblMaterialAlocado.getSelectedRow();  
+        ((DefaultTableModel)this.jTblMaterialAlocado.getModel()).removeRow(row);
+      // JmdiMain.reorderId(((DefaultTableModel)this.jTblAgregado.getModel()));
+        this.jBtRemover.setEnabled(false);
+    }//GEN-LAST:event_jBtRemoverActionPerformed
+
+    private void jBtGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtGuardarActionPerformed
+        List<Date> datas = new ArrayList<>();
+        List<Material> materiais = new ArrayList<>();
+        List<Float> quantidades = new ArrayList<>();
+        List<Fase> fases = new ArrayList<>();
+        
+        for(int i=0; i< jTblMaterialAlocado.getRowCount(); i++) {
+            datas.add((Date)jTblMaterialAlocado.getValueAt(i, 0));
+            materiais.add((Material) jTblMaterialAlocado.getValueAt(i, 1));
+            quantidades.add((Float) jTblMaterialAlocado.getValueAt(i, 2));
+            fases.add((Fase) jTblMaterialAlocado.getValueAt(i, 3));
+        }
+        
+        try {
+          JmdiMain.facadeBL.alocaMateriais(datas,materiais,quantidades,fases);
+        } catch (PersistableException ex) {
+           JOptionPane.showMessageDialog(this,"Não foi possivel guardar registo!","Erro", JOptionPane.ERROR_MESSAGE); 
+           return;
+        }
+        JOptionPane.showMessageDialog(this,"Registo adicionado com sucesso!","Sucesso", JOptionPane.INFORMATION_MESSAGE);
+        this.dispose();
+    }//GEN-LAST:event_jBtGuardarActionPerformed
+
+    private void getFases() throws PersistableException {
+        List<Object> fases = JmdiMain.facadeBL.getAll(new Fase(),"Projecto_Id",String.valueOf(this.Project_Id));
+        this.jCmbFases.removeAllItems();
+        for(Object obj : fases) {
+            Fase f = (Fase)obj;
+            this.jCmbFases.addItem(f);
+        }
+        
+    }
+    
+    private void getArtigos() throws PersistableException {
+        List<Object> artigos = JmdiMain.facadeBL.getAll(new Material());
+        this.jCmbArtigos.removeAllItems();
+        for(Object obj : artigos) {
+            Material m = (Material)obj;
+            this.jCmbArtigos.addItem(m);
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jBtAdicionar;
     private javax.swing.JButton jBtCancelar;
+    private javax.swing.JButton jBtGuardar;
+    private javax.swing.JButton jBtRemover;
     private javax.swing.JButton jBtSelectArtigo;
-    private javax.swing.JButton jButton10;
-    private javax.swing.JButton jButton11;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JComboBox jComboBox4;
-    private javax.swing.JComboBox jComboBox5;
-    private javax.swing.JComboBox jComboBox6;
+    private javax.swing.JComboBox jCmbArtigos;
+    private javax.swing.JComboBox jCmbFases;
+    private org.jdesktop.swingx.JXDatePicker jDpData;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLblStock;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSpinner jSpinner1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTblMaterialAlocado;
+    private javax.swing.JTextField jTxtQuantidade;
     // End of variables declaration//GEN-END:variables
 }

@@ -8,9 +8,11 @@ package DAOGeshabitat;
 import BLGeshabitat.Anexo;
 import BLGeshabitat.Candidatura;
 import BLGeshabitat.Familiar;
+import static DAOGeshabitat.EntityDAO.conn;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -102,36 +104,7 @@ public class CandidaturaDAO extends EntityDAO{
 
         return statement;
     } 
-    
 
-//    @Override
-//    public Candidatura convertResultSet(ResultSet rst) throws PersistableException {
-//            Candidatura ret;
-//        try {           
-//            ret = new Candidatura(rst.getInt("Nif"),
-//                                  rst.getString("Nome"),
-//                                  rst.getString("Telefone"),
-//                                  rst.getString("Email"),                    
-//                                  rst.getString("Rua"),
-//                                  rst.getString("Localidade"),
-//                                  rst.getString("Cp"),
-//                                  rst.getDate("DtNascimento"),
-//                                  rst.getString("Nacionalidade"),
-//                                  rst.getString("Profissao"),
-//                                  rst.getFloat("Rendimento"),
-//                                  rst.getString("Estado"),                    
-//                                  rst.getString("Escolaridade"),
-//                                  rst.getInt("Funcionario_Id"),
-//                                  rst.getInt("Projecto_Id"),
-//                                  rst.getFloat("Prestacao"),
-//                                  rst.getString("EstadoCivil"));
-//            ret.setId(rst.getInt("Id"));
-//        } catch (SQLException ex) {
-//            throw new PersistableException("Ocorreu um erro na crição da entidade (convertToResulSet())");
-//        }
-//        return ret;
-//    }
-// 
     @Override
     public int put(Object obj) throws PersistableException {
         Candidatura candidatura = (Candidatura)obj;
@@ -192,6 +165,74 @@ public class CandidaturaDAO extends EntityDAO{
         return  GeneratedKey; 
     }
 
+    public Iterable getAll() throws PersistableException  {
+        String sql = "SELECT * FROM " + EntityDAO.table;
+        
+        List<Object> ret = new ArrayList<>();
+        
+        PreparedStatement statement = null;
+        ResultSet rst = null;
+        
+        try {
+            statement = conn.prepareStatement(sql);           
+            rst = statement.executeQuery();
+
+            while(rst.next())
+            {
+                ret.add(this.convertResultSet(rst));
+            }
+            
+       
+            for(Object obj : ret) {
+                Candidatura cand = (Candidatura)obj;
+      
+                cand.setAgregado(this.getFamiliares(statement, cand.getId()));
+                cand.setAnexos(this.getAnexos(statement, cand.getId()));
+                
+                obj=cand;
+            }
+            
+        } catch (SQLException ex) { 
+            throw new PersistableException ("Ocorreu um erro na obtenção do registo!" + ex.getMessage());
+        } finally {
+            try {
+                if (statement != null)  statement.close();
+                if (rst != null) rst.close();
+                
+            } catch (SQLException ex) {
+                throw new PersistableException("Ocorreu um erro ao fechar conexões!\n" + ex.getMessage());
+            }  
+        }
+
+        return ret;
+    } 
+    
+    public List<Familiar> getFamiliares(PreparedStatement statement, int id) throws SQLException, PersistableException {
+        String sql = "SELECT * FROM " + FacadeDAO.FAMILIARTABLE + " WHERE Candidatura_Id = " + id;
+
+        ResultSet rst = statement.executeQuery(sql);
+        
+        List<Familiar> familiares = new ArrayList<>();
+        while(rst.next()) {
+            familiares.add((Familiar)this.convertResultSetFamiliar(rst));
+        }
+        return familiares;
+    }
+    
+    
+    public List<Anexo> getAnexos(PreparedStatement statement, int id) throws PersistableException, SQLException {
+        String sql = "SELECT * FROM " + FacadeDAO.ANEXOSTABLE + " WHERE Candidatura_Id = " + id;
+
+        ResultSet rst = statement.executeQuery(sql);
+        
+        List<Anexo> anexos = new ArrayList<>();
+        while(rst.next()) {
+            anexos.add((Anexo)this.convertResultSetAnexo(rst));
+        }
+        return anexos;
+        
+    }
+    
     @Override
     public Object convertResultSet(ResultSet rst) throws PersistableException {
         Candidatura ret;
@@ -223,6 +264,37 @@ public class CandidaturaDAO extends EntityDAO{
         return ret;
     }
     
+    public Object convertResultSetFamiliar(ResultSet rst) throws PersistableException {
+        Familiar ret;
+        try {
+            ret = new Familiar(rst.getInt("Id"),
+                                  rst.getString("Nome"),
+                                  rst.getString("EstadoCivil"),
+                                  rst.getDate("DtNascimento"),
+                                  rst.getString("Escolaridade"),
+                                  rst.getString("Ocupacao"),
+                                  rst.getString("Grau"));
+
+        } catch (SQLException ex) {
+            throw new PersistableException("Ocorreu um erro na crição da entidade (convertToResulSet())");
+        }
+
+        return ret;
+    }
+    
+    public Object convertResultSetAnexo(ResultSet rst) throws PersistableException {
+        Anexo ret;
+        try {
+            ret = new Anexo(rst.getInt("Id"),
+                                  rst.getString("Descricao"),
+                                  rst.getString("Caminho"));
+
+        } catch (SQLException ex) {
+            throw new PersistableException("Ocorreu um erro na crição da entidade (convertToResulSet())");
+        }
+
+        return ret;
+    }
     
 
     

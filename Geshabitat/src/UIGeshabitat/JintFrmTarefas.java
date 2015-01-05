@@ -5,33 +5,66 @@
  */
 package UIGeshabitat;
 
+import BLGeshabitat.Tarefa;
+import DAOGeshabitat.PersistableException;
+import java.text.DateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author nelson
  */
 public class JintFrmTarefas extends ModalJinternalFrame {
     
-    boolean tipo;  // true false iniciada | true concluida
-
+    private boolean tipo;  // true false iniciada | true concluida
+    private int Project_Id;
 
     /**
      * Creates new form JintFrmTarefas
      * @param tipo
      */
-    public JintFrmTarefas(boolean tipo) {
-
+    public JintFrmTarefas(boolean tipo, int Project_Id) {
+        this.Project_Id=Project_Id;
         this.tipo = tipo;
         initComponents();
         if(tipo) {
-            jLblTarefa.setText("Tarefa iniciada:");
+            jLblTarefa.setText("Tarefas não iniciadas:");
             jLblDt.setText("Data de inicio:");
+            try {
+                this.getTarefasNIniciadas();
+            } catch (PersistableException ex) {
+                Logger.getLogger(JintFrmTarefas.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         else {
-            jLblTarefa.setText("Tarefa concluida:");
+            try {
+                this.getTarefasIniciadas();
+            } catch (PersistableException ex) {
+                Logger.getLogger(JintFrmTarefas.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            jLblTarefa.setText("Tarefa não concluidas:");
             jLblDt.setText("Data de conclusão:");
         }
     }
-
+    
+    public void getTarefasNIniciadas() throws PersistableException {
+        jCmbTarefas.removeAllItems();
+        for(Tarefa t : JmdiMain.facadeBL.getTarefasNIniciadas(Project_Id)) {
+            jCmbTarefas.addItem(t);
+        }
+    }
+    
+    public void getTarefasIniciadas() throws PersistableException {
+        jCmbTarefas.removeAllItems();
+        for(Tarefa t : JmdiMain.facadeBL.getTarefasIniciadas(Project_Id)) {
+            jCmbTarefas.addItem(t);
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -42,27 +75,38 @@ public class JintFrmTarefas extends ModalJinternalFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jComboBox1 = new javax.swing.JComboBox();
-        jButton1 = new javax.swing.JButton();
-        jComboBox2 = new javax.swing.JComboBox();
-        jButton2 = new javax.swing.JButton();
+        jBtOk = new javax.swing.JButton();
+        jCmbTarefas = new javax.swing.JComboBox();
+        jBtCancel = new javax.swing.JButton();
         jLblTarefa = new javax.swing.JLabel();
         jLblDt = new javax.swing.JLabel();
+        jDpData = new org.jdesktop.swingx.JXDatePicker();
 
         setClosable(true);
         setTitle("Gestão de Tarefas");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "13 / Dezembro / 2015" }));
+        jBtOk.setText("Ok");
+        jBtOk.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtOkActionPerformed(evt);
+            }
+        });
 
-        jButton1.setText("Ok");
-
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Fase 2 - Pintura de interiores" }));
-
-        jButton2.setText("Cancelar");
+        jBtCancel.setText("Cancelar");
+        jBtCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtCancelActionPerformed(evt);
+            }
+        });
 
         jLblTarefa.setText("Tarefa iniciada:");
 
         jLblDt.setText("Data inicio:");
+
+        DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.LONG, Locale.forLanguageTag("pt"));
+        jDpData.setFormats(dateFormat);
+
+        jDpData.setDate(new Date());
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -76,15 +120,15 @@ public class JintFrmTarefas extends ModalJinternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jBtOk, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(87, 87, 87)
-                                .addComponent(jButton2))
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jBtCancel))
+                            .addComponent(jDpData, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLblTarefa)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jCmbTarefas, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(90, 90, 90))))
         );
         jPanel1Layout.setVerticalGroup(
@@ -92,16 +136,16 @@ public class JintFrmTarefas extends ModalJinternalFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jCmbTarefas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLblTarefa))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLblDt))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                    .addComponent(jLblDt)
+                    .addComponent(jDpData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(jBtOk)
+                    .addComponent(jBtCancel))
                 .addGap(28, 28, 28))
         );
 
@@ -125,12 +169,36 @@ public class JintFrmTarefas extends ModalJinternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jBtOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtOkActionPerformed
+        Tarefa t = (Tarefa)jCmbTarefas.getSelectedItem();
+
+        try {
+            if (this.tipo)
+                JmdiMain.facadeBL.update(new Tarefa(),"Data_inicio", this.jDpData.getDate(), t.getId());
+            else
+                JmdiMain.facadeBL.update(new Tarefa(),"Data_conclusao", this.jDpData.getDate(), t.getId());
+            
+            JOptionPane.showMessageDialog(this,"Data  registada com sucesso!","Sucesso", JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (PersistableException ex) {
+            Logger.getLogger(JintFrmTarefas.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            
+            this.dispose();
+            
+        }
+    }//GEN-LAST:event_jBtOkActionPerformed
+
+    private void jBtCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtCancelActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_jBtCancelActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JComboBox jComboBox1;
-    private javax.swing.JComboBox jComboBox2;
+    private javax.swing.JButton jBtCancel;
+    private javax.swing.JButton jBtOk;
+    private javax.swing.JComboBox jCmbTarefas;
+    private org.jdesktop.swingx.JXDatePicker jDpData;
     private javax.swing.JLabel jLblDt;
     private javax.swing.JLabel jLblTarefa;
     private javax.swing.JPanel jPanel1;

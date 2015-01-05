@@ -4,23 +4,128 @@
  * and open the template in the editor.
  */
 package UIGeshabitat;
+import BLGeshabitat.Candidatura;
+import BLGeshabitat.Fase;
+import BLGeshabitat.Funcionario;
+import BLGeshabitat.Projecto;
+import BLGeshabitat.RegistoMaterial;
+import BLGeshabitat.Tarefa;
+import DAOGeshabitat.PersistableException;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author nelson
  */
-public class JintFrmProject extends javax.swing.JInternalFrame {
+public class JintFrmProject extends ModalJinternalFrame{
 
-
+    public int Project_Id;
     /**
      * Creates new form JintFrmNewProjecto
      */
-    public JintFrmProject() {
+    public JintFrmProject(int Project_Id) {
+        this.Project_Id = Project_Id;
         initComponents();
+        this.getInfo();
+        this.getTarefasNRealizadas();
+        this.getTarefasConcluidas();
+        this.getMateriaisUtilizados();
     }
+    
+    private void getTarefasNRealizadas() {
+        
+        try {
+            for(Tarefa t : JmdiMain.facadeBL.getTarefasNRealizadas(Project_Id)) {
+                DefaultTableModel tableModel = (DefaultTableModel) this.jTblTarefasNRealizadas.getModel();
+                String Descricao = t.getDescricao();
+                String fase = JmdiMain.facadeBL.getField(new Fase(), "Descricao", "Id", t.getFase_Id());
+                tableModel.addRow(new Object[] { Descricao, fase });
+            }
+        } catch (PersistableException ex) {
+            JOptionPane.showMessageDialog(this,"Ocorreu um erro ao obter as terafas por realizar!\n"+ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+    }
+    
+    private void getTarefasConcluidas() {
+        try {
+            Map tarefas = JmdiMain.facadeBL.getTarefasConcluidas(Project_Id);
+            for(Object t : tarefas.entrySet()) {
+                Map.Entry<Tarefa,Integer> pair = (Map.Entry<Tarefa,Integer>)t;
+            
+                DefaultTableModel tableModel = (DefaultTableModel) this.jTblTarefasConcluidas.getModel();
+                String Descricao = pair.getKey().getDescricao();
+                String fase = JmdiMain.facadeBL.getField(new Fase(), "Descricao", "Id", pair.getKey().getFase_Id());
+                Integer duracao = pair.getValue();
+                
+                tableModel.addRow(new Object[] { Descricao, fase, duracao });
+        }
+        } catch (PersistableException ex) {
+            JOptionPane.showMessageDialog(this,"Ocorreu um erro ao obter as terafas realizadas!\n"+ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+    }
+    
+    private void getInfo() {
+        Projecto proj=null;
+        try {
+            proj = (Projecto)JmdiMain.facadeBL.get(new Projecto(),Project_Id);
+        } catch (PersistableException ex) {
+            JOptionPane.showMessageDialog(this,"Ocorreu um erro ao obter a informação do projecto!\n"+ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        jLblProjectNo.setText(String.valueOf(proj.getId()));
+        jLblDescricao.setText(proj.getDescricao());
+        jLblRua.setText(proj.getRua());
+        jLblCpLocalidade.setText(proj.getCp() + " - " + proj.getLocalidade());
+        jLblDtCriado.setText(proj.getDtInicioProjecto().toString());
+        String criadoPor = null;
+        try {
+            Candidatura c = (Candidatura) JmdiMain.facadeBL.get(new Candidatura(), proj.getCandidatura_Id());
+            criadoPor = JmdiMain.facadeBL.getField(new Funcionario(), "Nome", "Id", c.getFuncionario_Id());
+        } catch (PersistableException ex) {
+            JOptionPane.showMessageDialog(this,"Ocorreu um erro ao obter a informação do projecto!\n"+ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        jLblCriadoPor.setText(criadoPor);
 
+        
+        
+        if(proj.getOrcamento()==-1)  jLblOrcamento.setText("Não definido");
+        else  jLblOrcamento.setText(String.valueOf(proj.getOrcamento()));
+        if(proj.getCustoFinal()==-1)  jLblCustoFinal.setText("Não definido");
+        else  jLblCustoFinal.setText(String.valueOf(proj.getCustoFinal()));
+        
+        try {
+            String responsavel = JmdiMain.facadeBL.getNomeFuncionario(proj.getFuncionario_Id());
+            jLblResponsavel.setText(responsavel);
+        } catch (PersistableException ex) {
+            JOptionPane.showMessageDialog(this,"Ocorreu um erro ao obter a informação do projecto!\n"+ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+ 
+        
+    }
+    
+    private void getMateriaisUtilizados() {
+        jTblMateriaisUtilizados.removeAll();
+        DefaultTableModel tableModel = (DefaultTableModel) this.jTblMateriaisUtilizados.getModel();
+        try {
+            for(RegistoMaterial r : JmdiMain.facadeBL.getMateriaisUtilizados(this.Project_Id)) {
+                tableModel.addRow(r.getRow());
+            }
+        } catch (PersistableException ex) {
+            JOptionPane.showMessageDialog(this,"Ocorreu um erro os materiais utilizados!\n"+ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -31,44 +136,45 @@ public class JintFrmProject extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel7 = new javax.swing.JLabel();
+        jLblRua = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
+        jLblDtCriado = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
+        jLblDescricao = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLblProjectNo = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
+        jLblCpLocalidade = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
+        jLblCriadoPor = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
-        jLabel13 = new javax.swing.JLabel();
+        jLblOrcamento = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         jBtOrcamento = new javax.swing.JButton();
         jLabel12 = new javax.swing.JLabel();
         jBtResponsavel = new javax.swing.JButton();
         jBtCustoFinal = new javax.swing.JButton();
-        jLabel16 = new javax.swing.JLabel();
-        jLabel21 = new javax.swing.JLabel();
+        jLblCustoFinal = new javax.swing.JLabel();
+        jLblResponsavel = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
         jLabel26 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTblMateriaisUtilizados = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
         jPanel5 = new javax.swing.JPanel();
         jSplitPane1 = new javax.swing.JSplitPane();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable3 = new javax.swing.JTable();
+        jTblTarefasConcluidas = new javax.swing.JTable();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jTable4 = new javax.swing.JTable();
+        jTblTarefasNRealizadas = new javax.swing.JTable();
 
         setClosable(true);
         setIconifiable(true);
@@ -82,15 +188,15 @@ public class JintFrmProject extends javax.swing.JInternalFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true), "Info Projecto"));
 
-        jLabel7.setText("Rua das laranjinhas N.º 4 ");
+        jLblRua.setText("Rua das laranjinhas N.º 4 ");
 
         jLabel5.setText("Criado em:");
 
-        jLabel10.setText("12 Outubro 2013");
+        jLblDtCriado.setText("12 Outubro 2013");
 
         jLabel4.setText("Localização:");
 
-        jLabel6.setText("Habitação para o Ze Manel");
+        jLblDescricao.setText("Habitação para o Ze Manel");
 
         jLabel2.setText("Descrição:");
 
@@ -98,11 +204,11 @@ public class JintFrmProject extends javax.swing.JInternalFrame {
 
         jLblProjectNo.setText("13");
 
-        jLabel9.setText("4142-315 - Creixomil");
+        jLblCpLocalidade.setText("4142-315");
 
         jLabel8.setText("Criado por:");
 
-        jLabel11.setText("nunescf3");
+        jLblCriadoPor.setText("nunescf3");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -114,7 +220,7 @@ public class JintFrmProject extends javax.swing.JInternalFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel6))
+                        .addComponent(jLblDescricao))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -122,17 +228,17 @@ public class JintFrmProject extends javax.swing.JInternalFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel10))
+                        .addComponent(jLblDtCriado))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel9)
-                            .addComponent(jLabel7)))
+                            .addComponent(jLblCpLocalidade)
+                            .addComponent(jLblRua)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel8)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel11)))
+                        .addComponent(jLblCriadoPor)))
                 .addContainerGap(204, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -145,27 +251,27 @@ public class JintFrmProject extends javax.swing.JInternalFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jLabel6))
+                    .addComponent(jLblDescricao))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jLabel7))
+                    .addComponent(jLblRua))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel9)
+                .addComponent(jLblCpLocalidade)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(jLabel10))
+                    .addComponent(jLblDtCriado))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
-                    .addComponent(jLabel11))
+                    .addComponent(jLblCriadoPor))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true)));
 
-        jLabel13.setText("80000.00");
+        jLblOrcamento.setText("80000.00");
 
         jLabel15.setText("Custo final:");
 
@@ -194,9 +300,9 @@ public class JintFrmProject extends javax.swing.JInternalFrame {
             }
         });
 
-        jLabel16.setText("Não definido");
+        jLblCustoFinal.setText("Não definido");
 
-        jLabel21.setText("Joaquim Fernandes");
+        jLblResponsavel.setText("Joaquim Fernandes");
 
         jLabel20.setText("Responsável Obra:");
 
@@ -208,6 +314,8 @@ public class JintFrmProject extends javax.swing.JInternalFrame {
 
         jLabel26.setText("Ainda em execução");
 
+        jLabel3.setText("€");
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -215,20 +323,6 @@ public class JintFrmProject extends javax.swing.JInternalFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel12)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel13)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel14)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jBtOrcamento, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel15)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel16)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jBtCustoFinal, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel17)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -240,9 +334,25 @@ public class JintFrmProject extends javax.swing.JInternalFrame {
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel20)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel21)
+                        .addComponent(jLblResponsavel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jBtResponsavel, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jBtResponsavel, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel12)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLblOrcamento)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel14)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jBtOrcamento, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel15)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLblCustoFinal)
+                        .addGap(5, 5, 5)
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jBtCustoFinal, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(216, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
@@ -251,18 +361,19 @@ public class JintFrmProject extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel12)
-                    .addComponent(jLabel13)
+                    .addComponent(jLblOrcamento)
                     .addComponent(jLabel14)
                     .addComponent(jBtOrcamento))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jBtCustoFinal)
-                    .addComponent(jLabel16)
-                    .addComponent(jLabel15))
+                    .addComponent(jLblCustoFinal)
+                    .addComponent(jLabel15)
+                    .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel20)
-                    .addComponent(jLabel21)
+                    .addComponent(jLblResponsavel)
                     .addComponent(jBtResponsavel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -277,18 +388,26 @@ public class JintFrmProject extends javax.swing.JInternalFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 102, 102), 1, true), "Material Utilizado"));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTblMateriaisUtilizados.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+
             },
             new String [] {
-                "Nr", "Data", "Descrição", "Quantidade", "Fase", "Doador"
+                "Data", "Descrição", "Quantidade", "Fase"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTblMateriaisUtilizados.setColumnSelectionAllowed(true);
+        jTblMateriaisUtilizados.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(jTblMateriaisUtilizados);
+        jTblMateriaisUtilizados.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -343,33 +462,45 @@ public class JintFrmProject extends javax.swing.JInternalFrame {
 
         jSplitPane1.setDividerLocation(500);
 
-        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+        jTblTarefasConcluidas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+
             },
             new String [] {
                 "Descrição", "Fase", "Duração(dias)"
             }
-        ));
-        jScrollPane3.setViewportView(jTable3);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTblTarefasConcluidas.getTableHeader().setReorderingAllowed(false);
+        jScrollPane3.setViewportView(jTblTarefasConcluidas);
 
         jSplitPane1.setRightComponent(jScrollPane3);
 
-        jTable4.setModel(new javax.swing.table.DefaultTableModel(
+        jTblTarefasNRealizadas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+
             },
             new String [] {
                 "Descrição", "Fase"
             }
-        ));
-        jScrollPane4.setViewportView(jTable4);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTblTarefasNRealizadas.getTableHeader().setReorderingAllowed(false);
+        jScrollPane4.setViewportView(jTblTarefasNRealizadas);
 
         jSplitPane1.setLeftComponent(jScrollPane4);
 
@@ -427,16 +558,29 @@ public class JintFrmProject extends javax.swing.JInternalFrame {
 
     private void jBtResponsavelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtResponsavelActionPerformed
         ImageIcon icon = new ImageIcon("");
-        Object[] possibilities = {"Jose Manuel", "Filipe Gomes"};
+        List<Object> funcionarios = null;
+        try {
+            funcionarios = JmdiMain.facadeBL.getAll(new Funcionario());
+        } catch (PersistableException ex) {
+            Logger.getLogger(JintFrmProject.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
-        String s = (String)JOptionPane.showInputDialog(
+        Object s = JOptionPane.showInputDialog(
                     this    ,
                     "Responsavel obra",
                     "Escolha o Encarregado de Obra\n",
                     JOptionPane.PLAIN_MESSAGE,
                     icon,
-                    possibilities,
+                    funcionarios.toArray(),
                     "");
+        
+        try {
+            JmdiMain.facadeBL.update(new Projecto(), "Funcionario_Id",String.valueOf(((Funcionario)s).getId()) , this.Project_Id);
+        } catch (PersistableException ex) {
+            JOptionPane.showMessageDialog(this,"Ocorreu um erro registar o Responsavel!\n"+ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        this.getInfo();
 
     }//GEN-LAST:event_jBtResponsavelActionPerformed
 
@@ -451,6 +595,13 @@ public class JintFrmProject extends javax.swing.JInternalFrame {
         icon,
         null,
         "");
+        try {
+            JmdiMain.facadeBL.update(new Projecto(), "CustoFinal", s, this.Project_Id);
+          //  Custo = JmdiMain.facadeBL.getField(new Projecto(), "CustoFinal", "Id", this.Project_Id);
+        } catch (PersistableException ex) {
+            JOptionPane.showMessageDialog(this,"Ocorreu um erro registar o Custo Final!\n"+ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+        }
+        this.getInfo();
     }//GEN-LAST:event_jBtCustoFinalActionPerformed
 
     private void jBtOrcamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtOrcamentoActionPerformed
@@ -464,11 +615,21 @@ public class JintFrmProject extends javax.swing.JInternalFrame {
         icon,
         null,
         "");
+        
+
+        try {
+            JmdiMain.facadeBL.update(new Projecto(), "Orcamento", s, this.Project_Id);
+            //Orcamento = JmdiMain.facadeBL.getField(new Projecto(), "Orcamento", "Id", this.Project_Id);
+
+        } catch (PersistableException ex) {
+            JOptionPane.showMessageDialog(this,"Ocorreu um erro registar o Orcamento!\n"+ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+        }
+        this.getInfo();
+       // jLblOrcamento.setText(Orcamento);
     }//GEN-LAST:event_jBtOrcamentoActionPerformed
 
     private void formFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_formFocusGained
-        ((JmdiMain)this.getTopLevelAncestor()).jPanelProject.setVisible(true);
-        ((JmdiMain)this.getTopLevelAncestor()).jPanelSearch.setVisible(false);
+
     }//GEN-LAST:event_formFocusGained
 
 
@@ -477,27 +638,28 @@ public class JintFrmProject extends javax.swing.JInternalFrame {
     private javax.swing.JButton jBtOrcamento;
     private javax.swing.JButton jBtResponsavel;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
-    private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLblCpLocalidade;
+    private javax.swing.JLabel jLblCriadoPor;
+    private javax.swing.JLabel jLblCustoFinal;
+    private javax.swing.JLabel jLblDescricao;
+    private javax.swing.JLabel jLblDtCriado;
+    private javax.swing.JLabel jLblOrcamento;
     private javax.swing.JLabel jLblProjectNo;
+    private javax.swing.JLabel jLblResponsavel;
+    private javax.swing.JLabel jLblRua;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -508,9 +670,9 @@ public class JintFrmProject extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSplitPane jSplitPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
-    private javax.swing.JTable jTable3;
-    private javax.swing.JTable jTable4;
+    private javax.swing.JTable jTblMateriaisUtilizados;
+    private javax.swing.JTable jTblTarefasConcluidas;
+    private javax.swing.JTable jTblTarefasNRealizadas;
     // End of variables declaration//GEN-END:variables
 }
