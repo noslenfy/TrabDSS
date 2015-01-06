@@ -19,6 +19,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyVetoException;
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultDesktopManager;
@@ -65,6 +66,12 @@ public class JmdiMain extends javax.swing.JFrame implements InternalFrameListene
             if(nome.equals(table.getValueAt(i, column))) return true;
         }
         return false;
+    }
+    
+    public static void setReadOnly(List<Component> comp) {
+        for(Component c :  comp) {
+            c.setEnabled(false);
+        }
     }
     
     /**
@@ -139,6 +146,8 @@ public class JmdiMain extends javax.swing.JFrame implements InternalFrameListene
         jBtRegistoMaterial = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         jComboBox1 = new javax.swing.JComboBox();
+        jPanel8 = new javax.swing.JPanel();
+        jBtVoluntariado = new javax.swing.JButton();
         jPanelSearch = new javax.swing.JPanel();
         jButton11 = new javax.swing.JButton();
         jPanelDoacoes = new javax.swing.JPanel();
@@ -483,6 +492,32 @@ public class JmdiMain extends javax.swing.JFrame implements InternalFrameListene
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true), "Registo Voluntariado"));
+
+        jBtVoluntariado.setText("Registo Voluntariado");
+        jBtVoluntariado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtVoluntariadoActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jBtVoluntariado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jBtVoluntariado)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -493,7 +528,8 @@ public class JmdiMain extends javax.swing.JFrame implements InternalFrameListene
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -505,6 +541,8 @@ public class JmdiMain extends javax.swing.JFrame implements InternalFrameListene
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -626,7 +664,7 @@ public class JmdiMain extends javax.swing.JFrame implements InternalFrameListene
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLeftPanelLogo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLayeredPaneLeft, javax.swing.GroupLayout.PREFERRED_SIZE, 435, Short.MAX_VALUE))
+                        .addComponent(jLayeredPaneLeft, javax.swing.GroupLayout.DEFAULT_SIZE, 435, Short.MAX_VALUE))
                     .addComponent(jScrollDesktopMain))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jStatusBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -823,6 +861,15 @@ public class JmdiMain extends javax.swing.JFrame implements InternalFrameListene
         frmNewProject.setVisible(true);  
     }//GEN-LAST:event_jButton7ActionPerformed
 
+    private void jBtVoluntariadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtVoluntariadoActionPerformed
+        int Project_Id = ((JintFrmProject)((SidePanel)this.jPanelProject).getjIntFrame()).Project_Id;
+        JintFrmAlocarVoluntarios frmVoluntarios = new JintFrmAlocarVoluntarios(Project_Id);
+        frmVoluntarios.addInternalFrameListener(this);
+        this.jDesktopPaneMain.add(frmVoluntarios);
+        frmVoluntarios.setVisible(true);
+        frmVoluntarios.setLayer(20);
+    }//GEN-LAST:event_jBtVoluntariadoActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -872,6 +919,7 @@ public class JmdiMain extends javax.swing.JFrame implements InternalFrameListene
     private javax.swing.JButton jBtPlaneamento;
     private javax.swing.JButton jBtRegistoMaterial;
     private javax.swing.JButton jBtUserMan;
+    private javax.swing.JButton jBtVoluntariado;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
@@ -898,6 +946,7 @@ public class JmdiMain extends javax.swing.JFrame implements InternalFrameListene
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanelCandidatura;
     private javax.swing.JPanel jPanelDoacoes;
     public javax.swing.JPanel jPanelProject;

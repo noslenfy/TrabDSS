@@ -10,11 +10,14 @@ import BLGeshabitat.Candidatura;
 import BLGeshabitat.Familiar;
 import BLGeshabitat.Funcionario;
 import DAOGeshabitat.PersistableException;
+import java.awt.Component;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -26,32 +29,44 @@ import javax.swing.table.DefaultTableModel;
  */
 public class JintFrmNewCand extends javax.swing.JInternalFrame  {
     
- 
     private Candidatura cand;
 
-    public Candidatura getCand() {
-        return cand;
-    }
-    public void setCand(Candidatura cand) {
-        this.cand = cand;
-    }
-    
-    
+
     /**
      * Creates new form JintFrmNewCand
      */
     public JintFrmNewCand() {
         initComponents();
-        try {
+         try {
             List<Object> funcionarios = JmdiMain.facadeBL.getAll(new Funcionario());
             for(Object obj : funcionarios) {
                 jCmbFuncionario.addItem((Funcionario)obj);
             }
         } catch (PersistableException ex) {
             JOptionPane.showMessageDialog(this,ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
-        }
-        
+        }       
     }
+    
+        
+    
+    public JintFrmNewCand(Candidatura cand) {
+        initComponents();
+
+        try {
+            this.OpenCand(cand);
+        } catch (PersistableException ex) {
+            JOptionPane.showMessageDialog(this,ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+        }
+        this.cand= cand;
+        this.jBtAddFamiliar.setEnabled(false);
+        this.jBtAddCand.setVisible(false);
+        this.jBtProcurarAnexo.setEnabled(false);
+        this.jBtRemoveAgregado.setEnabled(false);
+        this.jBtRemoverAnexo.setEnabled(false);
+    }
+    
+           
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -615,7 +630,43 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame  {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-
+    public Candidatura getCand() {
+        return cand;
+    }
+    public void setCand(Candidatura cand) {
+        this.cand = cand;
+    }
+    
+    
+    
+    private void OpenCand(Candidatura cand) throws PersistableException {
+        this.jCmbFuncionario.addItem((Funcionario)JmdiMain.facadeBL.get(new Funcionario(), cand.getFuncionario_Id()));
+        
+        this.jTxtNome.setText(cand.getNome());
+        this.jTxtNif.setText(String.valueOf(cand.getNif()));
+        this.jDpDtNascimento.setDate(cand.getDtNascimento());
+        this.jCmbEscolaridade.addItem(cand.getEscolaridade());
+        this.jCmbEstadoCivil.addItem(cand.getEstadoCivil());
+        this.jTxtProfissao.setText(cand.getProfissao());
+        this.jTxtTelemovel.setText(cand.getTelemovel());
+        this.jTxtTelefone.setText(cand.getTelefone());
+        this.jTxtRua.setText(cand.getRua());
+        this.jTxtCp.setText(cand.getCp());
+        this.jTxtLocalidade.setText(cand.getLocalidade());
+        this.jTxtEmail.setText(cand.getEmail());
+        this.jTxtRendimento.setText(String.valueOf(cand.getRendimento()));
+        this.jTxtPrestacao.setText(String.valueOf(cand.getPrestacao()));
+        
+        for(Familiar f : cand.getAgregado()) {
+            Object obj[] = {f.getId(),f.getNome(),f.getGrau(),f.getEstadoCivil(),f.getEscolaridade(), f.getDtNascimento(), f.getOcupacao()};
+             ((DefaultTableModel)this.jTblAgregado.getModel()).addRow(obj);
+        }
+        
+        for(Anexo a : cand.getAnexos()) {
+            Object obj[] = {a.getId(),a.getDescricao(),a.getCaminho()}; 
+            ((DefaultTableModel)this.jTblAnexos.getModel()).addRow(obj);
+        }
+     }
     
     private void populateCmbFuncionario() {
         try {

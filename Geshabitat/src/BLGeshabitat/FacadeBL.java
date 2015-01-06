@@ -16,6 +16,7 @@ import DAOGeshabitat.FuncionarioDAO;
 import DAOGeshabitat.MaterialDAO;
 import DAOGeshabitat.PersistableException;
 import DAOGeshabitat.ProjectoDAO;
+import DAOGeshabitat.RegistoVoluntariadoDAO;
 import DAOGeshabitat.TarefaDAO;
 import DAOGeshabitat.VoluntarioDAO;
 import java.util.Date;
@@ -50,6 +51,7 @@ public class FacadeBL {
         if(obj instanceof Projecto) return new ProjectoDAO();
         if(obj instanceof Fase) return new FaseDAO();
         if(obj instanceof Tarefa) return new TarefaDAO();
+        if(obj instanceof RegistoVoluntariado) return new RegistoVoluntariadoDAO();        
         return null;
     }
     

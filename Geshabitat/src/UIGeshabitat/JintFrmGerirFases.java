@@ -73,7 +73,6 @@ public class JintFrmGerirFases extends ModalJinternalFrame  {
         jBtAddTarefa = new javax.swing.JButton();
         jBtRemoveTarefa = new javax.swing.JButton();
         jBtCancelar = new javax.swing.JButton();
-        jBtGuardar = new javax.swing.JButton();
 
         setClosable(true);
         setTitle("Gestão de tarefas");
@@ -160,14 +159,12 @@ public class JintFrmGerirFases extends ModalJinternalFrame  {
                 .addContainerGap())
         );
 
-        jBtCancelar.setText("Cancelar");
+        jBtCancelar.setText("Sair");
         jBtCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBtCancelarActionPerformed(evt);
             }
         });
-
-        jBtGuardar.setText("Guardar");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -179,8 +176,6 @@ public class JintFrmGerirFases extends ModalJinternalFrame  {
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jBtGuardar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jBtCancelar)))
                 .addContainerGap())
         );
@@ -190,9 +185,7 @@ public class JintFrmGerirFases extends ModalJinternalFrame  {
                 .addContainerGap()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jBtCancelar)
-                    .addComponent(jBtGuardar))
+                .addComponent(jBtCancelar)
                 .addContainerGap())
         );
 
@@ -295,7 +288,6 @@ public class JintFrmGerirFases extends ModalJinternalFrame  {
     private javax.swing.JButton jBtAddTarefa;
     private javax.swing.JButton jBtAdicionarFase;
     private javax.swing.JButton jBtCancelar;
-    private javax.swing.JButton jBtGuardar;
     private javax.swing.JButton jBtRemoveTarefa;
     private javax.swing.JButton jBtRemoverFase;
     private javax.swing.JLabel jLabel17;

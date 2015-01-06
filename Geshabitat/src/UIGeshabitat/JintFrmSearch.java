@@ -93,8 +93,23 @@ public class JintFrmSearch extends javax.swing.JInternalFrame {
             new String [] {
                 "Id", "Nome", "Nif", "Localidade", "Estado", "Responsavel"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTblCand.getTableHeader().setReorderingAllowed(false);
+        jTblCand.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTblCandMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTblCand);
+        jTblCand.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
         javax.swing.GroupLayout jPnlCandidaturasLayout = new javax.swing.GroupLayout(jPnlCandidaturas);
         jPnlCandidaturas.setLayout(jPnlCandidaturasLayout);
@@ -117,7 +132,6 @@ public class JintFrmSearch extends javax.swing.JInternalFrame {
                 "Id", "Descrição", "Localidade", "Data Inicio", "Candidatura"
             }
         ));
-        jTblProjectos.setColumnSelectionAllowed(true);
         jTblProjectos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTblProjectosMouseClicked(evt);
@@ -141,10 +155,7 @@ public class JintFrmSearch extends javax.swing.JInternalFrame {
 
         jTblVoluntarios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+
             },
             new String [] {
                 "Id", "Nome", "Localidade", "Profissao", "Nacionalidade", "Total Voluntariado"
@@ -324,6 +335,41 @@ public class JintFrmSearch extends javax.swing.JInternalFrame {
         }        
     }//GEN-LAST:event_jTblProjectosMouseClicked
 
+    private void jTblCandMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTblCandMouseClicked
+        boolean existing = false;
+        JDesktopPane jDesktopPaneMain = this.getDesktopPane();
+        
+        for( JInternalFrame i : jDesktopPaneMain.getAllFrames() )
+        {
+            if(i instanceof JintFrmNewCand) { 
+                /*
+                try {
+                    i.setSelected(true);
+                } catch (PropertyVetoException ex) {  }
+                existing=true;
+                        */
+                i.dispose(); // fecha a janela anterior caso esteja activa
+            }
+        }
+        if(!existing){
+            int id = (int)jTblCand.getValueAt(jTblCand.getSelectedRow(),0);
+            Candidatura cand = null;
+            try {
+                cand = (Candidatura) JmdiMain.facadeBL.get(new Candidatura(), id);
+            } catch (PersistableException ex) {
+                JOptionPane.showMessageDialog(this,"Ocorreu um erro ao obter a candidatura selecionada","Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            JintFrmNewCand jfrmNewCand = new JintFrmNewCand(cand);
+            jfrmNewCand.addInternalFrameListener((InternalFrameListener)((JFrame)this.getTopLevelAncestor()));
+
+            jDesktopPaneMain.add(jfrmNewCand);
+             
+            ((MDIDesktopPane)jDesktopPaneMain).checkDesktopSize();
+            jfrmNewCand.setVisible(true);
+        }  
+    }//GEN-LAST:event_jTblCandMouseClicked
+
     
     private void fillTableDoadores() {
         List<Object> doadores = null;
@@ -331,7 +377,8 @@ public class JintFrmSearch extends javax.swing.JInternalFrame {
         try {
             doadores = JmdiMain.facadeBL.getAll(new Doador());
         } catch (PersistableException ex) {
-            JOptionPane.showMessageDialog(this,"Ocorreu um erro ao obter a lista de Doadores","Erro", JOptionPane.ERROR_MESSAGE);  
+            JOptionPane.showMessageDialog(this,"Ocorreu um erro ao obter a lista de Doadores","Erro", JOptionPane.ERROR_MESSAGE);
+            return;
         }
         
         int row =0;
@@ -341,7 +388,8 @@ public class JintFrmSearch extends javax.swing.JInternalFrame {
             try {
                 totaldoado = JmdiMain.facadeBL.getTotalDoacoes(doador.getId());
             } catch (PersistableException ex) {
-                JOptionPane.showMessageDialog(this,"Ocorreu um erro ao obte o total doado de: " + doador.getNome() + " \n" + ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);                 
+                JOptionPane.showMessageDialog(this,"Ocorreu um erro ao obte o total doado de: " + doador.getNome() + " \n" + ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+                return;
             }
             tableModel.addRow(doador.getRowData());
             tableModel.setValueAt(totaldoado, row++, 4);
@@ -355,6 +403,7 @@ public class JintFrmSearch extends javax.swing.JInternalFrame {
             artigos = JmdiMain.facadeBL.getAll(new Material());
         } catch (PersistableException ex) {
             JOptionPane.showMessageDialog(this,"Ocorreu um erro ao obter a lista de Artigos","Erro", JOptionPane.ERROR_MESSAGE);  
+            return;
         }
         
         for(Object obj : artigos) {
@@ -370,7 +419,8 @@ public class JintFrmSearch extends javax.swing.JInternalFrame {
         try {
             funcionarios = JmdiMain.facadeBL.getAll(new Funcionario());
         } catch (PersistableException ex) {
-            JOptionPane.showMessageDialog(this,"Ocorreu um erro ao obter a lista de Funcionarios","Erro", JOptionPane.ERROR_MESSAGE);  
+            JOptionPane.showMessageDialog(this,"Ocorreu um erro ao obter a lista de Funcionarios","Erro", JOptionPane.ERROR_MESSAGE); 
+            return;
         }
         
         for(Object obj : funcionarios) {
@@ -385,7 +435,8 @@ public class JintFrmSearch extends javax.swing.JInternalFrame {
         try {
             vols = JmdiMain.facadeBL.getAll(new Voluntario());
         } catch (PersistableException ex) {
-            JOptionPane.showMessageDialog(this,"Ocorreu um erro ao obter a lista de Voluntarios","Erro", JOptionPane.ERROR_MESSAGE);  
+            JOptionPane.showMessageDialog(this,"Ocorreu um erro ao obter a lista de Voluntarios","Erro", JOptionPane.ERROR_MESSAGE); 
+            return;
         }
         
         for(Object obj : vols) {
@@ -401,7 +452,8 @@ public class JintFrmSearch extends javax.swing.JInternalFrame {
         try {
             cands = JmdiMain.facadeBL.getAll(new Candidatura());
         } catch (PersistableException ex) {
-            JOptionPane.showMessageDialog(this,"Ocorreu um erro ao obter a lista de Candidaturas","Erro", JOptionPane.ERROR_MESSAGE);  
+            JOptionPane.showMessageDialog(this,"Ocorreu um erro ao obter a lista de Candidaturas","Erro", JOptionPane.ERROR_MESSAGE); 
+            return;
         }
         
         for(Object obj : cands) {
@@ -417,7 +469,8 @@ public class JintFrmSearch extends javax.swing.JInternalFrame {
         try {
             projs = JmdiMain.facadeBL.getAll(new Projecto());
         } catch (PersistableException ex) {
-            JOptionPane.showMessageDialog(this,"Ocorreu um erro ao obter a lista de Projectos","Erro", JOptionPane.ERROR_MESSAGE);  
+            JOptionPane.showMessageDialog(this,"Ocorreu um erro ao obter a lista de Projectos","Erro", JOptionPane.ERROR_MESSAGE); 
+            return;
         }
         
         for(Object obj : projs) {

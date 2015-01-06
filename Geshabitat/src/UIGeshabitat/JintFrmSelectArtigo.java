@@ -63,7 +63,6 @@ public class JintFrmSelectArtigo extends javax.swing.JInternalFrame{
 
         jPanelMain = new javax.swing.JPanel();
         jBtNew = new javax.swing.JButton();
-        jBtSelect = new javax.swing.JButton();
         jBtCancel = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTblArtigos = new javax.swing.JTable();
@@ -79,9 +78,7 @@ public class JintFrmSelectArtigo extends javax.swing.JInternalFrame{
             }
         });
 
-        jBtSelect.setText("Selecionar");
-
-        jBtCancel.setText("Cancelar");
+        jBtCancel.setText("Sair");
         jBtCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBtCancelActionPerformed(evt);
@@ -123,8 +120,6 @@ public class JintFrmSelectArtigo extends javax.swing.JInternalFrame{
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jBtRemover)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jBtSelect)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jBtCancel)
                         .addGap(12, 12, 12))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelMainLayout.createSequentialGroup()
@@ -139,7 +134,6 @@ public class JintFrmSelectArtigo extends javax.swing.JInternalFrame{
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 339, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jBtSelect)
                     .addComponent(jBtCancel)
                     .addComponent(jBtNew)
                     .addComponent(jBtRemover))
@@ -221,7 +215,6 @@ public class JintFrmSelectArtigo extends javax.swing.JInternalFrame{
     private javax.swing.JButton jBtCancel;
     private javax.swing.JButton jBtNew;
     private javax.swing.JButton jBtRemover;
-    private javax.swing.JButton jBtSelect;
     private javax.swing.JPanel jPanelMain;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTblArtigos;

@@ -48,7 +48,10 @@ public final class FacadeDAO {
     public static final String PROJECTOTABLE = "Projecto";
     public static final String FASETABLE = "Fase";    
     public static final String TAREFATABLE = "Tarefa";     
-    public static final String MATERIALFASE = "MaterialFase";  
+    public static final String MATERIALFASETABLE = "MaterialFase";  
+    public static final String EQUIPAVOLUNTARIOTABLE = "EquipaVoluntario";  //not used
+    public static final String REGISTOVOLUNTARIADOTABLE = "VoluntarioTarefa";
+
     
     public FacadeDAO() {     
 
@@ -95,6 +98,7 @@ public final class FacadeDAO {
         if(entity instanceof ProjectoDAO) return PROJECTOTABLE;
         if(entity instanceof FaseDAO) return FASETABLE;
         if(entity instanceof TarefaDAO) return TAREFATABLE; 
+        if(entity instanceof RegistoVoluntariadoDAO) return REGISTOVOLUNTARIADOTABLE; 
         
         return null;
     }

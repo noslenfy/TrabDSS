@@ -109,7 +109,7 @@ public class MaterialDAO extends EntityDAO{
        
         try {
             
-            String sql = "Insert Into " + FacadeDAO.MATERIALFASE + " (Material_Id,Fase_Id,Data,Quantidade)"
+            String sql = "Insert Into " + FacadeDAO.MATERIALFASETABLE + " (Material_Id,Fase_Id,Data,Quantidade)"
                     + " values(?,?,?,?)";
    
              //Begin Transaction

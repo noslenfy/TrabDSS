@@ -239,6 +239,10 @@ public class TarefaDAO extends EntityDAO{
         return ret;
         
     }
+
+
+
+
 }
     
 

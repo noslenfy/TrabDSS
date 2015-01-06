@@ -164,6 +164,37 @@ public class CandidaturaDAO extends EntityDAO{
         }
         return  GeneratedKey; 
     }
+    
+    @Override
+    public Object get(int Value) throws PersistableException {
+
+        String sql = "SELECT * FROM " + EntityDAO.table + " where Id=?";
+        Object ret=null;
+        
+        try {
+            PreparedStatement statement = conn.prepareStatement(sql);           
+            statement.setInt(1, Value);
+            ResultSet rst = statement.executeQuery();
+            
+            while(rst.next())
+            {
+                if(ret != null) throw new PersistableException("Existe mais que um registo com esse id");
+                ret=this.convertResultSet(rst);
+            }
+            
+            Candidatura cand = (Candidatura)ret;
+      
+            cand.setAgregado(this.getFamiliares(statement, cand.getId()));
+            cand.setAnexos(this.getAnexos(statement, cand.getId()));
+                
+            ret=cand;
+   
+            
+        } catch (SQLException ex) { 
+            throw new PersistableException("Ocorreu um erro na obtenção do registo" + ex.getMessage());
+        }  
+        return ret;
+    }
 
     public Iterable getAll() throws PersistableException  {
         String sql = "SELECT * FROM " + EntityDAO.table;

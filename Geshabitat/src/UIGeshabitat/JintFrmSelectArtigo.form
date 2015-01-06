@@ -54,8 +54,6 @@
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="jBtRemover" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
-                          <Component id="jBtSelect" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="jBtCancel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                       </Group>
@@ -75,7 +73,6 @@
                   <Component id="jScrollPane1" pref="339" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jBtSelect" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jBtCancel" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jBtNew" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jBtRemover" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -94,14 +91,9 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jBtNewActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="jBtSelect">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Selecionar"/>
-          </Properties>
-        </Component>
         <Component class="javax.swing.JButton" name="jBtCancel">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Cancelar"/>
+            <Property name="text" type="java.lang.String" value="Sair"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jBtCancelActionPerformed"/>
