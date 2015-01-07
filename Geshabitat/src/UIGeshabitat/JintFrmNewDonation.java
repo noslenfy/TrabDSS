@@ -684,6 +684,7 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame{
             return;
         }
         JOptionPane.showMessageDialog(this,"Registo adicionado com sucesso!","Sucesso", JOptionPane.INFORMATION_MESSAGE);
+        this.dispose();
 
     }//GEN-LAST:event_jBtAdicionarActionPerformed
 

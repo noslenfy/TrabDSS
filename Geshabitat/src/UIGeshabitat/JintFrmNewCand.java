@@ -11,6 +11,9 @@ import BLGeshabitat.Familiar;
 import BLGeshabitat.Funcionario;
 import DAOGeshabitat.PersistableException;
 import java.awt.Component;
+import java.awt.Desktop;
+import java.io.File;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -120,6 +123,7 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame  {
         jTblAnexos = new javax.swing.JTable();
         jBtRemoverAnexo = new javax.swing.JButton();
         jTxtDescricao = new javax.swing.JTextField();
+        jBtAbrir = new javax.swing.JButton();
         jPanelInfoAgregado = new javax.swing.JPanel();
         jLabel18 = new javax.swing.JLabel();
         jTxtNomeAgr = new javax.swing.JTextField();
@@ -380,13 +384,14 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame  {
             }
         });
         jTblAnexos.setColumnSelectionAllowed(true);
+        jTblAnexos.getTableHeader().setReorderingAllowed(false);
         jTblAnexos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTblAnexosMouseClicked(evt);
             }
         });
         jScrollPane2.setViewportView(jTblAnexos);
-        jTblAnexos.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jTblAnexos.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         if (jTblAnexos.getColumnModel().getColumnCount() > 0) {
             jTblAnexos.getColumnModel().getColumn(0).setMinWidth(70);
             jTblAnexos.getColumnModel().getColumn(0).setPreferredWidth(70);
@@ -404,6 +409,14 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame  {
             }
         });
 
+        jBtAbrir.setText("Abrir Anexo");
+        jBtAbrir.setEnabled(false);
+        jBtAbrir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtAbrirActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanelAnexosLayout = new javax.swing.GroupLayout(jPanelAnexos);
         jPanelAnexos.setLayout(jPanelAnexosLayout);
         jPanelAnexosLayout.setHorizontalGroup(
@@ -414,7 +427,10 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame  {
                     .addComponent(jScrollPane2)
                     .addGroup(jPanelAnexosLayout.createSequentialGroup()
                         .addGroup(jPanelAnexosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jBtRemoverAnexo)
+                            .addGroup(jPanelAnexosLayout.createSequentialGroup()
+                                .addComponent(jBtRemoverAnexo)
+                                .addGap(18, 18, 18)
+                                .addComponent(jBtAbrir))
                             .addGroup(jPanelAnexosLayout.createSequentialGroup()
                                 .addComponent(jLabel25)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -435,7 +451,9 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame  {
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jBtRemoverAnexo)
+                .addGroup(jPanelAnexosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jBtRemoverAnexo)
+                    .addComponent(jBtAbrir))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -698,6 +716,11 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame  {
     }//GEN-LAST:event_jBtAddFamiliarActionPerformed
 
     private void jBtProcurarAnexoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtProcurarAnexoActionPerformed
+
+        if(this.jTxtDescricao.getText().equals("")) {
+            JOptionPane.showMessageDialog(this,"Por favor insira uma descrição do ficheiro a anexar!","Erro", JOptionPane.ERROR_MESSAGE);
+            return;    
+        }
         JFileChooser chooser = new JFileChooser();
         chooser.setAcceptAllFileFilterUsed(true);        
     
@@ -731,8 +754,14 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame  {
 
     private void jTblAnexosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTblAnexosMouseClicked
         int row = jTblAnexos.getSelectedRow();
-        if(row!=-1) this.jBtRemoverAnexo.setEnabled(true);
-        else this.jBtRemoverAnexo.setEnabled(false);
+        if(row!=-1)  {
+            this.jBtRemoverAnexo.setEnabled(true);
+            this.jBtAbrir.setEnabled(true);
+        }
+        else  {
+            this.jBtRemoverAnexo.setEnabled(false);
+
+        }
     }//GEN-LAST:event_jTblAnexosMouseClicked
 
     private void jBtRemoverAnexoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtRemoverAnexoActionPerformed
@@ -740,6 +769,7 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame  {
         ((DefaultTableModel)this.jTblAnexos.getModel()).removeRow(row);
         JmdiMain.reorderId(((DefaultTableModel)this.jTblAnexos.getModel()));
         this.jBtRemoverAnexo.setEnabled(false);
+        this.jBtAbrir.setEnabled(false);
     }//GEN-LAST:event_jBtRemoverAnexoActionPerformed
 
     private void jBtSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtSairActionPerformed
@@ -805,9 +835,20 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame  {
         }
         JOptionPane.showMessageDialog(this,"Registo adicionado com sucesso!","Sucesso", JOptionPane.INFORMATION_MESSAGE);
 
-      //  this.dispose();
+        this.dispose();
         
     }//GEN-LAST:event_jBtAddCandActionPerformed
+
+    private void jBtAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtAbrirActionPerformed
+        int row = jTblAnexos.getSelectedRow();  
+        File path = new File((String)(this.jTblAnexos.getValueAt(row, 2)));
+        Desktop dt = Desktop.getDesktop();
+        try {
+            dt.open(path);
+        } catch (IOException ex) {
+            Logger.getLogger(JintFrmNewCand.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jBtAbrirActionPerformed
 
     
     private List<Familiar> getFamiliares(JTable table) {
@@ -852,6 +893,7 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame  {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jBtAbrir;
     private javax.swing.JButton jBtAddCand;
     private javax.swing.JButton jBtAddFamiliar;
     private javax.swing.JButton jBtProcurarAnexo;

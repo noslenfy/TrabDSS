@@ -46,9 +46,9 @@ public class JintFrmDBConnection extends javax.swing.JInternalFrame {
         jTxtUser = new javax.swing.JTextField();
         jTxtPort = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        jTxtPass = new javax.swing.JTextField();
         jTxtDatabaseName = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
+        jTxtPass = new javax.swing.JPasswordField();
         jBtSair = new javax.swing.JButton();
 
         setClosable(true);
@@ -242,7 +242,7 @@ public class JintFrmDBConnection extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JTextField jTxtDatabaseName;
     private javax.swing.JTextField jTxtHost;
-    private javax.swing.JTextField jTxtPass;
+    private javax.swing.JPasswordField jTxtPass;
     private javax.swing.JTextField jTxtPort;
     private javax.swing.JTextField jTxtUser;
     // End of variables declaration//GEN-END:variables

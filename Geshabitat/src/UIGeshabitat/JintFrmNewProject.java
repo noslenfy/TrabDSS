@@ -10,6 +10,8 @@ import DAOGeshabitat.PersistableException;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -20,20 +22,23 @@ public class JintFrmNewProject extends ModalJinternalFrame {
     
     private final int Candidatura_Id;
     private final int Funcionario_Id;
-    private final String Funcionario_Nome;
+    private  String Funcionario_Nome;
 
     
     /**
      * Creates new form JIntFrmNewProject
      * @param Candidatura_Id
      * @param Funcionario_Id
-     * @param Funcionario_Nome
      */
-    public JintFrmNewProject(int Candidatura_Id, int Funcionario_Id, String Funcionario_Nome) {
+    public JintFrmNewProject(int Candidatura_Id, int Funcionario_Id) {
 
         this.Candidatura_Id = Candidatura_Id;
         this.Funcionario_Id = Funcionario_Id;
-        this.Funcionario_Nome = Funcionario_Nome;
+        try {
+            this.Funcionario_Nome = JmdiMain.facadeBL.getNomeFuncionario(Funcionario_Id);
+        } catch (PersistableException ex) {
+            Logger.getLogger(JintFrmNewProject.class.getName()).log(Level.SEVERE, null, ex);
+        }
         initComponents();
     }
 
@@ -238,7 +243,7 @@ public class JintFrmNewProject extends ModalJinternalFrame {
             return;
         }
         JOptionPane.showMessageDialog(this,"Registo adicionado com sucesso!","Sucesso", JOptionPane.INFORMATION_MESSAGE);
-
+        this.dispose();
         
     }//GEN-LAST:event_jBtCriarActionPerformed
 

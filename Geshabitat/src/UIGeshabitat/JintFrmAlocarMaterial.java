@@ -319,7 +319,7 @@ public class JintFrmAlocarMaterial extends ModalJinternalFrame {
         }
         
         DefaultTableModel tablemodel = (DefaultTableModel)this.jTblMaterialAlocado.getModel();
-        Object[] registo = {this.jDpData.getDate(), m, Quantidade, f};
+        Object[] registo = {new java.sql.Date(this.jDpData.getDate().getTime()), m, Quantidade, f};
         tablemodel.addRow(registo);
         
     }//GEN-LAST:event_jBtAdicionarActionPerformed
