@@ -5,7 +5,7 @@
  */
 package UIGeshabitat;
 
-import BLGeshabitat.Material;
+import BLGeshabitat.Fundos.Material;
 import DAOGeshabitat.PersistableException;
 import java.util.List;
 
@@ -16,7 +16,7 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author nelson
+ * @author 
  */
 public class JintFrmSelectArtigo extends javax.swing.JInternalFrame{
     
@@ -47,7 +47,7 @@ public class JintFrmSelectArtigo extends javax.swing.JInternalFrame{
                 tableModel.addRow(m.getRowData());
             }
         } catch (PersistableException ex) {
-            JOptionPane.showMessageDialog(this,"Ocorre um erro na obtencao da lista de Artigos!","Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this,"Ocorreu um erro na obtencao da lista de Artigos!","Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
     
@@ -165,7 +165,7 @@ public class JintFrmSelectArtigo extends javax.swing.JInternalFrame{
        
         String s = (String)JOptionPane.showInputDialog(
         this    ,
-        "Insira descrição(unitária) do novo artigo",
+        "Insira descrição do novo artigo",
         "Novo artigo",
         JOptionPane.PLAIN_MESSAGE,
         icon,
@@ -176,18 +176,19 @@ public class JintFrmSelectArtigo extends javax.swing.JInternalFrame{
             JOptionPane.showMessageDialog(this,"O artigo que inseriu já existe,\npor favor introduza um nome distinto.","Erro", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
+        if(s!=null) {
                 
-        Material m = new Material(s,0);
-        int Id=-1;
+            Material m = new Material(s,0);
+            int Id=-1;
 
-        try {
-            Id=JmdiMain.facadeBL.put(m);
-            m.setId(Id);
-        } catch (PersistableException ex) {
-            JOptionPane.showMessageDialog(this,"Ocorreu um erro na criação do Artigo!","Erro", JOptionPane.ERROR_MESSAGE);
+            try {
+                Id=JmdiMain.facadeBL.put(m);
+                m.setId(Id);
+            } catch (PersistableException ex) {
+                JOptionPane.showMessageDialog(this,"Ocorreu um erro na criação do Artigo!","Erro", JOptionPane.ERROR_MESSAGE);
+            }
+            ((DefaultTableModel)this.jTblArtigos.getModel()).addRow(m.getRowData());
         }
-        ((DefaultTableModel)this.jTblArtigos.getModel()).addRow(m.getRowData());
     }//GEN-LAST:event_jBtNewActionPerformed
 
 

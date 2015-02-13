@@ -7,7 +7,7 @@ package DAOGeshabitat;
 
 /**
  *
- * @author nelson
+ * @author 
  */
 public class PersistableException extends Exception{
 

@@ -5,7 +5,7 @@
  */
 package UIGeshabitat;
 
-import BLGeshabitat.Projecto;
+import BLGeshabitat.Projectos.Projecto;
 import DAOGeshabitat.PersistableException;
 import java.text.DateFormat;
 import java.util.Date;
@@ -16,7 +16,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author nelson
+ * @author 
  */
 public class JintFrmNewProject extends ModalJinternalFrame {
     

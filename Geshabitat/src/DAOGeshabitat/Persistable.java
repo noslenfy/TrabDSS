@@ -10,7 +10,7 @@ import java.util.Collection;
 
 /**
  *
- * @author nelson
+ * @author 
  */
 public interface Persistable {
     

@@ -5,11 +5,21 @@
  */
 package DAOGeshabitat;
 
-import BLGeshabitat.Fase;
-import BLGeshabitat.Funcionario;
-import BLGeshabitat.Material;
-import BLGeshabitat.RegistoMaterial;
-import BLGeshabitat.Tarefa;
+import DAOGeshabitat.Fundos.RegistoVoluntariadoDAO;
+import DAOGeshabitat.Utilizadores.FuncionarioDAO;
+import DAOGeshabitat.Projectos.TarefaDAO;
+import DAOGeshabitat.Projectos.ProjectoDAO;
+import DAOGeshabitat.Projectos.FaseDAO;
+import DAOGeshabitat.Fundos.DoacaoDAO;
+import DAOGeshabitat.Fundos.MaterialDAO;
+import DAOGeshabitat.Fundos.VoluntarioDAO;
+import DAOGeshabitat.Fundos.DoadorDAO;
+import DAOGeshabitat.Familias.CandidaturaDAO;
+import BLGeshabitat.Projectos.Fase;
+import BLGeshabitat.Utilizadores.Funcionario;
+import BLGeshabitat.Fundos.Material;
+import BLGeshabitat.Projectos.RegistoMaterial;
+import BLGeshabitat.Projectos.Tarefa;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -21,16 +31,16 @@ import java.util.Map;
 
 /**
  *
- * @author nelson
+ * @author 
  */
-public final class FacadeDAO {
+public final class FacadeDAO implements IFacadeDAO{
     private static String DB_TYPE;// = "mysql";
-    private static String HOST;// = "localhost";
+    public static String HOST;// = "localhost";
     private static String PORT;// = "3306";
     private static String USER;// = "root";
     private static String PASSWORD;//
-    private static String DATABASE;// = "GesHabitat";
-    
+    public static String DATABASE;// = "GesHabitat";
+
   
     public static Connection conn;
 
@@ -52,6 +62,7 @@ public final class FacadeDAO {
     public static final String EQUIPAVOLUNTARIOTABLE = "EquipaVoluntario";  //not used
     public static final String REGISTOVOLUNTARIADOTABLE = "VoluntarioTarefa";
 
+    public static String DEFAULTUSERPASS = "Z#5&4aE@5asd";
     
     public FacadeDAO() {     
 
@@ -70,7 +81,7 @@ public final class FacadeDAO {
   
     public void connect() throws PersistableException{
         try {
-            conn = DriverManager. getConnection(getURL(), USER, PASSWORD);
+            conn = DriverManager.getConnection(getURL(), USER, PASSWORD);
         } catch (SQLException ex) {
             throw new PersistableException("Erro na conexão à basedados!");
         }
@@ -103,7 +114,7 @@ public final class FacadeDAO {
         return null;
     }
     
-
+    
             
     public int put(EntityDAO entityTypeDAO, Object obj) throws PersistableException {
        EntityDAO.setConnection(conn, getTable(entityTypeDAO));  
@@ -132,6 +143,21 @@ public final class FacadeDAO {
         
         return array;
     }
+    
+    public Map<Integer,Float> getDoacoesMateriais(int Doacao) throws PersistableException {
+         DoacaoDAO d = new DoacaoDAO();
+         EntityDAO.setConnection(conn, getTable(d));       
+         return d.getDoacoesMateriais(Doacao); 
+    }
+    
+   public List<Funcionario> getUsers() throws PersistableException {
+        FuncionarioDAO func = new FuncionarioDAO();
+        EntityDAO.setConnection(conn, getTable(func));
+        ArrayList<Funcionario> array = (ArrayList<Funcionario>) func.getUsers();
+        
+        return array;
+    }
+    
     public List<Object> getAll(EntityDAO entityTypeDAO, String Atribute, String Value) throws PersistableException {
         EntityDAO.setConnection(conn, getTable(entityTypeDAO));
         ArrayList<Object> array = (ArrayList<Object>) entityTypeDAO.getAll(Atribute, Value);
@@ -190,6 +216,13 @@ public final class FacadeDAO {
     public float getTotalDoado() throws PersistableException {
         EntityDAO.setConnection(conn, getTable(new DoacaoDAO()));
         return new DoacaoDAO().getTotalDoado();
+    }
+
+    public void setPassword(String username, String pass) throws PersistableException {
+        FuncionarioDAO func = new FuncionarioDAO();
+        EntityDAO.setConnection(conn, getTable(func));
+        func.setPassword(username, pass);
+        
     }
     
 }

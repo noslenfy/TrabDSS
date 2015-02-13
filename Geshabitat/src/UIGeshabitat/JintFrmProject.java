@@ -4,15 +4,19 @@
  * and open the template in the editor.
  */
 package UIGeshabitat;
-import BLGeshabitat.Candidatura;
-import BLGeshabitat.Fase;
-import BLGeshabitat.Funcionario;
-import BLGeshabitat.Projecto;
-import BLGeshabitat.RegistoMaterial;
-import BLGeshabitat.Tarefa;
+import BLGeshabitat.Familias.Candidatura;
+import BLGeshabitat.Projectos.Fase;
+import BLGeshabitat.Utilizadores.Funcionario;
+import BLGeshabitat.Projectos.Projecto;
+import BLGeshabitat.Projectos.RegistoMaterial;
+import BLGeshabitat.Fundos.RegistoVoluntariado;
+import BLGeshabitat.Projectos.Tarefa;
+import BLGeshabitat.Fundos.Voluntario;
 import DAOGeshabitat.PersistableException;
 import java.util.List;
 import java.util.Map;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -21,34 +25,55 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author nelson
+ * @author 
  */
-public class JintFrmProject extends ModalJinternalFrame{
+public class JintFrmProject extends ModalJinternalFrame implements Observer{
 
-    public int Project_Id;
+    public Projecto projecto;
     /**
      * Creates new form JintFrmNewProjecto
      */
-    public JintFrmProject(int Project_Id) {
-        this.Project_Id = Project_Id;
+    public JintFrmProject(Projecto projecto) {
+        JmdiMain.facadeBL.addObserver(this);
+        this.projecto = projecto;
         initComponents();
         this.getInfo();
         this.getTarefasNRealizadas();
         this.getTarefasConcluidas();
         this.getMateriaisUtilizados();
+        this.getVoluntariado();
+    }
+    
+    private void getVoluntariado() {
+        try {
+            DefaultTableModel tableModel = (DefaultTableModel) this.jTblVoluntariado.getModel();
+            tableModel.setRowCount(0);
+            for ( Object obj : JmdiMain.facadeBL.getAll(new RegistoVoluntariado())) {
+                RegistoVoluntariado reg = (RegistoVoluntariado)obj;
+                Voluntario v = (Voluntario) JmdiMain.facadeBL.get(new Voluntario(), reg.getVoluntario_Id());
+                Tarefa t = (Tarefa)  JmdiMain.facadeBL.get(new Tarefa(), reg.getTarefa_Id());
+                Funcionario f = (Funcionario) JmdiMain.facadeBL.get(new Funcionario(), reg.getFuncionario_Id());
+                tableModel.addRow(new Object[] {reg.getId(),v.getNome(),reg.getEquipa(), t.getDescricao(), reg.getTempo(), f.getNome()});
+            }
+        } catch (PersistableException ex) {
+            JOptionPane.showMessageDialog(this,"Ocorreu um erro ao obter os voluntarios!\n"+ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
     }
     
     private void getTarefasNRealizadas() {
         
         try {
-            for(Tarefa t : JmdiMain.facadeBL.getTarefasNRealizadas(Project_Id)) {
-                DefaultTableModel tableModel = (DefaultTableModel) this.jTblTarefasNRealizadas.getModel();
+            DefaultTableModel tableModel = (DefaultTableModel) this.jTblTarefasNRealizadas.getModel();
+            tableModel.setRowCount(0);
+            for(Tarefa t : JmdiMain.facadeBL.getTarefasNRealizadas(projecto.getId())) {
                 String Descricao = t.getDescricao();
                 String fase = JmdiMain.facadeBL.getField(new Fase(), "Descricao", "Id", t.getFase_Id());
                 tableModel.addRow(new Object[] { Descricao, fase });
             }
         } catch (PersistableException ex) {
-            JOptionPane.showMessageDialog(this,"Ocorreu um erro ao obter as terafas por realizar!\n"+ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this,"Ocorreu um erro ao obter as tarefas por realizar!\n"+ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
             return;
         }
         
@@ -56,11 +81,13 @@ public class JintFrmProject extends ModalJinternalFrame{
     
     private void getTarefasConcluidas() {
         try {
-            Map tarefas = JmdiMain.facadeBL.getTarefasConcluidas(Project_Id);
+            Map tarefas = JmdiMain.facadeBL.getTarefasConcluidas(projecto.getId());
+            DefaultTableModel tableModel = (DefaultTableModel) this.jTblTarefasConcluidas.getModel();
+            tableModel.setRowCount(0);            
             for(Object t : tarefas.entrySet()) {
                 Map.Entry<Tarefa,Integer> pair = (Map.Entry<Tarefa,Integer>)t;
             
-                DefaultTableModel tableModel = (DefaultTableModel) this.jTblTarefasConcluidas.getModel();
+
                 String Descricao = pair.getKey().getDescricao();
                 String fase = JmdiMain.facadeBL.getField(new Fase(), "Descricao", "Id", pair.getKey().getFase_Id());
                 Integer duracao = pair.getValue();
@@ -73,22 +100,16 @@ public class JintFrmProject extends ModalJinternalFrame{
         }
     }
     
-    private void getInfo() {
-        Projecto proj=null;
-        try {
-            proj = (Projecto)JmdiMain.facadeBL.get(new Projecto(),Project_Id);
-        } catch (PersistableException ex) {
-            JOptionPane.showMessageDialog(this,"Ocorreu um erro ao obter a informação do projecto!\n"+ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        jLblProjectNo.setText(String.valueOf(proj.getId()));
-        jLblDescricao.setText(proj.getDescricao());
-        jLblRua.setText(proj.getRua());
-        jLblCpLocalidade.setText(proj.getCp() + " - " + proj.getLocalidade());
-        jLblDtCriado.setText(proj.getDtInicioProjecto().toString());
+    private void getInfo()  {
+
+        jLblProjectNo.setText(String.valueOf(projecto.getId()));
+        jLblDescricao.setText(projecto.getDescricao());
+        jLblRua.setText(projecto.getRua());
+        jLblCpLocalidade.setText(projecto.getCp() + " - " + projecto.getLocalidade());
+        jLblDtCriado.setText(projecto.getDtInicioProjecto().toString());
         String criadoPor = null;
         try {
-            Candidatura c = (Candidatura) JmdiMain.facadeBL.get(new Candidatura(), proj.getCandidatura_Id());
+            Candidatura c = (Candidatura) JmdiMain.facadeBL.get(new Candidatura(), projecto.getCandidatura_Id());
             criadoPor = JmdiMain.facadeBL.getField(new Funcionario(), "Nome", "Id", c.getFuncionario_Id());
         } catch (PersistableException ex) {
             JOptionPane.showMessageDialog(this,"Ocorreu um erro ao obter a informação do projecto!\n"+ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
@@ -98,27 +119,26 @@ public class JintFrmProject extends ModalJinternalFrame{
 
         
         
-        if(proj.getOrcamento()==-1)  jLblOrcamento.setText("Não definido");
-        else  jLblOrcamento.setText(String.valueOf(proj.getOrcamento()));
-        if(proj.getCustoFinal()==-1)  jLblCustoFinal.setText("Não definido");
-        else  jLblCustoFinal.setText(String.valueOf(proj.getCustoFinal()));
+        if(projecto.getOrcamento()==-1)  jLblOrcamento.setText("Não definido");
+        else  jLblOrcamento.setText(String.valueOf(projecto.getOrcamento()));
+        if(projecto.getCustoFinal()==-1)  jLblCustoFinal.setText("Não definido");
+        else  jLblCustoFinal.setText(String.valueOf(projecto.getCustoFinal()));
         
         try {
-            String responsavel = JmdiMain.facadeBL.getNomeFuncionario(proj.getFuncionario_Id());
+            String responsavel = JmdiMain.facadeBL.getNomeFuncionario(projecto.getFuncionario_Id());
             jLblResponsavel.setText(responsavel);
         } catch (PersistableException ex) {
             JOptionPane.showMessageDialog(this,"Ocorreu um erro ao obter a informação do projecto!\n"+ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
             return;
         }
  
-        
     }
     
     private void getMateriaisUtilizados() {
         jTblMateriaisUtilizados.removeAll();
         DefaultTableModel tableModel = (DefaultTableModel) this.jTblMateriaisUtilizados.getModel();
         try {
-            for(RegistoMaterial r : JmdiMain.facadeBL.getMateriaisUtilizados(this.Project_Id)) {
+            for(RegistoMaterial r : JmdiMain.facadeBL.getMateriaisUtilizados(projecto.getId())) {
                 tableModel.addRow(r.getRow());
             }
         } catch (PersistableException ex) {
@@ -171,7 +191,7 @@ public class JintFrmProject extends ModalJinternalFrame{
         jTblMateriaisUtilizados = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        jTblVoluntariado = new javax.swing.JTable();
         jPanel5 = new javax.swing.JPanel();
         jSplitPane1 = new javax.swing.JSplitPane();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -407,10 +427,10 @@ public class JintFrmProject extends ModalJinternalFrame{
                 return canEdit [columnIndex];
             }
         });
-        jTblMateriaisUtilizados.setColumnSelectionAllowed(true);
+        jTblMateriaisUtilizados.setCellSelectionEnabled(false);
         jTblMateriaisUtilizados.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTblMateriaisUtilizados);
-        jTblMateriaisUtilizados.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jTblMateriaisUtilizados.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -431,18 +451,26 @@ public class JintFrmProject extends ModalJinternalFrame{
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 102, 102), 1, true), "Voluntariado Utilizado"));
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        jTblVoluntariado.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+
             },
             new String [] {
-                "Nr", "Data", "Nome", "Equipa", "Fase"
+                "Nr", "Nome", "Equipa", "Tarefa", "Tempo", "Responsavel"
             }
-        ));
-        jScrollPane2.setViewportView(jTable2);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTblVoluntariado.setColumnSelectionAllowed(true);
+        jTblVoluntariado.getTableHeader().setReorderingAllowed(false);
+        jScrollPane2.setViewportView(jTblVoluntariado);
+        jTblVoluntariado.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -578,7 +606,7 @@ public class JintFrmProject extends ModalJinternalFrame{
                     "");
         
         try {
-            JmdiMain.facadeBL.update(new Projecto(), "Funcionario_Id",String.valueOf(((Funcionario)s).getId()) , this.Project_Id);
+            JmdiMain.facadeBL.update(new Projecto(), "Funcionario_Id",String.valueOf(((Funcionario)s).getId()) , projecto.getId());
         } catch (PersistableException ex) {
             JOptionPane.showMessageDialog(this,"Ocorreu um erro registar o Responsavel!\n"+ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
             return;
@@ -598,13 +626,19 @@ public class JintFrmProject extends ModalJinternalFrame{
         icon,
         null,
         "");
-        try {
-            JmdiMain.facadeBL.update(new Projecto(), "CustoFinal", s, this.Project_Id);
-          //  Custo = JmdiMain.facadeBL.getField(new Projecto(), "CustoFinal", "Id", this.Project_Id);
-        } catch (PersistableException ex) {
-            JOptionPane.showMessageDialog(this,"Ocorreu um erro registar o Custo Final!\n"+ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+        if(s!=null) {
+            try {
+                Float valor = Float.valueOf(s); // apesar de fornecer como dados uma string testa aqui se é convertivel para float
+                JmdiMain.facadeBL.update(new Projecto(), "CustoFinal", s, projecto.getId());
+              //  Custo = JmdiMain.facadeBL.getField(new Projecto(), "CustoFinal", "Id", this.Project_Id);
+            } catch (PersistableException ex) {
+                JOptionPane.showMessageDialog(this,"Ocorreu um erro registar o Custo Final!\n"+ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this,"O valor que inseriu não é válido!\n","Erro", JOptionPane.ERROR_MESSAGE);
+                
+            }
+            this.getInfo();
         }
-        this.getInfo();
     }//GEN-LAST:event_jBtCustoFinalActionPerformed
 
     private void jBtOrcamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtOrcamentoActionPerformed
@@ -618,17 +652,22 @@ public class JintFrmProject extends ModalJinternalFrame{
         icon,
         null,
         "");
-        
 
-        try {
-            JmdiMain.facadeBL.update(new Projecto(), "Orcamento", s, this.Project_Id);
-            //Orcamento = JmdiMain.facadeBL.getField(new Projecto(), "Orcamento", "Id", this.Project_Id);
+        if(s!=null) {
 
-        } catch (PersistableException ex) {
-            JOptionPane.showMessageDialog(this,"Ocorreu um erro registar o Orcamento!\n"+ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+            try {
+                Float valor = Float.valueOf(s);
+                JmdiMain.facadeBL.update(new Projecto(), "Orcamento", s, projecto.getId());
+                //Orcamento = JmdiMain.facadeBL.getField(new Projecto(), "Orcamento", "Id", this.Project_Id);
+
+            } catch (PersistableException ex) {
+                JOptionPane.showMessageDialog(this,"Ocorreu um erro registar o Orcamento!\n"+ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this,"O valor que inseriu não é válido!\n","Erro", JOptionPane.ERROR_MESSAGE);
+                
+            }
+            this.getInfo();
         }
-        this.getInfo();
-       // jLblOrcamento.setText(Orcamento);
     }//GEN-LAST:event_jBtOrcamentoActionPerformed
 
     private void formFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_formFocusGained
@@ -673,9 +712,18 @@ public class JintFrmProject extends ModalJinternalFrame{
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSplitPane jSplitPane1;
-    private javax.swing.JTable jTable2;
     private javax.swing.JTable jTblMateriaisUtilizados;
     private javax.swing.JTable jTblTarefasConcluidas;
     private javax.swing.JTable jTblTarefasNRealizadas;
+    private javax.swing.JTable jTblVoluntariado;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void update(Observable o, Object arg) {
+        this.getInfo();
+        this.getTarefasNRealizadas();
+        this.getTarefasConcluidas();
+        this.getMateriaisUtilizados();
+        this.getVoluntariado();
+    }
 }

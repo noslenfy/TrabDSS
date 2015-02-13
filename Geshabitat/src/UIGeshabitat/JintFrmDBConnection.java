@@ -15,7 +15,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author nelson
+ * @author 
  */
 public class JintFrmDBConnection extends javax.swing.JInternalFrame {
 
@@ -36,7 +36,6 @@ public class JintFrmDBConnection extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jPanel2 = new javax.swing.JPanel();
-        jBtSave = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jBtTest = new javax.swing.JButton();
@@ -49,17 +48,14 @@ public class JintFrmDBConnection extends javax.swing.JInternalFrame {
         jTxtDatabaseName = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jTxtPass = new javax.swing.JPasswordField();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jBtSave = new javax.swing.JButton();
         jBtSair = new javax.swing.JButton();
 
         setClosable(true);
         setTitle("Setup Database Connection");
-
-        jBtSave.setText("Save");
-        jBtSave.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBtSaveActionPerformed(evt);
-            }
-        });
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 102, 102), 1, true), "Configuration"));
 
@@ -79,7 +75,8 @@ public class JintFrmDBConnection extends javax.swing.JInternalFrame {
 
         jLabel2.setText("Port:");
 
-        jTxtUser.setText("root");
+        jTxtUser.setEditable(false);
+        jTxtUser.setText("Admin");
 
         jTxtPort.setText("3306");
 
@@ -141,6 +138,20 @@ public class JintFrmDBConnection extends javax.swing.JInternalFrame {
                 .addContainerGap())
         );
 
+        jLabel6.setFont(new java.awt.Font("Dialog", 3, 12)); // NOI18N
+        jLabel6.setText("Nota:");
+
+        jLabel7.setText("É necessário que exista um utilizador da Basedados com");
+
+        jLabel8.setText("o nome Admin com todas as permissões");
+
+        jBtSave.setText("Save");
+        jBtSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtSaveActionPerformed(evt);
+            }
+        });
+
         jBtSair.setText("Cancel");
         jBtSair.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -156,23 +167,35 @@ public class JintFrmDBConnection extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jBtSave)
-                        .addGap(18, 18, 18)
-                        .addComponent(jBtSair)
-                        .addGap(4, 4, 4)))
-                .addContainerGap())
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel7))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jBtSave)
+                .addGap(18, 18, 18)
+                .addComponent(jBtSair)
+                .addGap(15, 15, 15))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jBtSave)
                     .addComponent(jBtSair))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel7))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel8)
                 .addContainerGap())
         );
 
@@ -189,8 +212,8 @@ public class JintFrmDBConnection extends javax.swing.JInternalFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -217,7 +240,7 @@ public class JintFrmDBConnection extends javax.swing.JInternalFrame {
         DBConnection conn = new DBConnection("mysql",jTxtHost.getText(),jTxtPort.getText(),jTxtUser.getText(),jTxtPass.getText(),jTxtDatabaseName.getText());
         try {
             FacadeDAO dummyFacade = new FacadeDAO(conn);
-            JOptionPane.showMessageDialog(this,"Conexão efectuada com sucesso!","Sucesso", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(this,"Teste efectuada com sucesso!\nPode guardar configurações","Sucesso", JOptionPane.PLAIN_MESSAGE);
             dummyFacade.closeConnection();
         } catch (PersistableException ex) {
            JOptionPane.showMessageDialog(this,"Não foi possivel estabelecer conexão!","Erro", JOptionPane.ERROR_MESSAGE);
@@ -238,6 +261,9 @@ public class JintFrmDBConnection extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JTextField jTxtDatabaseName;

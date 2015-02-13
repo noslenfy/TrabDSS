@@ -5,20 +5,36 @@
  */
 package UIGeshabitat;
 
+import BLGeshabitat.Utilizadores.Funcionario;
+import DAOGeshabitat.DBConnection;
+import DAOGeshabitat.FacadeDAO;
+import DAOGeshabitat.PersistableException;
 import java.awt.Cursor;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import javax.swing.JRootPane;
+import javax.swing.SwingUtilities;
 
 /**
  *
- * @author nelson
+ * @author 
  */
 public class JintFrmLogin extends javax.swing.JInternalFrame {
-
+    
+    private boolean automaticFilling=true;   // usado para que a adicao de utilizadores não active jCmbUsersActionPerformed
     /**
      * Creates new form jInteralFrameLogin
+     * @param users
      */
-    public JintFrmLogin() {
+    public JintFrmLogin(List<Funcionario> users) {
         initComponents();
-    }
+        this.fillUsers(users);
+        JRootPane rootPane = SwingUtilities.getRootPane(this.jbtLogin); 
+        rootPane.setDefaultButton(jbtLogin);
+    }   
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -29,24 +45,61 @@ public class JintFrmLogin extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
         jCmbUsers = new javax.swing.JComboBox();
-        jPassword = new javax.swing.JPasswordField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        jPassword = new javax.swing.JPasswordField();
         jbtLogin = new javax.swing.JButton();
         jbtSair = new javax.swing.JButton();
-        jlblUserManagment = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
         setTitle("Login");
 
-        jCmbUsers.setEditable(true);
-        jCmbUsers.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Admin", "João", "Manuel", "Filipe" }));
+        jCmbUsers.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jCmbUsersItemStateChanged(evt);
+            }
+        });
+        jCmbUsers.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCmbUsersActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Utilizador:");
 
         jLabel2.setText("Palavra-passe:");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jCmbUsers, 0, 184, Short.MAX_VALUE)
+                    .addComponent(jPassword))
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jCmbUsers, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addGap(24, 24, 24)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(23, Short.MAX_VALUE))
+        );
 
         jbtLogin.setText("Login");
         jbtLogin.addActionListener(new java.awt.event.ActionListener() {
@@ -56,75 +109,113 @@ public class JintFrmLogin extends javax.swing.JInternalFrame {
         });
 
         jbtSair.setText("Sair");
-
-        jlblUserManagment.setFont(new java.awt.Font("Dialog", 0, 10)); // NOI18N
-        jlblUserManagment.setForeground(new java.awt.Color(51, 51, 255));
-        jlblUserManagment.setText("Gestão de Utilizadores");
+        jbtSair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtSairActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(43, 43, 43)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jCmbUsers, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
-                        .addComponent(jPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(39, 39, 39))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(103, 103, 103)
+                .addGap(84, 84, 84)
                 .addComponent(jbtLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(48, 48, 48)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jbtSair, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jlblUserManagment)
-                .addContainerGap())
+                .addGap(102, 102, 102))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(49, 49, 49)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(60, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(37, 37, 37)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCmbUsers, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jbtLogin)
                     .addComponent(jbtSair))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
-                .addComponent(jlblUserManagment)
-                .addContainerGap())
+                .addGap(26, 26, 26))
         );
-
-        jlblUserManagment.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    private void fillUsers(List<Funcionario> users) {
+        this.jCmbUsers.addItem(new Funcionario());
+        for(Funcionario f : users) {
+            this.jCmbUsers.addItem(f);
+        }
+        this.automaticFilling=false;
+    }
     private void jbtLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtLoginActionPerformed
-        // TODO add your handling code here:
+        //Encerra conexao root
+        try {
+            JmdiMain.facadeBL.getFacadeDAO().closeConnection();
+        } catch (PersistableException ex) {
+            JOptionPane.showMessageDialog(this,"Ocorreu um erro, contacte o administrador de sistema!","Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        // cria conexão com os dados inseridos
+        DBConnection conn = new DBConnection("mysql", JmdiMain.connectionRoot.getHost(),JmdiMain.connectionRoot.getPort(),this.jCmbUsers.getSelectedItem().toString(),this.jPassword.getText(),JmdiMain.connectionRoot.getDatabase());
+ 
+        // Testa conexão
+        try {
+            FacadeDAO testFacade = new FacadeDAO(conn);
+            JmdiMain.facadeBL.setFacadeDAO(testFacade);
+        } catch (PersistableException ex) {
+            JOptionPane.showMessageDialog(this,"Os dados que inseriu não são validos!","Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        JmdiMain.currentUser=(Funcionario)this.jCmbUsers.getSelectedItem();
+        ((JmdiMain)this.getTopLevelAncestor()).SetStart();
+        this.dispose();
     }//GEN-LAST:event_jbtLoginActionPerformed
+
+    private void jbtSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtSairActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_jbtSairActionPerformed
+
+    private void jCmbUsersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCmbUsersActionPerformed
+        if(!this.automaticFilling)
+        try {
+            DBConnection conn = new DBConnection("mysql", JmdiMain.connectionRoot.getHost(),JmdiMain.connectionRoot.getPort(),this.jCmbUsers.getSelectedItem().toString(),FacadeDAO.DEFAULTUSERPASS ,JmdiMain.connectionRoot.getDatabase());
+            FacadeDAO testFacade = new FacadeDAO(conn);
+            String pass = JOptionPane.showInputDialog(this,"O utilizador "+this.jCmbUsers.getSelectedItem().toString()+" ainda não definiu a palavra-passe\nPor favor defina-a agora!","Aviso", JOptionPane.PLAIN_MESSAGE);
+            if(pass!=null) {
+                String username = ((Funcionario)this.jCmbUsers.getSelectedItem()).getUsername();
+                JmdiMain.facadeBL.setPassword(username,pass);
+
+                JmdiMain.facadeBL.setFacadeDAO(testFacade);
+
+                JmdiMain.currentUser=(Funcionario)this.jCmbUsers.getSelectedItem();
+                ((JmdiMain)this.getTopLevelAncestor()).SetStart();
+            }
+            this.dispose();
+        } catch (PersistableException ex) {
+
+        }
+    }//GEN-LAST:event_jCmbUsersActionPerformed
+
+    private void jCmbUsersItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCmbUsersItemStateChanged
+
+    }//GEN-LAST:event_jCmbUsersItemStateChanged
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox jCmbUsers;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPasswordField jPassword;
     private javax.swing.JButton jbtLogin;
     private javax.swing.JButton jbtSair;
-    private javax.swing.JLabel jlblUserManagment;
     // End of variables declaration//GEN-END:variables
 }

@@ -5,16 +5,21 @@
  */
 package UIGeshabitat;
 
+import BLGeshabitat.Fundos.Doacao;
+import BLGeshabitat.Fundos.Doador;
 import DAOGeshabitat.PersistableException;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author nelson
+ * @author 
  */
-public class JintFrmDonations extends javax.swing.JInternalFrame {
+public class JintFrmDonations extends javax.swing.JInternalFrame implements Observer{
 
     private final JPanel panel;
     /**
@@ -22,10 +27,37 @@ public class JintFrmDonations extends javax.swing.JInternalFrame {
      * @param panel panel que vai adicionar funcionalidades
      */
     public JintFrmDonations(JPanel panel) {
+        JmdiMain.facadeBL.addObserver(this);
         this.panel = panel;
         panel.setVisible(true);
         initComponents();
         this.getInfo();
+        this.fillDoacoes();
+        
+    }
+    
+    private void fillDoacoes() {
+        try {
+            DefaultTableModel tableModel = (DefaultTableModel) this.jTblDoacoesMonetarias.getModel();
+            DefaultTableModel tableModel2 = (DefaultTableModel) this.jTblOutrasDoacoes.getModel();
+            tableModel.setRowCount(0);
+            tableModel2.setRowCount(0);
+            for(Object obj : JmdiMain.facadeBL.getAll(new Doacao())) {
+                Doacao d = (Doacao)obj;
+                Doador doador = (Doador) JmdiMain.facadeBL.get(new Doador(), d.getDoador_Id());
+                if(d.getTipo()==0) {
+                    tableModel.addRow(new Object[] {d.getId(),d.getData(),d.getValor(),d.getDestino(), doador.getNome(), doador.getTipo(), d.getEvento()} );
+                } else  {
+                    String tipo="";
+                    if (d.getTipo()==1) tipo="Material";
+                    if (d.getTipo()==2) tipo="Serviços";
+                    tableModel2.addRow(new Object[] {d.getId(),d.getData(),d.getDescricao(),d.getDestino(),doador.getNome(), tipo, d.getEvento()} );
+                }
+
+            }
+        } catch (PersistableException ex) {
+            Logger.getLogger(JintFrmDonations.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     private void getInfo() {
@@ -47,6 +79,7 @@ public class JintFrmDonations extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel4 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -60,10 +93,11 @@ public class JintFrmDonations extends javax.swing.JInternalFrame {
         jLblTotalDoado = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        jTblOutrasDoacoes = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTblDoacoesMonetarias = new javax.swing.JTable();
 
         setClosable(true);
         setTitle("Gestão Doações");
@@ -148,18 +182,31 @@ public class JintFrmDonations extends javax.swing.JInternalFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 102, 102), 1, true), "Doações materiais / Serviços"));
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        jTblOutrasDoacoes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+
             },
             new String [] {
-                "Data", "Descrição", "Quantidade", "Destino", "Doador", "Tipo", "Evento"
+                "Id", "Data", "Descrição", "Destino", "Doador", "Tipo", "Evento"
             }
-        ));
-        jScrollPane2.setViewportView(jTable2);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTblOutrasDoacoes.setColumnSelectionAllowed(true);
+        jTblOutrasDoacoes.getTableHeader().setReorderingAllowed(false);
+        jTblOutrasDoacoes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTblOutrasDoacoesMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(jTblOutrasDoacoes);
+        jTblOutrasDoacoes.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -178,20 +225,35 @@ public class JintFrmDonations extends javax.swing.JInternalFrame {
                 .addContainerGap())
         );
 
+        jButton1.setText("Sair");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 102, 102), 1, true), "Doações Monetárias"));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTblDoacoesMonetarias.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+
             },
             new String [] {
-                "Data", "Valor", "Destino", "Doador", "Tipo", "Evento"
+                "Id", "Data", "Valor", "Destino", "Doador", "Tipo", "Evento"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTblDoacoesMonetarias.setColumnSelectionAllowed(true);
+        jTblDoacoesMonetarias.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(jTblDoacoesMonetarias);
+        jTblDoacoesMonetarias.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -210,39 +272,76 @@ public class JintFrmDonations extends javax.swing.JInternalFrame {
                 .addContainerGap())
         );
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
+                    .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton1)
+                .addContainerGap())
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        this.doDefaultCloseAction();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jTblOutrasDoacoesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTblOutrasDoacoesMouseClicked
+        int id = (int)jTblOutrasDoacoes.getValueAt(jTblOutrasDoacoes.getSelectedRow(),0); 
+        String tipo = (String)jTblOutrasDoacoes.getValueAt(jTblOutrasDoacoes.getSelectedRow(),5);
+        if(tipo.equals("Material")) {
+            JintFrmViewArtigos frmArtigos = new JintFrmViewArtigos(id);
+            this.getDesktopPane().add(frmArtigos);
+            frmArtigos.setVisible(true);
+        }
+        
+    }//GEN-LAST:event_jTblOutrasDoacoesMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
@@ -256,9 +355,20 @@ public class JintFrmDonations extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
+    private javax.swing.JTable jTblDoacoesMonetarias;
+    private javax.swing.JTable jTblOutrasDoacoes;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void update(Observable o, Object arg) {
+        if(arg instanceof Doacao) {
+            this.fillDoacoes();
+            this.getInfo();
+        }
+    }
+
+
 }

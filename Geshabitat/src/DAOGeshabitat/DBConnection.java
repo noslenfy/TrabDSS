@@ -15,7 +15,7 @@ import java.util.Objects;
 
 /**
  *
- * @author nelson
+ * @author 
  */
 public class DBConnection implements Serializable{
     private String db_type;

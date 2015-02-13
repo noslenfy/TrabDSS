@@ -5,8 +5,8 @@
  */
 package UIGeshabitat;
 
-import BLGeshabitat.Funcionario;
-import BLGeshabitat.Voluntario;
+import BLGeshabitat.Utilizadores.Funcionario;
+import BLGeshabitat.Fundos.Voluntario;
 import DAOGeshabitat.*;
 import java.text.DateFormat;
 import java.util.Date;
@@ -15,7 +15,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author nelson
+ * @author 
  */
 public class JintFrmNewVoluntario extends javax.swing.JInternalFrame {
 

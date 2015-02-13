@@ -5,11 +5,11 @@
  */
 package UIGeshabitat;
 
-import BLGeshabitat.Funcionario;
-import BLGeshabitat.Projecto;
-import BLGeshabitat.RegistoVoluntariado;
-import BLGeshabitat.Tarefa;
-import BLGeshabitat.Voluntario;
+import BLGeshabitat.Utilizadores.Funcionario;
+import BLGeshabitat.Projectos.Projecto;
+import BLGeshabitat.Fundos.RegistoVoluntariado;
+import BLGeshabitat.Projectos.Tarefa;
+import BLGeshabitat.Fundos.Voluntario;
 import DAOGeshabitat.PersistableException;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,7 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author nelson
+ * @author 
  */
 public class JintFrmAlocarVoluntarios extends ModalJinternalFrame  {
     private int Project_Id;
@@ -30,6 +30,7 @@ public class JintFrmAlocarVoluntarios extends ModalJinternalFrame  {
      */
     public JintFrmAlocarVoluntarios(int Project_Id) {
         this.Project_Id=Project_Id;
+        
         initComponents();
         try {
             this.fillInfo();
@@ -337,6 +338,8 @@ public class JintFrmAlocarVoluntarios extends ModalJinternalFrame  {
                JOptionPane.showMessageDialog(this,"Ocorreu um erro ao gravar o registo!","Erro", JOptionPane.ERROR_MESSAGE);
            }
         }
+        JOptionPane.showMessageDialog(this,"Registo adicionado com sucesso!","Sucesso", JOptionPane.INFORMATION_MESSAGE);
+        this.dispose();
         
     }//GEN-LAST:event_jBtGuardarActionPerformed
 

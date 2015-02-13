@@ -5,15 +5,18 @@
  */
 package UIGeshabitat;
 
-import BLGeshabitat.Candidatura;
-import BLGeshabitat.Doador;
-import BLGeshabitat.Funcionario;
-import BLGeshabitat.Material;
-import BLGeshabitat.Projecto;
-import BLGeshabitat.Voluntario;
+import BLGeshabitat.Familias.Candidatura;
+import BLGeshabitat.Fundos.Doador;
+import BLGeshabitat.Utilizadores.Funcionario;
+import BLGeshabitat.Fundos.Material;
+import BLGeshabitat.Projectos.Projecto;
+import BLGeshabitat.Fundos.Voluntario;
 import DAOGeshabitat.PersistableException;
+import static UIGeshabitat.JmdiMain.currentUser;
 import java.beans.PropertyVetoException;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JDesktopPane;
@@ -25,23 +28,53 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author nelson
+ * @author 
  */
-public class JintFrmSearch extends javax.swing.JInternalFrame {
+public class JintFrmSearch extends javax.swing.JInternalFrame implements Observer{
 
     /**
      * Creates new form JintFrmFind
      */
     public JintFrmSearch() {
         initComponents();
-        this.fillTableCandidatura();
-        this.fillTableProjecto();
-        this.fillTableVoluntarios();
-        this.fillTableDoadores();
-        this.fillTableFuncionarios();
-        this.fillTableArtigos();
+        JmdiMain.facadeBL.addObserver(this);
+       
+        jTabbedPane1.removeAll();
+        this.setStart();
+
     }
 
+    private void setStart() {
+        if(currentUser==null) {
+            JOptionPane.showMessageDialog(this,"Ocorreu um erro, experimente reiniciar as configuraçoes da base dados\nCaso o problema persista contacte o administrador de sistema","Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if(currentUser.getUsername().equals("Admin")) {
+            jTabbedPane1.addTab("Funcionarios", jPnlFuncionarios);
+            this.fillTableFuncionarios();
+        }
+        if(currentUser.isCFamilias()) {
+            jTabbedPane1.addTab("Candidaturas", jPnlCandidaturas);
+            this.fillTableCandidatura();
+        }
+        if(currentUser.isCConstrucao()) {
+            jTabbedPane1.addTab("Projectos", jPnlProjectos);
+            jTabbedPane1.addTab("Artigos", jPanelArtigos);
+            this.fillTableProjecto();
+            this.fillTableArtigos();
+        }
+        if(currentUser.isCFundos()) {
+            jTabbedPane1.addTab("Voluntarios", jPnlVoluntarios);
+            jTabbedPane1.addTab("Doadores", jPnlDoadores);
+            if((jTabbedPane1.indexOfTab("Artigos"))==-1) {
+                jTabbedPane1.addTab("Artigos", jPanelArtigos);
+                this.fillTableArtigos();
+            }
+            this.fillTableVoluntarios();
+            this.fillTableDoadores();
+
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -68,7 +101,7 @@ public class JintFrmSearch extends javax.swing.JInternalFrame {
         jPnlFuncionarios = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
         jTblFuncionarios = new javax.swing.JTable();
-        jPanel1 = new javax.swing.JPanel();
+        jPanelArtigos = new javax.swing.JPanel();
         jScrollPane6 = new javax.swing.JScrollPane();
         jTblArtigos = new javax.swing.JTable();
 
@@ -129,16 +162,26 @@ public class JintFrmSearch extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "Id", "Descrição", "Localidade", "Data Inicio", "Candidatura"
+                "Id", "Descrição", "Localidade", "Data Inicio", "Data Conclusão", "Estado"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTblProjectos.setColumnSelectionAllowed(true);
+        jTblProjectos.getTableHeader().setReorderingAllowed(false);
         jTblProjectos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTblProjectosMouseClicked(evt);
             }
         });
         jScrollPane2.setViewportView(jTblProjectos);
-        jTblProjectos.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jTblProjectos.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
         javax.swing.GroupLayout jPnlProjectosLayout = new javax.swing.GroupLayout(jPnlProjectos);
         jPnlProjectos.setLayout(jPnlProjectosLayout);
@@ -161,7 +204,9 @@ public class JintFrmSearch extends javax.swing.JInternalFrame {
                 "Id", "Nome", "Localidade", "Profissao", "Nacionalidade", "Total Voluntariado"
             }
         ));
+        jTblVoluntarios.getTableHeader().setReorderingAllowed(false);
         jScrollPane3.setViewportView(jTblVoluntarios);
+        jTblVoluntarios.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         if (jTblVoluntarios.getColumnModel().getColumnCount() > 0) {
             jTblVoluntarios.getColumnModel().getColumn(4).setMinWidth(70);
             jTblVoluntarios.getColumnModel().getColumn(4).setPreferredWidth(70);
@@ -205,9 +250,9 @@ public class JintFrmSearch extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
-        jTblDoadores.setColumnSelectionAllowed(true);
+        jTblDoadores.getTableHeader().setReorderingAllowed(false);
         jScrollPane4.setViewportView(jTblDoadores);
-        jTblDoadores.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jTblDoadores.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         if (jTblDoadores.getColumnModel().getColumnCount() > 0) {
             jTblDoadores.getColumnModel().getColumn(6).setMinWidth(70);
             jTblDoadores.getColumnModel().getColumn(6).setPreferredWidth(70);
@@ -232,18 +277,21 @@ public class JintFrmSearch extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "Id", "Nome", "Localidade", "Telefone", "Email"
+                "Id", "Nome", "Localidade", "Telefone", "Email", "Username"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, true, false, false
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
+        jTblFuncionarios.setColumnSelectionAllowed(true);
+        jTblFuncionarios.getTableHeader().setReorderingAllowed(false);
         jScrollPane5.setViewportView(jTblFuncionarios);
+        jTblFuncionarios.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
         javax.swing.GroupLayout jPnlFuncionariosLayout = new javax.swing.GroupLayout(jPnlFuncionarios);
         jPnlFuncionarios.setLayout(jPnlFuncionariosLayout);
@@ -276,20 +324,22 @@ public class JintFrmSearch extends javax.swing.JInternalFrame {
         });
         jTblArtigos.setDragEnabled(true);
         jTblArtigos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jTblArtigos.getTableHeader().setReorderingAllowed(false);
         jScrollPane6.setViewportView(jTblArtigos);
+        jTblArtigos.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout jPanelArtigosLayout = new javax.swing.GroupLayout(jPanelArtigos);
+        jPanelArtigos.setLayout(jPanelArtigosLayout);
+        jPanelArtigosLayout.setHorizontalGroup(
+            jPanelArtigosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 858, Short.MAX_VALUE)
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanelArtigosLayout.setVerticalGroup(
+            jPanelArtigosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)
         );
 
-        jTabbedPane1.addTab("Artigos", jPanel1);
+        jTabbedPane1.addTab("Artigos", jPanelArtigos);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -325,7 +375,17 @@ public class JintFrmSearch extends javax.swing.JInternalFrame {
         }
         if(!existing){
             int id = (int)jTblProjectos.getValueAt(jTblProjectos.getSelectedRow(),0);
-            JintFrmProject jfrmNewProject = new JintFrmProject(id);
+            
+            Projecto proj=null;
+            try {
+                proj = (Projecto)JmdiMain.facadeBL.get(new Projecto(),id);
+            } catch (PersistableException ex) {
+                JOptionPane.showMessageDialog(this,"Ocorreu um erro ao obter a informação do projecto!\n"+ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            
+            JintFrmProject jfrmNewProject = new JintFrmProject(proj);
             jfrmNewProject.addInternalFrameListener((InternalFrameListener)((JFrame)this.getTopLevelAncestor()));
 
             jDesktopPaneMain.add(jfrmNewProject);
@@ -383,6 +443,8 @@ public class JintFrmSearch extends javax.swing.JInternalFrame {
         
         int row =0;
         float totaldoado=0;
+        
+        tableModel.setRowCount(0);  // clears table
         for(Object obj : doadores) {
             Doador doador = (Doador) obj;
             try {
@@ -406,6 +468,7 @@ public class JintFrmSearch extends javax.swing.JInternalFrame {
             return;
         }
         
+
         for(Object obj : artigos) {
             Material artigo = (Material) obj;
 
@@ -413,7 +476,7 @@ public class JintFrmSearch extends javax.swing.JInternalFrame {
         }
         
     }
-        private void fillTableFuncionarios() {
+    private void fillTableFuncionarios() {
         List<Object> funcionarios = null;
         DefaultTableModel tableModel = (DefaultTableModel)jTblFuncionarios.getModel();
         try {
@@ -423,6 +486,7 @@ public class JintFrmSearch extends javax.swing.JInternalFrame {
             return;
         }
         
+        tableModel.setRowCount(0);  // clears table
         for(Object obj : funcionarios) {
             Funcionario funcionario = (Funcionario) obj;
             tableModel.addRow(funcionario.getRowData());
@@ -439,13 +503,13 @@ public class JintFrmSearch extends javax.swing.JInternalFrame {
             return;
         }
         
+        tableModel.setRowCount(0);  // clears table        
         for(Object obj : vols) {
             Voluntario vol = (Voluntario) obj;
             tableModel.addRow(vol.getRowData());
         }
         
     }
-    
     private void fillTableCandidatura() {
         List<Object> cands = null;
         DefaultTableModel tableModel = (DefaultTableModel)jTblCand.getModel();
@@ -456,13 +520,13 @@ public class JintFrmSearch extends javax.swing.JInternalFrame {
             return;
         }
         
+        tableModel.setRowCount(0);  // clears table        
         for(Object obj : cands) {
             Candidatura cand = (Candidatura) obj;
             tableModel.addRow(cand.getRowData());
         }
         
     }
-    
     private void fillTableProjecto() {
         List<Object> projs = null;
         DefaultTableModel tableModel = (DefaultTableModel)jTblProjectos.getModel();
@@ -473,16 +537,55 @@ public class JintFrmSearch extends javax.swing.JInternalFrame {
             return;
         }
         
+        tableModel.setRowCount(0);  // clears table       
         for(Object obj : projs) {
             Projecto proj = (Projecto) obj;
             tableModel.addRow(proj.getRowData());
         }
         
     }
+    
+    private void createTabCandidatura(){
+       jTblCand.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Id", "Nome", "Nif", "Localidade", "Estado", "Responsavel"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTblCand.getTableHeader().setReorderingAllowed(false);
+        jTblCand.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTblCandMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jTblCand);
+        jTblCand.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+
+        javax.swing.GroupLayout jPnlCandidaturasLayout = new javax.swing.GroupLayout(jPnlCandidaturas);
+        jPnlCandidaturas.setLayout(jPnlCandidaturasLayout);
+        jPnlCandidaturasLayout.setHorizontalGroup(
+            jPnlCandidaturasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 858, Short.MAX_VALUE)
+        );
+        jPnlCandidaturasLayout.setVerticalGroup(
+            jPnlCandidaturasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1)
+        );    
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanelArtigos;
     private javax.swing.JPanel jPnlCandidaturas;
     private javax.swing.JPanel jPnlDoadores;
     private javax.swing.JPanel jPnlFuncionarios;
@@ -502,4 +605,21 @@ public class JintFrmSearch extends javax.swing.JInternalFrame {
     private javax.swing.JTable jTblProjectos;
     private javax.swing.JTable jTblVoluntarios;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void update(Observable o, Object arg) {
+        if(arg instanceof Candidatura) {
+            this.fillTableCandidatura();
+        } else if (arg instanceof Projecto) {
+            this.fillTableProjecto();
+        } else if (arg instanceof Doador) {
+            this.fillTableDoadores();
+        } else if (arg instanceof Funcionario) {
+            this.fillTableFuncionarios();
+        } else if (arg instanceof Voluntario) {
+            this.fillTableVoluntarios();
+        } else if (arg instanceof Material) {
+            this.fillTableArtigos();
+        }
+    }
 }

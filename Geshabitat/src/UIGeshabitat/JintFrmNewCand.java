@@ -5,10 +5,10 @@
  */
 package UIGeshabitat;
 
-import BLGeshabitat.Anexo;
-import BLGeshabitat.Candidatura;
-import BLGeshabitat.Familiar;
-import BLGeshabitat.Funcionario;
+import BLGeshabitat.Familias.Anexo;
+import BLGeshabitat.Familias.Candidatura;
+import BLGeshabitat.Familias.Familiar;
+import BLGeshabitat.Utilizadores.Funcionario;
 import DAOGeshabitat.PersistableException;
 import java.awt.Component;
 import java.awt.Desktop;
@@ -28,12 +28,12 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author nelson
+ * @author 
  */
 public class JintFrmNewCand extends javax.swing.JInternalFrame  {
     
-    private Candidatura cand;
-
+    public Candidatura cand;
+    public boolean viewMode=false;
 
     /**
      * Creates new form JintFrmNewCand
@@ -54,7 +54,7 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame  {
     
     public JintFrmNewCand(Candidatura cand) {
         initComponents();
-
+        this.viewMode=true;
         try {
             this.OpenCand(cand);
         } catch (PersistableException ex) {
@@ -773,7 +773,7 @@ public class JintFrmNewCand extends javax.swing.JInternalFrame  {
     }//GEN-LAST:event_jBtRemoverAnexoActionPerformed
 
     private void jBtSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtSairActionPerformed
-        this.dispose();
+        this.doDefaultCloseAction();
     }//GEN-LAST:event_jBtSairActionPerformed
 
     private void jBtAddCandActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtAddCandActionPerformed

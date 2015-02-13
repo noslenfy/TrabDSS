@@ -5,10 +5,10 @@
  */
 package UIGeshabitat;
 
-import BLGeshabitat.Doacao;
-import BLGeshabitat.Doador;
-import BLGeshabitat.Material;
-import BLGeshabitat.Projecto;
+import BLGeshabitat.Fundos.Doacao;
+import BLGeshabitat.Fundos.Doador;
+import BLGeshabitat.Fundos.Material;
+import BLGeshabitat.Projectos.Projecto;
 
 
 import DAOGeshabitat.PersistableException;
@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,9 +31,9 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author nelson
+ * @author 
  */
-public class JintFrmNewDonation extends javax.swing.JInternalFrame{
+public class JintFrmNewDonation extends javax.swing.JInternalFrame implements Observer{
 
     private int tipo=0;  // 0->Monetaria 1->Material 2->Serviços
     /**
@@ -42,6 +44,7 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame{
         this.populateComboArtigos();
         this.populateComdoDoadores();
         this.populateCmbProjecto();
+        JmdiMain.facadeBL.addObserver(this);
     }
 
     /**
@@ -67,7 +70,6 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame{
         jTxtEvento = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         jCmbDoador = new javax.swing.JComboBox();
-        jBtListaDoadores = new javax.swing.JButton();
         jDpData = new org.jdesktop.swingx.JXDatePicker();
         jCmbProjecto = new javax.swing.JComboBox();
         jPanelMoney = new javax.swing.JPanel();
@@ -169,13 +171,6 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame{
             }
         });
 
-        jBtListaDoadores.setText("...");
-        jBtListaDoadores.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBtListaDoadoresActionPerformed(evt);
-            }
-        });
-
         DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.LONG, Locale.forLanguageTag("pt"));
         jDpData.setFormats(dateFormat);
 
@@ -209,10 +204,8 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame{
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel8)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jCmbDoador, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jBtListaDoadores, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 207, Short.MAX_VALUE)))
+                                .addComponent(jCmbDoador, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 221, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -221,8 +214,7 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame{
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
-                    .addComponent(jCmbDoador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBtListaDoadores))
+                    .addComponent(jCmbDoador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -477,6 +469,7 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame{
 
     
     private void populateComboArtigos() {
+        jCmbArtigos.removeAllItems();
         try {
             List<Object> artigos = JmdiMain.facadeBL.getAll(new Material());
             for(Object obj : artigos) {
@@ -489,6 +482,7 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame{
     }
     
     private void populateComdoDoadores() {
+        jCmbDoador.removeAllItems();
         try {
             List<Object> artigos = JmdiMain.facadeBL.getAll(new Doador());
             for(Object obj : artigos) {
@@ -547,10 +541,6 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame{
             hide_others(jOptMoney);
         }
     }//GEN-LAST:event_jOptMoneyActionPerformed
-
-    private void jBtListaDoadoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtListaDoadoresActionPerformed
-
-    }//GEN-LAST:event_jBtListaDoadoresActionPerformed
 
 
     
@@ -722,7 +712,7 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame{
     }//GEN-LAST:event_jTblArtigosMouseClicked
 
     private void jCmbDoadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCmbDoadorActionPerformed
-        if(jCmbDoador.getSelectedItem()!="") {
+        if(jCmbDoador.getSelectedItem()!=null) {
             Doador d = (Doador)jCmbDoador.getSelectedItem();
             String valor="";
             try {
@@ -743,7 +733,6 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame{
     private javax.swing.ButtonGroup btGrpTipo;
     private javax.swing.JButton jBtAddMaterial;
     private javax.swing.JButton jBtAdicionar;
-    private javax.swing.JButton jBtListaDoadores;
     private javax.swing.JButton jBtRemover;
     private javax.swing.JButton jBtSair;
     private javax.swing.JButton jBtSelectArtigos;
@@ -781,6 +770,17 @@ public class JintFrmNewDonation extends javax.swing.JInternalFrame{
     private javax.swing.JTextField jTxtQuantidade;
     private javax.swing.JTextField jTxtValor;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void update(Observable o, Object arg) {
+        if(arg instanceof Material) {
+            this.populateComboArtigos();
+        } else if (arg instanceof Doador) {
+            this.populateComdoDoadores();
+        } else if (arg instanceof Projecto) {
+            this.populateCmbProjecto();
+        }
+    }
 
 
 }

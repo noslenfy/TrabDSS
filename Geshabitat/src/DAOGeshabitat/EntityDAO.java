@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Observable;
 
 
 
@@ -44,10 +45,12 @@ public abstract class EntityDAO implements Persistable{
     public int put(Object obj) throws PersistableException {
         this.objectToPersist = obj;
         int GeneratedKey;
+        PreparedStatement statement = null;
+        ResultSet keys = null;
         try {
-            PreparedStatement statement = this.getInsertSqlStatement(table);
+            statement = this.getInsertSqlStatement(table);
             statement.executeUpdate(); 
-            ResultSet keys = statement.getGeneratedKeys();
+            keys = statement.getGeneratedKeys();
             if(keys.next()) {
                  GeneratedKey=keys.getInt(1);
              }
@@ -56,11 +59,18 @@ public abstract class EntityDAO implements Persistable{
              }
             statement.close();
             keys.close();
-            return  GeneratedKey;         
+        
         } catch (SQLException | PersistableException ex) {
             throw new PersistableException("Ocorreu um erro na criação do registo!" + ex.getMessage());
+        } finally {
+            try {
+                if (statement != null)  statement.close();               
+                if (keys != null) statement.close();
+            } catch (SQLException ex) {
+                throw new PersistableException("Ocorreu um erro ao fechar conexões!\n" + ex.getMessage());
+            }   
         }
-
+        return  GeneratedKey; 
     }
 
     @Override
@@ -93,6 +103,8 @@ public abstract class EntityDAO implements Persistable{
             statement = conn.prepareStatement(sql);
             if(newvalue instanceof String)  statement.setString(1, (String)newvalue);
             if(newvalue instanceof Date)  statement.setDate(1, new java.sql.Date(((Date)newvalue).getTime()));
+            if(newvalue instanceof Float)  statement.setFloat(1, (Float)newvalue);
+            if(newvalue==null)  statement.setNull(1,0);
             
             statement.setInt(2, Id);
  
@@ -111,6 +123,7 @@ public abstract class EntityDAO implements Persistable{
         }
     }
 
+    
     
     @Override
     public Object get(int Id) throws PersistableException {
@@ -201,6 +214,8 @@ public abstract class EntityDAO implements Persistable{
         }  
         return ret;
     }
+    
+
     
     @Override
     public Iterable getAll() throws PersistableException {

@@ -5,8 +5,8 @@
  */
 package UIGeshabitat;
 
-import BLGeshabitat.Fase;
-import BLGeshabitat.Tarefa;
+import BLGeshabitat.Projectos.Fase;
+import BLGeshabitat.Projectos.Tarefa;
 import DAOGeshabitat.PersistableException;
 import java.util.List;
 import java.util.logging.Level;
@@ -20,7 +20,7 @@ import javax.swing.ListModel;
 
 /**
  *
- * @author nelson
+ * @author 
  */
 public class JintFrmGerirFases extends ModalJinternalFrame  {
     private int Project_Id;
@@ -217,10 +217,6 @@ public class JintFrmGerirFases extends ModalJinternalFrame  {
         if(!"".equals(jTxtDescricao.getText())){
             Fase f = new Fase(jTxtDescricao.getText(),this.Project_Id);
             try {
-//                if(JmdiMain.facadeBL.exists(f,"Descricao", f.getDescricao())) {
-//                    JOptionPane.showMessageDialog(this,"Já existe uma fase com essa Descricao","Erro", JOptionPane.ERROR_MESSAGE);
-//                    return;
-//                }
                 DefaultListModel listmodel = (DefaultListModel) jLstFases.getModel();
                 listmodel. addElement(f);
 

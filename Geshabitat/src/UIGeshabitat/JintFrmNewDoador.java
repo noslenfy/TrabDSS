@@ -5,7 +5,7 @@
  */
 package UIGeshabitat;
 
-import BLGeshabitat.Doador;
+import BLGeshabitat.Fundos.Doador;
 import DAOGeshabitat.*;
 import java.awt.Dimension;
 import java.text.DateFormat;
@@ -15,7 +15,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author nelson
+ * @author 
  */
 public class JintFrmNewDoador extends javax.swing.JInternalFrame {
 

@@ -8,7 +8,7 @@ package UIGeshabitat;
 
 /**
  *
- * @author nelson
+ * @author 
  */
 public abstract class ModalJinternalFrame extends javax.swing.JInternalFrame  {
 

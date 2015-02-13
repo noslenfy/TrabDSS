@@ -5,8 +5,9 @@
  */
 package UIGeshabitat;
 
-import BLGeshabitat.Fase;
-import BLGeshabitat.Material;
+import BLGeshabitat.Projectos.Fase;
+import BLGeshabitat.Fundos.Material;
+import BLGeshabitat.Projectos.Projecto;
 import DAOGeshabitat.PersistableException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -14,6 +15,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -21,9 +24,9 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author nelson
+ * @author 
  */
-public class JintFrmAlocarMaterial extends ModalJinternalFrame {
+public class JintFrmAlocarMaterial extends ModalJinternalFrame implements Observer{
     private int Project_Id;
     DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.LONG, Locale.forLanguageTag("pt"));
     /**
@@ -33,11 +36,13 @@ public class JintFrmAlocarMaterial extends ModalJinternalFrame {
         this.Project_Id=Project_Id;
         initComponents();
         try {
-            this.getFases();
-            this.getArtigos();
+            this.fillFases();
+            this.fillArtigos();
         } catch (PersistableException ex) {
             JOptionPane.showMessageDialog(this,"Ocorreu um erro ao obter os artigos/fases","Erro", JOptionPane.ERROR_MESSAGE);
+            return;
         }
+        JmdiMain.facadeBL.addObserver(this);
     }
 
     /**
@@ -56,7 +61,6 @@ public class JintFrmAlocarMaterial extends ModalJinternalFrame {
         jLabel22 = new javax.swing.JLabel();
         jLabel23 = new javax.swing.JLabel();
         jCmbArtigos = new javax.swing.JComboBox();
-        jBtSelectArtigo = new javax.swing.JButton();
         jLabel24 = new javax.swing.JLabel();
         jBtAdicionar = new javax.swing.JButton();
         jBtRemover = new javax.swing.JButton();
@@ -109,13 +113,6 @@ public class JintFrmAlocarMaterial extends ModalJinternalFrame {
             }
         });
 
-        jBtSelectArtigo.setText("...");
-        jBtSelectArtigo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBtSelectArtigoActionPerformed(evt);
-            }
-        });
-
         jLabel24.setText("Quantidade:");
 
         jBtAdicionar.setText("Adicionar");
@@ -164,8 +161,6 @@ public class JintFrmAlocarMaterial extends ModalJinternalFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jCmbArtigos, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jBtSelectArtigo, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel24)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jTxtQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -195,7 +190,6 @@ public class JintFrmAlocarMaterial extends ModalJinternalFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jCmbArtigos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel23)
-                    .addComponent(jBtSelectArtigo)
                     .addComponent(jLabel24)
                     .addComponent(jLblStock)
                     .addComponent(jTxtQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -269,12 +263,6 @@ public class JintFrmAlocarMaterial extends ModalJinternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jBtSelectArtigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtSelectArtigoActionPerformed
-        JintFrmSelectArtigo frmArtigos = new JintFrmSelectArtigo(1);
-        this.getDesktopPane().add(frmArtigos);
-        frmArtigos.setVisible(true);
-    }//GEN-LAST:event_jBtSelectArtigoActionPerformed
-
     private void jBtCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtCancelarActionPerformed
         this.dispose();
     }//GEN-LAST:event_jBtCancelarActionPerformed
@@ -314,7 +302,7 @@ public class JintFrmAlocarMaterial extends ModalJinternalFrame {
         }
         
         if(Quantidade > Float.valueOf(Stock) || Quantidade <= 0 ) {
-            JOptionPane.showMessageDialog(this,"A quantidade que inseriu não é valida","Erro", JOptionPane.ERROR_MESSAGE); 
+            JOptionPane.showMessageDialog(this,"A quantidade que inseriu é inferior ao stock","Erro", JOptionPane.ERROR_MESSAGE); 
             return;
         }
         
@@ -351,7 +339,8 @@ public class JintFrmAlocarMaterial extends ModalJinternalFrame {
         }
         
         try {
-          JmdiMain.facadeBL.alocaMateriais(datas,materiais,quantidades,fases);
+          Projecto p = JmdiMain.facadeBL.getProjecto(Project_Id);
+          p.alocaMateriais(datas,materiais,quantidades,fases);
         } catch (PersistableException ex) {
            JOptionPane.showMessageDialog(this,"Não foi possivel guardar registo!","Erro", JOptionPane.ERROR_MESSAGE); 
            return;
@@ -360,21 +349,19 @@ public class JintFrmAlocarMaterial extends ModalJinternalFrame {
         this.dispose();
     }//GEN-LAST:event_jBtGuardarActionPerformed
 
-    private void getFases() throws PersistableException {
-        List<Object> fases = JmdiMain.facadeBL.getAll(new Fase(),"Projecto_Id",String.valueOf(this.Project_Id));
+    private void fillFases() throws PersistableException {
+        List<Fase> lista_fase = JmdiMain.facadeBL.getListaFases(Project_Id);
         this.jCmbFases.removeAllItems();
-        for(Object obj : fases) {
-            Fase f = (Fase)obj;
+        for(Fase f : lista_fase) {
             this.jCmbFases.addItem(f);
         }
         
     }
     
-    private void getArtigos() throws PersistableException {
-        List<Object> artigos = JmdiMain.facadeBL.getAll(new Material());
+    private void fillArtigos() throws PersistableException {
         this.jCmbArtigos.removeAllItems();
-        for(Object obj : artigos) {
-            Material m = (Material)obj;
+        List<Material> artigos = JmdiMain.facadeBL.getListaMaterial();
+        for(Material m : artigos) {
             this.jCmbArtigos.addItem(m);
         }
     }
@@ -384,7 +371,6 @@ public class JintFrmAlocarMaterial extends ModalJinternalFrame {
     private javax.swing.JButton jBtCancelar;
     private javax.swing.JButton jBtGuardar;
     private javax.swing.JButton jBtRemover;
-    private javax.swing.JButton jBtSelectArtigo;
     private javax.swing.JComboBox jCmbArtigos;
     private javax.swing.JComboBox jCmbFases;
     private org.jdesktop.swingx.JXDatePicker jDpData;
@@ -399,4 +385,9 @@ public class JintFrmAlocarMaterial extends ModalJinternalFrame {
     private javax.swing.JTable jTblMaterialAlocado;
     private javax.swing.JTextField jTxtQuantidade;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void update(Observable o, Object arg) {
+
+    }
 }

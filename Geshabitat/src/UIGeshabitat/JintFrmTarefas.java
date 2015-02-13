@@ -5,8 +5,10 @@
  */
 package UIGeshabitat;
 
-import BLGeshabitat.Tarefa;
+import BLGeshabitat.Projectos.Tarefa;
 import DAOGeshabitat.PersistableException;
+import UIGeshabitat.JmdiMain;
+import UIGeshabitat.ModalJinternalFrame;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -16,7 +18,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author nelson
+ * @author 
  */
 public class JintFrmTarefas extends ModalJinternalFrame {
     
